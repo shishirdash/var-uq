@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Anatomy of the disallowed goal — schematic</title>
+<style>
+  :root {
+    --surface: #fcfcfb; --ink: #0b0b0b; --muted: #898781; --grid: #e1e0d9;
+    --croatia: #2a78d6; --portugal: #e34948; --line: #1baf7a;
+    --beat: #eda100; --gk: #eb6834; --officials: #4a3aa7;
+  }
+  body { margin: 0; background: #f9f9f7; color: var(--ink);
+         font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 980px; margin: 16px auto; padding: 0 12px; }
+  h1 { font-size: 18px; margin: 8px 0 2px; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+  .tabs { display: flex; gap: 6px; margin: 10px 0; }
+  .tabs button { border: 1px solid var(--grid); background: var(--surface);
+    padding: 7px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; color: var(--ink); }
+  .tabs button.active { border-color: var(--ink); font-weight: 600; }
+  .panel { background: var(--surface); border: 1px solid var(--grid);
+    border-radius: 12px; padding: 10px; }
+  .controls { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+  .controls button { border: 1px solid var(--grid); background: var(--surface);
+    padding: 6px 12px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+  .note { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5; }
+  .cites { color: var(--muted); font-size: 11px; margin-top: 6px; line-height: 1.5;
+    border-top: 1px solid var(--grid); padding-top: 6px; }
+  .cites a { color: #52514e; }
+  .verdictBox { opacity: 0; transition: opacity .4s; border: 1px solid var(--grid);
+    border-radius: 10px; padding: 10px 14px; margin-top: 8px; font-size: 13px; line-height: 1.6; }
+  svg text { font-family: inherit; }
+  .scene { display: none; } .scene.on { display: block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Anatomy of the disallowed goal</h1>
+  <div class="sub">Croatia–Portugal, 2026 World Cup round of 32 — a schematic, not a reconstruction. Positions are illustrative, distances compressed.</div>
+
+  <div class="tabs">
+    <button id="tab1" class="active" onclick="show(1)">1 · The play &amp; the rule</button>
+    <button id="tab2" onclick="show(2)">2 · Inside the ball</button>
+    <button id="tab3" onclick="show(3)">3 · Push vs. ring</button>
+  </div>
+
+  <!-- ============ SCENE 1: zoomed to the final third ============ -->
+  <div class="panel scene on" id="scene1">
+    <svg id="pitch" viewBox="0 0 960 625" width="100%">
+      <rect x="0" y="0" width="960" height="625" fill="#f2f5f0"/>
+      <!-- attack points UP; one uniform scale: 13.2 px/m (68 m across) -->
+      <g stroke="#cfd6cc" stroke-width="2" fill="none">
+        <rect x="30" y="30" width="900" height="440"/>
+        <rect x="214" y="30" width="532" height="218"/>
+        <rect x="359" y="30" width="242" height="73"/>
+        <circle cx="480" cy="176" r="3" fill="#cfd6cc"/>
+        <path d="M 383 248 A 121 121 0 0 0 577 248"/>
+      </g>
+      <!-- compressed corridor (bottom) + break -->
+      <g stroke="#cfd6cc" stroke-width="2" fill="none">
+        <path d="M 30 478 q 60 6 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0"/>
+        <path d="M 30 492 q 60 6 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0"/>
+      </g>
+      <text x="480" y="612" font-size="11" fill="#a9b2a6" text-anchor="middle">≈ 40 m of pitch, compressed — everything above is true to scale (box: 40.23 × 16.5 m)</text>
+      <!-- goal (top) -->
+      <rect x="431" y="16" width="98" height="14" fill="#c3c2b7"/>
+
+      <!-- offside line, tracks the second-last defender (horizontal now) -->
+      <line id="offline" x1="34" y1="260" x2="926" y2="260" stroke="#e34948"
+            stroke-width="2" stroke-dasharray="7 6"/>
+      <text id="offlbl" x="38" y="252" fill="#e34948" font-size="13">offside line</text>
+
+      <!-- ghost freeze-frames -->
+      <g id="ghostPass" opacity="0">
+        <circle cx="588" cy="268" r="11" fill="none" stroke="#008300" stroke-width="2" stroke-dasharray="3 3"/>
+        <text x="612" y="296" font-size="13" fill="#008300">✓ onside at the cross</text>
+      </g>
+      <g id="ghostGraze" opacity="0">
+        <line x1="220" y1="252" x2="836" y2="252" stroke="#e34948" stroke-width="1.5" stroke-dasharray="3 5" opacity="0.85"/>
+        <text x="390" y="244" font-size="10" fill="#e34948">the line, frozen at the graze</text>
+        <circle cx="560" cy="246" r="14" fill="none" stroke="#e34948" stroke-width="2" stroke-dasharray="3 3"/>
+        <text x="600" y="228" font-size="13" fill="#e34948">✗ offside at the graze</text>
+      </g>
+
+      <!-- Portugal (red), GK (orange) -->
+      <g font-size="12">
+        <circle id="gk" cx="480" cy="54" r="11" fill="#eda100"/>
+        <text id="gklbl" x="504" y="58" fill="#b07500">GK</text>
+        <circle id="def2l" cx="620" cy="260" r="11" fill="#1baf7a"/>
+        <text id="def2lbl" x="638" y="250" font-size="12" fill="#199e70">2nd-last defender</text>
+        <circle id="defA" cx="230" cy="330" r="11" fill="#1baf7a"/>
+        <circle id="defB" cx="800" cy="318" r="11" fill="#1baf7a"/>
+      </g>
+
+      <!-- officials (violet) -->
+      <g font-size="12" fill="#eb6834">
+        <circle id="ref" cx="250" cy="385" r="9" fill="none" stroke="#eb6834" stroke-width="3"/>
+        <text id="reflbl" x="250" y="363" text-anchor="middle">referee</text>
+        <rect id="ar" x="938" y="500" width="13" height="13" fill="#eb6834"/>
+        <text transform="rotate(90 952 330)" x="952" y="330" text-anchor="middle" font-size="11">assistant referee — level with the line</text>
+        <text id="arThought" x="666" y="278" opacity="0" fill="#b05010" font-weight="600">…must judge line AND touch, together, live</text>
+      </g>
+
+      <!-- Croatia (blue) -->
+      <g font-size="12" fill="#2a78d6">
+        <circle id="perisic" cx="300" cy="560" r="11" fill="#2a78d6"/>
+        <text id="perlbl" x="300" y="538" text-anchor="middle">Perišić</text>
+        <circle id="matanovic" cx="490" cy="262" r="11" fill="#2a78d6"/>
+        <text id="matlbl" x="490" y="290" text-anchor="middle">Matanović</text>
+        <circle id="pasalic" cx="600" cy="278" r="11" fill="#2a78d6"/>
+        <text id="paslbl" x="600" y="260" text-anchor="middle">Pašalić</text>
+        <circle id="gvardiol" cx="430" cy="430" r="11" fill="#2a78d6"/>
+        <text id="gvalbl" x="430" y="458" text-anchor="middle">Gvardiol</text>
+      </g>
+
+      <!-- ball -->
+      <circle id="ball" cx="150" cy="560" r="7" fill="#fff" stroke="#0b0b0b" stroke-width="2"/>
+
+      <!-- graze marker + heartbeat -->
+      <g id="grazeMark" opacity="0">
+        <circle cx="502" cy="260" r="15" fill="none" stroke="#eda100" stroke-width="2"/>
+        <text x="466" y="230" font-size="13" fill="#b07500" text-anchor="end">graze — invisible to every camera…</text>
+        <text x="458" y="248" font-size="12" fill="#b07500" text-anchor="end">…but the chip blips</text>
+        <path d="M 400 262 l 10 0 4 -12 6 24 5 -12 12 0" fill="none" stroke="#eda100" stroke-width="2.5"/>
+      </g>
+
+      <!-- goal -->
+      <text id="goalTxt" x="770" y="72" font-size="30" font-weight="700" opacity="0">GOAL?</text>
+    </svg>
+    <div class="controls">
+      <button onclick="replay()">↺ replay</button>
+      <button id="slowbtn" onclick="toggleSlow()">🐢 slow-mo: off</button>
+      <span class="note" id="phaseLbl"></span>
+    </div>
+    <div id="verdictBox" class="verdictBox">
+      <b>The rule, replayed both ways:</b>&nbsp;
+      no touch → judge Pašalić at the CROSS → onside ✓ &nbsp;·&nbsp;
+      graze → judge Pašalić at the GRAZE → offside ✗<br>
+      <span style="color:var(--muted)">dashed circles on the pitch = Pašalić frozen at each moment. The verdict hangs on whether a touch happened at all.</span>
+    </div>
+    <div class="note">Everyone is moving at once — the dashed offside line sits wherever the second-last defender
+    stands, and after the graze the whole defense collapses goalward, dragging the line with it. That is why
+    the verdict shows a second, frozen dashed line: the rule compares Pašalić to where the line was AT the
+    graze, not where it ended up. The one thing that decides everything is the one thing no human in the
+    frame can perceive.</div>
+    <div class="cites">Play &amp; FIFA statement: <a href="https://www.espn.com/soccer/story/_/id/49256422/fifa-var-correctly-denied-croatia-equaliser-portugal">ESPN</a> ·
+      <a href="https://www.goal.com/en/lists/fifa-defend-var-croatia-goal-disallowed-portugal-world-cup/bltc7118fa3e7cbdffb">Goal.com</a> ·
+      <a href="https://www.tntsports.co.uk/football/world-cup/2026/croatia-var-goal-disallowed-portugal-bottles-thrown-last-32_sto23315655/story.shtml">TNT Sports</a>.
+      Positions schematic but cross-checked against broadcast footage (Fox, 103:09–103:18): graze zone, defensive-line collapse, and Gvardiol's close-range sliding finish are footage-faithful. Kit colors stylized: Croatia blue (navy away kit), Portugal green (seafoam away kit).</div>
+  </div>
+
+  <!-- ============ SCENE 2: inside the ball (2026: side-mounted chip) ============ -->
+  <div class="panel scene" id="scene2">
+    <svg viewBox="0 0 960 545" width="100%">
+      <rect width="960" height="545" fill="#fcfcfb"/>
+      <circle cx="430" cy="270" r="185" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="7"/>
+      <g stroke="#c3c2b7" stroke-width="2.5" fill="none">
+        <path d="M 430 85 C 340 180, 340 360, 430 455"/>
+        <path d="M 430 85 C 520 180, 520 360, 430 455"/>
+        <path d="M 245 270 C 340 210, 520 210, 615 270"/>
+      </g>
+      <!-- the special layer inside one panel -->
+      <path d="M 567.6 173.6 A 168 168 0 0 1 567.6 366.4" fill="none" stroke="#cde2fb" stroke-width="16"/>
+      <!-- the chip, embedded in that layer -->
+      <g id="sensor2">
+        <rect x="566" y="254" width="34" height="32" rx="6" fill="#2a78d6"/>
+        <text x="583" y="275" font-size="12" fill="#fff" text-anchor="middle" font-weight="600">IMU</text>
+      </g>
+      <!-- counterweights in the other three panels -->
+      <g fill="#898781">
+        <rect x="320" y="143" width="20" height="14" rx="3"/>
+        <rect x="255" y="263" width="20" height="14" rx="3"/>
+        <rect x="320" y="383" width="20" height="14" rx="3"/>
+      </g>
+      <!-- graze contact, top-left -->
+      <circle cx="299" cy="139" r="10" fill="none" stroke="#eda100" stroke-width="3"/>
+      <text x="40" y="70" font-size="13" fill="#b07500">a graze can land anywhere on the shell — maybe the</text>
+      <text x="40" y="88" font-size="13" fill="#b07500">chip's panel, maybe the far side (the ring then travels around)</text>
+      <path d="M 250 96 C 275 110, 290 122, 296 131" fill="none" stroke="#eda100" stroke-width="2"/>
+      <!-- old design inset -->
+      <g>
+        <circle cx="120" cy="400" r="46" fill="none" stroke="#c3c2b7" stroke-width="3"/>
+        <line x1="120" y1="358" x2="120" y2="392" stroke="#c3c2b7" stroke-width="1.5"/>
+        <line x1="120" y1="442" x2="120" y2="408" stroke="#c3c2b7" stroke-width="1.5"/>
+        <line x1="78" y1="400" x2="112" y2="400" stroke="#c3c2b7" stroke-width="1.5"/>
+        <line x1="162" y1="400" x2="128" y2="400" stroke="#c3c2b7" stroke-width="1.5"/>
+        <rect x="113" y="393" width="14" height="14" rx="3" fill="#9ec5f4"/>
+        <text x="120" y="466" font-size="11" fill="#898781" text-anchor="middle">2022–24 balls: chip suspended</text>
+        <text x="120" y="480" font-size="11" fill="#898781" text-anchor="middle">at the center on tethers</text>
+      </g>
+      <!-- labels -->
+      <g font-size="14">
+        <text x="655" y="120">outer shell — the "drum skin".</text>
+        <text x="655" y="140" fill="#898781">4 bonded panels, pressurized air behind it</text>
+        <text x="655" y="190">the chip: embedded in a special layer</text>
+        <text x="655" y="210">INSIDE one panel — new for 2026</text>
+        <text x="655" y="230" fill="#898781">accelerometer + gyroscope, 500 reports/s —</text>
+        <text x="655" y="250" fill="#898781">no mic, no camera; it only feels motion</text>
+        <text x="655" y="300">counterweights in the other three</text>
+        <text x="655" y="320">panels keep the spinning ball balanced</text>
+        <text x="655" y="370" fill="#898781">chip IN the shell = shell vibration</text>
+        <text x="655" y="390" fill="#898781">reaches it directly, no tethers to cross</text>
+      </g>
+      <path d="M 650 200 C 632 210, 616 232, 605 252" fill="none" stroke="#898781" stroke-width="1.5"/>
+      <path d="M 650 305 C 500 330, 360 350, 344 392" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="4 4"/>
+    </svg>
+    <div class="note">Verified update (this changed our model): the 2026 Trionda embeds the chip in a layer of
+    ONE panel, with counterweights in the other three — earlier connected balls hung it at the center on
+    tethers (inset). A shell-mounted chip hears shell vibration directly… but how loudly now depends on
+    where the graze lands relative to the chip's panel.</div>
+    <div class="cites">Sensor placement (primary): <a href="https://news.adidas.com/football/adidas-unveils--trionda----the-official-match-ball-of-the-fifa-world-cup26-/s/27042e3a-12ba-482d-8839-8a96e056b33e">Adidas Trionda unveil</a> — "a side mounted chip system… inside a specially created layer in one of the four panels", counter-balances in the other three ·
+      500 Hz IMU &amp; VAR integration: same release + <a href="https://inside.fifa.com/innovation/world-cup-2022/semi-automated-offside-technology">FIFA (SAOT)</a> ·
+      sensor &amp; data stream: <a href="https://kinexon-sports.com/blog/connected-ball-technology-data">KINEXON</a> ·
+      panel geometry &amp; aero: <a href="https://www.scientificamerican.com/article/the-surprising-math-and-physics-behind-the-2026-trionda-world-cup-soccer-ball/">Scientific American</a> ·
+      2022–24 center-suspension: Adidas Al Rihla release, TUM. Cross-section geometry is schematic.</div>
+  </div>
+
+  <!-- ============ SCENE 3: push vs ring ============ -->
+  <div class="panel scene" id="scene3">
+    <svg viewBox="0 0 960 560" width="100%">
+      <rect width="960" height="560" fill="#fcfcfb"/>
+      <text x="240" y="40" font-size="17" font-weight="650" text-anchor="middle">Channel 1 — THE PUSH</text>
+      <text x="720" y="40" font-size="17" font-weight="650" text-anchor="middle">Channel 2 — THE RING</text>
+      <line x1="480" y1="20" x2="480" y2="490" stroke="#e1e0d9"/>
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#0b0b0b"/>
+        </marker>
+      </defs>
+
+      <g id="wakeP" stroke="#c3c2b7" stroke-width="2" fill="none" opacity="0.5">
+        <path d="M 60 190 q 12 -8 24 0 t 24 0 t 24 0"/>
+        <path d="M 50 235 q 12 8 24 0 t 24 0 t 24 0"/>
+        <path d="M 62 280 q 12 -8 24 0 t 24 0 t 24 0"/>
+      </g>
+      <g id="wakeR" stroke="#c3c2b7" stroke-width="2" fill="none" opacity="0.5">
+        <path d="M 540 190 q 12 -8 24 0 t 24 0 t 24 0"/>
+        <path d="M 530 235 q 12 8 24 0 t 24 0 t 24 0"/>
+        <path d="M 542 280 q 12 -8 24 0 t 24 0 t 24 0"/>
+      </g>
+
+      <!-- PUSH panel -->
+      <g id="pushBall">
+        <circle cx="240" cy="230" r="110" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="5"/>
+        <g id="seamsP" stroke="#c3c2b7" stroke-width="2" fill="none">
+          <path d="M 240 120 C 190 180, 190 280, 240 340"/>
+          <path d="M 240 120 C 290 180, 290 280, 240 340"/>
+        </g>
+        <g fill="#898781">
+          <circle cx="179" cy="303" r="7"/><circle cx="145" cy="230" r="7"/><circle cx="179" cy="157" r="7"/>
+        </g>
+        <rect id="pushSensor" x="312" y="217" width="26" height="26" rx="5" fill="#2a78d6"/>
+      </g>
+      <g id="pushFx" opacity="0">
+        <path d="M 150 158 L 196 196" stroke="#eda100" stroke-width="3" marker-end="url(#arr)"/>
+        <path d="M 240 230 L 300 282" stroke="#e34948" stroke-width="3" marker-end="url(#arr)" opacity="0.9"/>
+        <text x="255" y="305" font-size="12" fill="#e34948">Δv — exaggerated ×10,000</text>
+      </g>
+      <g font-size="13">
+        <text x="70" y="425">the whole ball (chip included) gets nudged once.</text>
+        <text x="70" y="447">your numbers: Δv ≈ 0.1–2 mm/s on a 20 m/s ball —</text>
+        <text x="70" y="469">deflection over the rest of flight ≈ <tspan font-weight="650">the width of a hair</tspan></text>
+        <text x="70" y="491" fill="#898781">one tiny shove, over in 5 ms, 10–200× below the aero ride</text>
+      </g>
+
+      <!-- RING panel -->
+      <g id="ringBall">
+        <circle id="ringShell" cx="720" cy="230" r="110" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="5"/>
+        <g id="seamsR" stroke="#c3c2b7" stroke-width="2" fill="none">
+          <path d="M 720 120 C 670 180, 670 280, 720 340"/>
+          <path d="M 720 120 C 770 180, 770 280, 720 340"/>
+        </g>
+        <g id="ringMass" fill="#898781">
+          <circle cx="659" cy="303" r="7"/><circle cx="625" cy="230" r="7"/><circle cx="659" cy="157" r="7"/>
+        </g>
+        <rect id="ringSensor" x="792" y="217" width="26" height="26" rx="5" fill="#2a78d6"/>
+        <g fill="none" stroke="#eda100" stroke-width="3">
+          <circle id="rip1" cx="643" cy="153" r="8" opacity="0"/>
+          <circle id="rip2" cx="643" cy="153" r="8" opacity="0"/>
+          <circle id="rip3" cx="643" cy="153" r="8" opacity="0"/>
+        </g>
+        <path id="ringHit" d="M 610 118 L 636 146" stroke="#eda100" stroke-width="3" marker-end="url(#arr)" opacity="0"/>
+      </g>
+      <g font-size="13">
+        <text x="550" y="425">the shell shudders like a struck drum — your pressure</text>
+        <text x="550" y="447">wave, ringing at 100s of Hz for ~50 ms. the 2026 chip</text>
+        <text x="550" y="469">lives IN the shell, so the ring reaches it directly:</text>
+        <text x="550" y="491"><tspan font-weight="650" fill="#b07500">κ likely higher — but depends where the graze lands</tspan></text>
+      </g>
+      <text x="480" y="522" font-size="12" fill="#898781" text-anchor="middle">both panels slowed ~20×. wavy gray lines = the turbulent wake; the ball spins (~8 turns/s → your ~10 Hz wobble)</text>
+      <text x="480" y="540" font-size="12" fill="#898781" text-anchor="middle">and the chip jiggles faintly the whole time — that constant jiggle is the noise every real signal must beat.</text>
+    </svg>
+    <div class="note">Same graze, two different messages to the chip — delivered on top of a ride that never
+    stops. The push is honest about the ball's motion but absurdly faint. The ring says nothing about where
+    the ball goes — but it may be loud. Which one would you build a detector around?</div>
+    <div class="cites">Physics numbers: our own order-of-magnitude estimates (this project's M0 dialogue) — drag F = ½ρC<tspan baseline-shift="sub" font-size="9">d</tspan>Av², graze impulse bracket 0.05–1 mN·s.
+      Chip-in-panel placement: <a href="https://news.adidas.com/football/adidas-unveils--trionda----the-official-match-ball-of-the-fifa-world-cup26-/s/27042e3a-12ba-482d-8839-8a96e056b33e">Adidas</a>.
+      Detection mechanism: <b>no primary source exists</b> — FIFA/Adidas/KINEXON have published no algorithm, threshold, or error rate (checked July 2026). The ring channel and κ are our modeling hypothesis, not an official description.</div>
+  </div>
+</div>
+
+<script>
+// ---------- tabs ----------
+function show(n) {
+  for (const k of [1,2,3]) {
+    document.getElementById('scene'+k).classList.toggle('on', k===n);
+    document.getElementById('tab'+k).classList.toggle('active', k===n);
+  }
+}
+
+// ---------- scene 1 timeline ----------
+const $ = id => document.getElementById(id);
+let t0 = performance.now(), slow = false;
+
+function lerp(a,b,u){ return a + (b-a)*u; }
+function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+function bez(p0,p1,p2,u){
+  const x = (1-u)*(1-u)*p0[0] + 2*(1-u)*u*p1[0] + u*u*p2[0];
+  const y = (1-u)*(1-u)*p0[1] + 2*(1-u)*u*p1[1] + u*u*p2[1];
+  return [x,y];
+}
+function setBall(x,y){ $('ball').setAttribute('cx',x); $('ball').setAttribute('cy',y); }
+function setP(el,x,y,lbl,dy){ $(el).setAttribute('cx',x); $(el).setAttribute('cy',y);
+  if (lbl){ $(lbl).setAttribute('x',x); $(lbl).setAttribute('y',y+dy); } }
+
+const PH = [ ['buildup',1200], ['cross',2600], ['graze',2600], ['finish',2600], ['verdict',5200] ];
+const TOTAL = PH.reduce((s,p)=>s+p[1],0);
+const DRIFT = [
+  ['defA', 230,330, 226,240], ['defB', 800,318, 788,230],
+  ['gk', 480,54, 480,50], ['ref', 250,385, 318,352],
+];
+
+function replay(){ t0 = performance.now(); ['grazeMark','goalTxt','ghostPass','ghostGraze','arThought']
+  .forEach(id=>$(id).setAttribute('opacity',0)); $('verdictBox').style.opacity = 0; }
+function toggleSlow(){ slow = !slow; $('slowbtn').textContent = slow ? '🐢 slow-mo: ON' : '🐢 slow-mo: off'; }
+
+function tick(now){
+  let t = (now - t0) * (slow ? 0.35 : 1);
+  if (t > TOTAL + 1500) t = TOTAL + 1500;
+  let acc = 0, phase = 'end', u = 1;
+  for (const [name,dur] of PH){
+    if (t < acc + dur){ phase = name; u = (t - acc)/dur; break; }
+    acc += dur;
+  }
+  $('phaseLbl').textContent = phase === 'end' ? 'done — hit replay' : phase;
+
+  const g = clamp01((t - 1200) / 7800);
+  for (const [id,sx,sy,ex,ey] of DRIFT){
+    const lbl = $(id+'lbl') ? id+'lbl' : null;
+    setP(id, lerp(sx,ex,g), lerp(sy,ey,g), lbl, id==='gk' ? 28 : -22);
+  }
+  let dly; // the line holds until the graze, then collapses goalward (footage-true)
+  if (t < 6400) dly = lerp(260, 252, clamp01(t/6400));
+  else dly = lerp(252, 180, clamp01((t-6400)/2600));
+  setP('def2l', 620, dly, null, 0);
+  $('def2lbl').setAttribute('x', 638); $('def2lbl').setAttribute('y', dly-10);
+  $('offline').setAttribute('y1', dly); $('offline').setAttribute('y2', dly);
+  $('offlbl').setAttribute('y', dly-8);
+  $('ar').setAttribute('transform', `translate(0 ${dly-506}) rotate(45 944 506)`);
+
+  const pj = clamp01((t - 3800) / 3000);
+  setP('perisic', lerp(300,380,pj), lerp(560,535,pj), 'perlbl', -22);
+
+  let px = 600, py = 278;
+  if (phase==='cross'){ px = lerp(600, 588, u); py = lerp(278, 268, u); }
+  else if (phase==='graze'){ px = lerp(588, 560, u); py = lerp(268, 246, u); }
+  else if (phase!=='buildup'){ px = 560; py = 246; }
+  setP('pasalic', px, py, 'paslbl', -18);
+
+  // Gvardiol's late run: deep -> box edge by the layoff -> sliding finish
+  const gvA = clamp01((t-3800)/3500), gvB = clamp01((t-7310)/650);
+  setP('gvardiol', lerp(lerp(430,495,gvA),505,gvB), lerp(lerp(430,235,gvA),168,gvB), 'gvalbl', 28);
+  const hop = phase==='graze' ? -8*Math.sin(Math.PI*u) : 0;
+  setP('matanovic', 490, 262+hop, 'matlbl', 34);
+
+  if (phase==='buildup'){ setBall(300,560); }
+  if (phase==='cross'){ const [x,y]=bez([300,560],[350,400],[494,268],u); setBall(x,y); }
+  if (phase==='graze'){
+    $('grazeMark').setAttribute('opacity', Math.min(1, u*3));
+    $('arThought').setAttribute('opacity', Math.min(1, u*2));
+    const [x,y]=bez([494,268],[502,262],[510,256],u); setBall(x,y);
+  }
+  if (phase==='finish'){
+    $('grazeMark').setAttribute('opacity', Math.max(0, 1-u*2));
+    $('arThought').setAttribute('opacity', Math.max(0, 1-u*1.5));
+    if (u<0.35){ const v=u/0.35; const [x,y]=bez([510,256],[535,250],[554,247],v); setBall(x,y); }
+    else if (u<0.6){ const v=(u-0.35)/0.25; setBall(lerp(560,508,v), lerp(246,172,v)); }
+    else { const v=(u-0.6)/0.4; setBall(lerp(508,480,v), lerp(172,44,v));
+      $('goalTxt').setAttribute('opacity', v); }
+  }
+  if (phase==='verdict'){
+    $('goalTxt').setAttribute('opacity', Math.max(0,1-u*3));
+    $('ghostPass').setAttribute('opacity', Math.min(1,u*4));
+    $('ghostGraze').setAttribute('opacity', Math.min(1,Math.max(0,u*4-1)));
+    $('verdictBox').style.opacity = Math.min(1,Math.max(0,u*4-2));
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+// ---------- scene 3 loop ----------
+function s3(now){
+  const u = (now % 3500) / 3500;
+  const spin = (now/1000 * 55) % 360;
+  const nj = 0.6*Math.sin(now*0.037) + 0.35*Math.sin(now*0.081);
+
+  $('seamsP').setAttribute('transform', `rotate(${spin} 240 230)`);
+  $('seamsR').setAttribute('transform', `rotate(${spin} 720 230)`);
+  $('wakeP').setAttribute('opacity', 0.35 + 0.2*Math.sin(now*0.004));
+  $('wakeR').setAttribute('opacity', 0.35 + 0.2*Math.sin(now*0.0047));
+  $('wakeP').setAttribute('transform', `translate(${2*Math.sin(now*0.003)},${1.5*Math.cos(now*0.004)})`);
+  $('wakeR').setAttribute('transform', `translate(${2*Math.sin(now*0.0035)},${1.5*Math.cos(now*0.0042)})`);
+
+  const push = $('pushFx'), pb = $('pushBall');
+  if (u < 0.08){ push.setAttribute('opacity', u/0.08); pb.setAttribute('transform','translate(0,0)'); }
+  else if (u < 0.75){ push.setAttribute('opacity', 1);
+    const v = Math.min(1,(u-0.08)/0.1);
+    pb.setAttribute('transform', `translate(${v*5},${v*4})`); }
+  else { push.setAttribute('opacity', Math.max(0, 1-(u-0.75)/0.15)); pb.setAttribute('transform','translate(0,0)'); }
+  $('pushSensor').setAttribute('transform', `translate(${nj*0.7},${nj*0.5})`);
+
+  $('ringHit').setAttribute('opacity', u<0.1 ? 1 : Math.max(0,1-(u-0.1)/0.1));
+  [['rip1',0],['rip2',0.07],['rip3',0.14]].forEach(([id,d])=>{
+    const v = (u-0.08-d)/0.5;
+    const el = $(id);
+    if (v>0 && v<1){ el.setAttribute('opacity', 0.9*(1-v)); el.setAttribute('r', 8+v*150); }
+    else el.setAttribute('opacity',0);
+  });
+  const ringing = u>0.08 && u<0.7;
+  const decay = ringing ? Math.exp(-(u-0.08)*6) : 0;
+  const jig = decay * Math.sin(u*400) * 3;
+  $('ringShell').setAttribute('transform', `translate(${jig*0.4},0)`);
+  $('ringSensor').setAttribute('transform', `translate(${jig + nj*0.7},${-jig*0.6 + nj*0.5})`);
+  $('ringMass').setAttribute('transform', `translate(${jig*0.7},0)`);
+  requestAnimationFrame(s3);
+}
+requestAnimationFrame(s3);
+</script>
+</body>
+</html>

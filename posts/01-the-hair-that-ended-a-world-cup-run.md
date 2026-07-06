@@ -68,8 +68,8 @@ touch, and the goal dies.
 Which is why everything reduces to one question: **can you really detect a hair
 graze on a flying football?**
 
-[TODO: embed/link the interactive schematic here — the play, the ball cutaway,
-and the two detection channels]
+[EMBED in Notion via /embed: https://shishirdash.github.io/var-uq/anim/decision-anim.html
+— interactive schematic: the play & the rule, inside the ball, push vs. ring]
 
 ## The machine that made the call
 

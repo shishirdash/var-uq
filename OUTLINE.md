@@ -122,5 +122,15 @@ not on artifact completion.
   collapse after the graze + a frozen "line at the graze" ghost in the verdict
   (the SAOT freeze-frame concept, visualized). Real sequence duration ≈ 9 s,
   matching the animation's play phases.
-- PENDING: round-2 prediction — where does the κ=2 cliff sit in J (0.05–1 mN·s)?
-  Then fine sweep + threshold-sensitivity check.
+- 2026-07-06 (day 2): Round-2 opened (predicted 0.2 vs ~0.35 mN·s cliff; logged).
+  κ=2 panels added to all figures. Traces flaw found by Shishir and fixed (HPF
+  overlay). Post-1 skeleton brain-dump completed (closed book) → draft assembled
+  with drift corrections. Repo pushed PUBLIC to github.com/shishirdash/var-uq;
+  GitHub Pages live — animation at
+  https://shishirdash.github.io/var-uq/anim/decision-anim.html (embed URL now in
+  the post draft). Notion MCP added user-scope; publish deferred to next session
+  (/mcp auth needed). Blog reboot direction agreed: "Explorations" section,
+  transparent AI-collaboration framing.
+- PENDING: Shishir's TODOs — broadcast waveform frame-grab, voice pass on draft.
+  Then: Notion publish (next session), M1 round 3 (contact-duration cliff),
+  M0 anatomy one-pager, M2 comparison, post 2.

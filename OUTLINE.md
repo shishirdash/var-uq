@@ -131,6 +131,13 @@ not on artifact completion.
   the post draft). Notion MCP added user-scope; publish deferred to next session
   (/mcp auth needed). Blog reboot direction agreed: "Explorations" section,
   transparent AI-collaboration framing.
-- PENDING: Shishir's TODOs — broadcast waveform frame-grab, voice pass on draft.
+- 2026-07-06 (later): PUBLISHED to Notion. /mcp re-auth to correct workspace
+  ("TL;DR"); post 1 created under Explorations (Shishir had already created the
+  section and moved the old data-roles post into it). Page includes house-style
+  TL;DR callout, waveform-placeholder callout, workshop-notes callout, and the
+  animation embedded as a sandboxed HTML attachment (+ GitHub Pages link).
+  Notion page: app.notion.com/p/395b6a00c28a81ae9fd0e9ebc9f9a080
+- PENDING: Shishir's TODOs — broadcast waveform frame-grab (replace placeholder
+  callout), voice pass on the LIVE Notion page.
   Then: Notion publish (next session), M1 round 3 (contact-duration cliff),
   M0 anatomy one-pager, M2 comparison, post 2.

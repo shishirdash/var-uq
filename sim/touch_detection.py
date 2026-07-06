@@ -123,14 +123,16 @@ def styled_axes(ax):
 
 
 def fig_traces(noise_stats, out):
-    cases = [("no touch", 0.0), ("hair graze, J = 1 mN·s", 1e-3),
-             ("firm graze, J = 5 mN·s", 5e-3)]
+    cases = [("no touch", 0.0, 0.5),
+             ("hair graze, J = 1 mN·s, ring κ = 0.5", 1e-3, 0.5),
+             ("same hair graze, loud ring κ = 2", 1e-3, 2.0),
+             ("firm graze, J = 5 mN·s, ring κ = 0.5", 5e-3, 0.5)]
     thresh = np.quantile(noise_stats, 1 - FPR_TARGET)
-    fig, axes = plt.subplots(3, 1, figsize=(8, 6), sharex=True, sharey=True)
+    fig, axes = plt.subplots(4, 1, figsize=(8, 7.6), sharex=True, sharey=True)
     fig.patch.set_facecolor(SURFACE)
     t = np.arange(N_HI // DECIM) / FS * 1000
-    for ax, (label, J) in zip(axes, cases):
-        sig = touch_pulse(J, 5e-3, 0.5) if J else np.zeros(N_HI)
+    for ax, (label, J, kappa) in zip(axes, cases):
+        sig = touch_pulse(J, 5e-3, kappa) if J else np.zeros(N_HI)
         a = to_sensor(make_noise(1)[0] + sig)
         styled_axes(ax)
         ax.plot(t, a, color=INK, lw=1.0)
@@ -146,7 +148,7 @@ def fig_traces(noise_stats, out):
                  transform=axes[0].transAxes, fontsize=9, color=MUTED,
                  va="top", ha="right")
     axes[-1].set_xlabel("time (ms)", color=MUTED)
-    axes[1].set_ylabel("accelerometer reading (m/s²)", color=MUTED)
+    fig.supylabel("accelerometer reading (m/s²)", color=MUTED, fontsize=10)
     fig.suptitle("What the 'heartbeat graphic' is drawn from", color=INK,
                  fontsize=12, x=0.02, ha="left")
     fig.tight_layout()
@@ -155,26 +157,28 @@ def fig_traces(noise_stats, out):
 
 
 def fig_roc(noise_stats, out):
-    fig, ax = plt.subplots(figsize=(6.4, 5.6))
+    kappas = [(0.0, "κ = 0 (push only)"), (0.5, "κ = 0.5 (faint ring)"),
+              (2.0, "κ = 2 (loud ring)")]
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4.8), sharey=True)
     fig.patch.set_facecolor(SURFACE)
-    styled_axes(ax)
-    order = np.sort(noise_stats)
-    for J, color in zip([0.5e-3, 1e-3, 2e-3, 5e-3], CAT):
-        sig = touch_pulse(J, 5e-3, 0.5)
-        stats = detect_stat(to_sensor(make_noise(N_TRIALS) + sig))
-        fpr = 1 - np.searchsorted(order, order) / len(order)
-        fpr = np.linspace(0, 1, 200)
-        thr = np.quantile(noise_stats, 1 - fpr)
-        tpr = (stats[:, None] > thr[None, :]).mean(axis=0)
-        ax.plot(fpr, tpr, color=color, lw=2)
-        i = np.searchsorted(fpr, 0.35)
-        ax.text(0.36, tpr[i] + 0.015, f"J = {J*1e3:g} mN·s", color=color,
-                fontsize=9)
-    ax.plot([0, 1], [0, 1], color=GRID, lw=1, ls=":")
-    ax.set_xlabel("false-alarm rate", color=MUTED)
-    ax.set_ylabel("detection rate", color=MUTED)
-    ax.set_title("ROC: graze detection, 5 ms contact, ring coupling 0.5",
-                 color=INK, fontsize=11, loc="left")
+    fpr = np.linspace(0, 1, 200)
+    thr = np.quantile(noise_stats, 1 - fpr)
+    for ax, (kappa, title) in zip(axes, kappas):
+        styled_axes(ax)
+        for J, color in zip([0.5e-3, 1e-3, 2e-3, 5e-3], CAT):
+            sig = touch_pulse(J, 5e-3, kappa)
+            stats = detect_stat(to_sensor(make_noise(N_TRIALS) + sig))
+            tpr = (stats[:, None] > thr[None, :]).mean(axis=0)
+            ax.plot(fpr, tpr, color=color, lw=2, label=f"J = {J*1e3:g} mN·s")
+        ax.plot([0, 1], [0, 1], color=GRID, lw=1, ls=":")
+        ax.set_xlabel("false-alarm rate", color=MUTED)
+        ax.set_title(title, color=INK, fontsize=11, loc="left")
+    axes[0].set_ylabel("detection rate", color=MUTED)
+    leg = axes[0].legend(loc="lower right", fontsize=9, frameon=False)
+    for txt in leg.get_texts():
+        txt.set_color(INK)
+    fig.suptitle("ROC: graze detection, 5 ms contact — the ring makes the cliff",
+                 color=INK, fontsize=12, x=0.02, ha="left")
     fig.tight_layout()
     fig.savefig(out, dpi=150, facecolor=SURFACE)
     plt.close(fig)
@@ -184,9 +188,9 @@ def fig_detectability(noise_stats, out):
     Js = np.geomspace(0.2e-3, 10e-3, 8)
     taus = np.array([1, 2, 5, 10, 20]) * 1e-3
     cmap = LinearSegmentedColormap.from_list("seq", SEQ)
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4.4), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2), sharey=True)
     fig.patch.set_facecolor(SURFACE)
-    for ax, kappa in zip(axes, [0.0, 0.5]):
+    for ax, kappa in zip(axes, [0.0, 0.5, 2.0]):
         grid = np.array([[run_cell(J, tau, kappa, noise_stats)
                           for J in Js] for tau in taus])
         im = ax.imshow(grid, origin="lower", aspect="auto", cmap=cmap,

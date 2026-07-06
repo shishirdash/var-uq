@@ -21,6 +21,15 @@ may matched-filter or use gyro); κ=180 Hz ring frequency assumed; noise σ=1 m/
 assumed; fig_traces draws the threshold on the raw trace (wrong signal — teaching
 moment, fix in round 2 figures).
 
+Flaw resolution (2026-07-06): Shishir found it by asking "does the traces figure
+already have the hpf output" — it didn't; the threshold dashes were drawn on the
+raw trace while the detector thresholds the high-passed signal. Fixed: each row
+now overlays the filtered signal (blue) on the raw (gray); the no-touch row is
+finally self-consistent (raw roams ±3, blue sits inside the dashes), and the
+κ=2 row shows the detected burst clearly while the raw trace shows nothing.
+Meta-lesson for post 2: the broadcast heartbeat graphic commits exactly this sin —
+showing a raw-looking wiggle while the decision happens in a domain nobody sees.
+
 ## Round 2 — 2026-07-06: "where does the κ=2 cliff sit in J?"
 
 Shishir predicted: 0.2 mN·s. Sim result: ~0.35 mN·s (TPR: 0.01 at J≤0.2, 0.21 at

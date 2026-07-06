@@ -95,12 +95,17 @@ def to_sensor(a_hi):
     return np.fft.irfft(spec, n=N_HI, axis=-1)[..., ::DECIM]
 
 
-def detect_stat(a_500):
-    """Detection statistic: peak |high-pass| above the aero band."""
+def highpass(a_500):
+    """The detector's ears: kill everything below ~100 Hz (the aero band)."""
     f = np.fft.rfftfreq(a_500.shape[-1], 1 / FS)
     spec = np.fft.rfft(a_500, axis=-1)
     spec *= 1 - 1 / (1 + (f / 100.0) ** 8)
-    return np.abs(np.fft.irfft(spec, n=a_500.shape[-1], axis=-1)).max(axis=-1)
+    return np.fft.irfft(spec, n=a_500.shape[-1], axis=-1)
+
+
+def detect_stat(a_500):
+    """Detection statistic: peak |high-pass| above the aero band."""
+    return np.abs(highpass(a_500)).max(axis=-1)
 
 
 def run_cell(J, tau, kappa, noise_stats):
@@ -134,17 +139,21 @@ def fig_traces(noise_stats, out):
     for ax, (label, J, kappa) in zip(axes, cases):
         sig = touch_pulse(J, 5e-3, kappa) if J else np.zeros(N_HI)
         a = to_sensor(make_noise(1)[0] + sig)
+        hp = highpass(a)
         styled_axes(ax)
-        ax.plot(t, a, color=INK, lw=1.0)
+        ax.plot(t, a, color=INK, lw=0.9, alpha=0.35)
+        ax.plot(t, hp, color=CAT[0], lw=1.3)
         ax.axhline(thresh, color=CAT[2], lw=1.2, ls="--")
         ax.axhline(-thresh, color=CAT[2], lw=1.2, ls="--")
         ax.text(0.01, 0.92, label, transform=ax.transAxes, fontsize=10,
                 color=INK, va="top")
         if J:
-            ax.annotate("contact", (300, a[int(0.3 * FS)]), fontsize=9,
+            ax.annotate("contact", (300, hp[int(0.3 * FS)]), fontsize=9,
                         color=MUTED, xytext=(320, 6),
                         arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.8))
-    axes[0].text(0.99, 0.92, "dashes: detector threshold (1% false-alarm)",
+    axes[0].text(0.99, 0.92,
+                 "gray: raw signal · blue: after the >100 Hz filter —\n"
+                 "the dashes (1% false-alarm threshold) apply to BLUE",
                  transform=axes[0].transAxes, fontsize=9, color=MUTED,
                  va="top", ha="right")
     axes[-1].set_xlabel("time (ms)", color=MUTED)

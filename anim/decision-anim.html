@@ -300,6 +300,17 @@
 </div>
 
 <script>
+// ---------- deep links: ?scene=1|2|3 opens a tab; &solo=1 hides chrome ----------
+const _params = new URLSearchParams(location.search);
+window.addEventListener('DOMContentLoaded', () => {
+  const sc = parseInt(_params.get('scene'));
+  if (sc >= 1 && sc <= 3) show(sc);
+  if (_params.get('solo') === '1') {
+    for (const sel of ['.tabs', 'h1', '.sub'])
+      document.querySelector(sel).style.display = 'none';
+  }
+});
+
 // ---------- tabs ----------
 function show(n) {
   for (const k of [1,2,3]) {

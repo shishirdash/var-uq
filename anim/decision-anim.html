@@ -41,7 +41,7 @@
   <div class="tabs">
     <button id="tab1" class="active" onclick="show(1)">1 · The play &amp; the rule</button>
     <button id="tab2" onclick="show(2)">2 · Inside the ball</button>
-    <button id="tab3" onclick="show(3)">3 · Push vs. ring</button>
+    <button id="tab3" onclick="show(3)">3 · Push vs. shudder</button>
     <button id="tab4" onclick="show(4)">4 · The full flight</button>
   </div>
 
@@ -176,7 +176,7 @@
       <!-- graze contact, top-left -->
       <circle cx="299" cy="139" r="10" fill="none" stroke="#eda100" stroke-width="3"/>
       <text x="40" y="70" font-size="13" fill="#b07500">a graze can land anywhere on the shell — maybe the</text>
-      <text x="40" y="88" font-size="13" fill="#b07500">chip's panel, maybe the far side (the ring then travels around)</text>
+      <text x="40" y="88" font-size="13" fill="#b07500">chip's panel, maybe the far side (the shudder then travels around)</text>
       <path d="M 250 96 C 275 110, 290 122, 296 131" fill="none" stroke="#eda100" stroke-width="2"/>
       <!-- old design inset -->
       <g>
@@ -221,7 +221,7 @@
     <svg viewBox="0 0 960 560" width="100%">
       <rect width="960" height="560" fill="#fcfcfb"/>
       <text x="240" y="40" font-size="17" font-weight="650" text-anchor="middle">Channel 1 — THE PUSH</text>
-      <text x="720" y="40" font-size="17" font-weight="650" text-anchor="middle">Channel 2 — THE RING</text>
+      <text x="720" y="40" font-size="17" font-weight="650" text-anchor="middle">Channel 2 — THE SHUDDER</text>
       <line x1="480" y1="20" x2="480" y2="490" stroke="#e1e0d9"/>
       <defs>
         <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
@@ -285,18 +285,18 @@
       <g font-size="13">
         <text x="550" y="425">the shell shudders like a struck drum — your pressure</text>
         <text x="550" y="447">wave, ringing at 100s of Hz for ~50 ms. the 2026 chip</text>
-        <text x="550" y="469">lives IN the shell, so the ring reaches it directly:</text>
+        <text x="550" y="469">lives IN the shell, so the shudder reaches it directly:</text>
         <text x="550" y="491"><tspan font-weight="650" fill="#b07500">κ likely higher — but depends where the graze lands</tspan></text>
       </g>
       <text x="480" y="522" font-size="12" fill="#898781" text-anchor="middle">both panels slowed ~20×. wavy gray lines = the turbulent wake; the ball spins (~8 turns/s → your ~10 Hz wobble)</text>
       <text x="480" y="540" font-size="12" fill="#898781" text-anchor="middle">and the chip jiggles faintly the whole time — that constant jiggle is the noise every real signal must beat.</text>
     </svg>
     <div class="note">Same graze, two different messages to the chip — delivered on top of a ride that never
-    stops. The push is honest about the ball's motion but absurdly faint. The ring says nothing about where
+    stops. The push is honest about the ball's motion but absurdly faint. The shudder says nothing about where
     the ball goes — but it may be loud. Which one would you build a detector around?</div>
     <div class="cites">Physics numbers: our own order-of-magnitude estimates (this project's M0 dialogue) — drag F = ½ρC<tspan baseline-shift="sub" font-size="9">d</tspan>Av², graze impulse bracket 0.05–1 mN·s.
       Chip-in-panel placement: <a href="https://news.adidas.com/football/adidas-unveils--trionda----the-official-match-ball-of-the-fifa-world-cup26-/s/27042e3a-12ba-482d-8839-8a96e056b33e">Adidas</a>.
-      Detection mechanism: <b>no primary source exists</b> — FIFA/Adidas/KINEXON have published no algorithm, threshold, or error rate (checked July 2026). The ring channel and κ are our modeling hypothesis, not an official description.</div>
+      Detection mechanism: <b>no primary source exists</b> — FIFA/Adidas/KINEXON have published no algorithm, threshold, or error rate (checked July 2026). The shudder channel and κ are our modeling hypothesis, not an official description.</div>
   </div>
 
   <!-- ============ SCENE 4: the full flight ============ -->

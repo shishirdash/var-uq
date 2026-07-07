@@ -43,6 +43,7 @@
     <button id="tab2" onclick="show(2)">2 · Inside the ball</button>
     <button id="tab3" onclick="show(3)">3 · Push vs. shudder</button>
     <button id="tab4" onclick="show(4)">4 · The full flight</button>
+    <button id="tab5" onclick="show(5)">5 · The twist</button>
   </div>
 
   <!-- ============ SCENE 1: zoomed to the final third ============ -->
@@ -301,8 +302,8 @@
 
   <!-- ============ SCENE 4: the full flight ============ -->
   <div class="panel scene" id="scene4">
-    <svg viewBox="0 0 960 640" width="100%">
-      <rect width="960" height="640" fill="#fcfcfb"/>
+    <svg viewBox="0 0 960 775" width="100%">
+      <rect width="960" height="775" fill="#fcfcfb"/>
       <defs>
         <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
@@ -369,7 +370,14 @@
         <text id="s4det" x="640" y="462" font-size="13" font-weight="650" fill="#008300" opacity="0">detected ✓</text>
         <line id="s4cursor" x1="70" y1="446" x2="70" y2="574" stroke="#c3c2b7" stroke-width="1"/>
       </g>
-      <text x="480" y="616" font-size="12" fill="#898781" text-anchor="middle">the ball spins, the wake churns, the chip rides along — then a graze. watch the blue line, not the ball.</text>
+      <text x="480" y="612" font-size="12" fill="#898781" text-anchor="middle">the ball spins, the wake churns, the chip rides along — then a graze. watch the blue line, not the ball.</text>
+      <g>
+        <rect x="60" y="628" width="880" height="118" fill="#f4f3ef" rx="8"/>
+        <text x="70" y="646" font-size="11" fill="#898781">the OTHER instrument — gyroscope: spin rate (calm weather up here)</text>
+        <polyline id="s4gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
+        <text id="s4gstep" x="700" y="668" font-size="12" font-weight="650" fill="#199e70" opacity="0">a step — and it stays ↗</text>
+        <text x="928" y="740" font-size="10" fill="#898781" text-anchor="end">step exaggerated for visibility — how big is it really? (open Fermi question)</text>
+      </g>
     </svg>
     <div class="controls">
       <button onclick="s4replay()">↺ replay</button>
@@ -387,6 +395,88 @@
     the impulse arrow is not to scale; the signal strip is illustrative, patterned on our simulation
     (<a href="https://github.com/shishirdash/var-uq">repo</a>). Physics numbers are our own order-of-magnitude estimates.</div>
   </div>
+
+  <!-- ============ SCENE 5: the twist (gyro channel) ============ -->
+  <div class="panel scene" id="scene5">
+    <svg viewBox="0 0 960 600" width="100%">
+      <rect width="960" height="600" fill="#fcfcfb"/>
+      <defs>
+        <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
+        </marker>
+      </defs>
+      <text x="40" y="40" font-size="17" font-weight="650">Channel 3 — THE TWIST (the gyroscope's channel)</text>
+
+      <!-- ball -->
+      <g>
+        <circle cx="250" cy="225" r="110" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="5"/>
+        <g id="s5seams" stroke="#c3c2b7" stroke-width="2" fill="none">
+          <path d="M 250 115 C 200 175, 200 275, 250 335"/>
+          <path d="M 250 115 C 300 175, 300 275, 250 335"/>
+          <rect x="322" y="220" width="8" height="8" rx="2" fill="#2a78d6" stroke="none"/>
+        </g>
+        <path d="M 148 168 A 116 116 0 0 0 148 282" stroke="#199e70" stroke-width="2.5" fill="none" marker-end="url(#arr5)"/>
+        <text x="118" y="228" font-size="11" fill="#199e70" text-anchor="end">spin (slowed)</text>
+        <!-- graze contact at rim, upper right -->
+        <g id="s5hair" opacity="0">
+          <path d="M 348 128 q 8 -6 16 -8 M 352 138 q 9 -4 17 -4 M 354 148 q 9 -2 17 0" stroke="#52514e" stroke-width="1.5" fill="none"/>
+        </g>
+        <circle id="s5spark" cx="334" cy="154" r="12" fill="none" stroke="#eda100" stroke-width="2.5" opacity="0"/>
+        <!-- force vector + decomposition -->
+        <g id="s5F" opacity="0">
+          <line x1="334" y1="154" x2="274" y2="126" stroke="#eda100" stroke-width="3.5" marker-end="url(#arr5)"/>
+          <text x="268" y="118" font-size="12" fill="#b07500" text-anchor="end">the graze force</text>
+        </g>
+        <g id="s5Fn" opacity="0">
+          <line x1="334" y1="154" x2="310" y2="174" stroke="#898781" stroke-width="2.5" stroke-dasharray="5 3" marker-end="url(#arr5)"/>
+          <text x="392" y="196" font-size="11" fill="#898781">toward the center →</text>
+          <text x="392" y="211" font-size="11" fill="#898781">the push + the shudder</text>
+        </g>
+        <g id="s5Ft" opacity="0">
+          <line x1="334" y1="154" x2="298" y2="106" stroke="#199e70" stroke-width="3" marker-end="url(#arr5)"/>
+          <text x="352" y="112" font-size="11" fill="#199e70">along the rim →</text>
+          <text x="352" y="127" font-size="11" fill="#199e70">the twist (full 11 cm lever)</text>
+          <path id="s5torque" d="M 322 96 A 130 130 0 0 1 380 200" stroke="#199e70" stroke-width="2" fill="none" stroke-dasharray="6 4" marker-end="url(#arr5)" opacity="0"/>
+        </g>
+      </g>
+
+      <!-- story text -->
+      <g font-size="13">
+        <text x="520" y="100">Turbulence shoves the ball through its middle:</text>
+        <text x="520" y="120" fill="#898781">no lever arm, no grip. It moves the ball (the</text>
+        <text x="520" y="140" fill="#898781">accelerometer's storm) but cannot twist it.</text>
+        <text x="520" y="180">The graze grabs the rim as it slides past:</text>
+        <text x="520" y="200" fill="#898781">maximum lever arm, real grip. Its tangential</text>
+        <text x="520" y="220" fill="#898781">component goes entirely into changing the spin.</text>
+        <text x="520" y="260" font-weight="650">One contact, three channels:</text>
+        <text x="520" y="280" fill="#898781">the perpendicular part feeds the push and the</text>
+        <text x="520" y="300" fill="#898781">shudder; the tangential part feeds the twist.</text>
+      </g>
+
+      <!-- two instrument strips -->
+      <g>
+        <rect x="40" y="380" width="430" height="170" fill="#f4f3ef" rx="8"/>
+        <text x="52" y="400" font-size="11" fill="#898781">accelerometer — the storm</text>
+        <polyline id="s5acc" points="" fill="none" stroke="#0b0b0b" stroke-width="1.2" opacity="0.75"/>
+        <text id="s5acclbl" x="455" y="420" font-size="11" fill="#b07500" text-anchor="end" opacity="0">a blip… gone in 5 ms</text>
+      </g>
+      <g>
+        <rect x="490" y="380" width="430" height="170" fill="#f4f3ef" rx="8"/>
+        <text x="502" y="400" font-size="11" fill="#898781">gyroscope — the calm</text>
+        <polyline id="s5gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
+        <text id="s5gylbl" x="905" y="420" font-size="11" fill="#199e70" text-anchor="end" opacity="0">a step… that never leaves</text>
+      </g>
+      <text x="480" y="578" font-size="12" fill="#898781" text-anchor="middle">same graze, two signatures: the storm swallows its blip; the calm remembers its step. (step size exaggerated — how big is it really? that's the open Fermi question)</text>
+    </svg>
+    <div class="controls"><button onclick="s5replay()">↺ replay</button></div>
+    <div class="note">The twist is the third channel, and it plays by different rules: the evidence doesn't
+    decay. The accelerometer must catch its blip in the 5 milliseconds it exists; the gyroscope can compare
+    "spin before" with "spin after" for as long as the flight lasts. Whether the step is big enough to see
+    over the gyro's own noise is the question currently under socratic construction.</div>
+    <div class="cites">Schematic. Gyroscope = angular-rate sensor (reports degrees-per-second of rotation,
+    3 axes, 500/s). Step size deliberately unquantified here. Decomposition insight credit: the author,
+    mid-dialogue. <a href="https://github.com/shishirdash/var-uq">repo</a></div>
+  </div>
 </div>
 
 <script>
@@ -394,7 +484,7 @@
 const _params = new URLSearchParams(location.search);
 window.addEventListener('DOMContentLoaded', () => {
   const sc = parseInt(_params.get('scene'));
-  if (sc >= 1 && sc <= 4) show(sc);
+  if (sc >= 1 && sc <= 5) show(sc);
   if (_params.get('solo') === '1') {
     for (const sel of ['.tabs', 'h1', '.sub'])
       document.querySelector(sel).style.display = 'none';
@@ -403,7 +493,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // ---------- tabs ----------
 function show(n) {
-  for (const k of [1,2,3,4]) {
+  for (const k of [1,2,3,4,5]) {
     document.getElementById('scene'+k).classList.toggle('on', k===n);
     document.getElementById('tab'+k).classList.toggle('active', k===n);
   }
@@ -543,7 +633,7 @@ const s4 = {
   UC: 0.625,            // contact point along the bezier
   ST: 1.6,              // total "match time" seconds of flight
   exagg: 10000, t0: performance.now(),
-  rawPts: [], hpPts: [],
+  rawPts: [], hpPts: [], gyPts: [],
 };
 function s4bez(u){
   const [x0,y0]=s4.p0,[cx,cy]=s4.c,[x2,y2]=s4.p2;
@@ -560,7 +650,7 @@ function s4setEx(e){ s4.exagg=e;
     b.style.borderColor = v===e ? '#0b0b0b' : ''; b.style.fontWeight = v===e ? '600' : '';
   }
 }
-function s4replay(){ s4.t0=performance.now(); s4.rawPts=[]; s4.hpPts=[]; }
+function s4replay(){ s4.t0=performance.now(); s4.rawPts=[]; s4.hpPts=[]; s4.gyPts=[]; }
 // wall-time -> match-time: normal, x35 slow-mo through contact, normal, hold
 function s4time(w){
   if (w < 2.5) return w/2.5*0.95;
@@ -624,9 +714,49 @@ function s4tick(now){
   $('s4hp').setAttribute('points', s4.hpPts.join(' '));
   $('s4cursor').setAttribute('x1', sx); $('s4cursor').setAttribute('x2', sx);
   $('s4det').setAttribute('opacity', t>tc+0.01 ? 1 : 0);
+  // gyro strip: calm jitter, permanent step after contact
+  const gjit = 1.1*Math.sin(t*33)+0.5*Math.sin(t*57+1);
+  const gbase = t > tc ? 682 : 704;
+  s4.gyPts.push(`${sx.toFixed(1)},${(gbase - gjit*2).toFixed(1)}`);
+  if (s4.gyPts.length>1500) s4.gyPts.shift();
+  $('s4gy').setAttribute('points', s4.gyPts.join(' '));
+  $('s4gstep').setAttribute('opacity', t>tc+0.05 ? 1 : 0);
   requestAnimationFrame(s4tick);
 }
 requestAnimationFrame(s4tick);
+
+// ---------- scene 5: the twist ----------
+const s5 = { t0: performance.now(), accPts: [], gyPts: [] };
+function s5replay(){ s5.t0=performance.now(); s5.accPts=[]; s5.gyPts=[]; }
+function s5tick(now){
+  if (!document.getElementById('scene5').classList.contains('on')) { requestAnimationFrame(s5tick); return; }
+  let w=(now-s5.t0)/1000; const T=7, tc=2.8;
+  if (w>T){ s5replay(); w=0; }
+  $('s5seams').setAttribute('transform', `rotate(${(now/1000*30)%360} 250 225)`);
+  // graze fx sequence
+  const ph=(a,b)=>w>=a&&w<b;
+  $('s5hair').setAttribute('opacity', ph(tc-0.5,tc+1.6)?1:0);
+  $('s5spark').setAttribute('opacity', ph(tc,tc+0.35)?1:0);
+  $('s5F').setAttribute('opacity', ph(tc+0.2,tc+1.6)?1:0);
+  $('s5Fn').setAttribute('opacity', w>=tc+1.0?Math.min(1,(w-tc-1.0)*2):0);
+  $('s5Ft').setAttribute('opacity', w>=tc+1.4?Math.min(1,(w-tc-1.4)*2):0);
+  $('s5torque').setAttribute('opacity', w>=tc+1.9?Math.min(1,(w-tc-1.9)*2):0);
+  // strips (x maps cycle time)
+  const ax=40+ (w/T)*420, gx=490+(w/T)*420;
+  const storm = 20*Math.sin(w*9)+13*Math.sin(w*17+1)+8*Math.sin(w*29+2);
+  const blip = w>tc ? 42*Math.exp(-(w-tc)*9)*Math.sin((w-tc)*90) : 0;
+  s5.accPts.push(`${ax.toFixed(1)},${(475-(storm+blip)).toFixed(1)}`);
+  const calm = 2.2*Math.sin(w*21)+1.2*Math.sin(w*47);
+  const step = w>tc ? 26 : 0;
+  s5.gyPts.push(`${gx.toFixed(1)},${(495-calm-step).toFixed(1)}`);
+  if (s5.accPts.length>1200){s5.accPts.shift(); s5.gyPts.shift();}
+  $('s5acc').setAttribute('points', s5.accPts.join(' '));
+  $('s5gy').setAttribute('points', s5.gyPts.join(' '));
+  $('s5acclbl').setAttribute('opacity', ph(tc+0.6,T)?1:0);
+  $('s5gylbl').setAttribute('opacity', ph(tc+0.6,T)?1:0);
+  requestAnimationFrame(s5tick);
+}
+requestAnimationFrame(s5tick);
 </script>
 </body>
 </html>

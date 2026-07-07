@@ -137,7 +137,15 @@ not on artifact completion.
   TL;DR callout, waveform-placeholder callout, workshop-notes callout, and the
   animation embedded as a sandboxed HTML attachment (+ GitHub Pages link).
   Notion page: app.notion.com/p/395b6a00c28a81ae9fd0e9ebc9f9a080
+- 2026-07-06 (evening): BLOG REBRANDED by Shishir: "TL;DR" → "Socratic Parroting"
+  (his synthesis of the stochastic-parrots riff + socratic format). What/Why/Who
+  replaced with a minimal toggle: "Explorations on (and with) AI, tech, books,
+  etc." + 4-line bio. No gimmicks policy for new posts: TL;DR callout removed from
+  post 1; workshop-notes callout flattened to a plain section. Post 1 remains
+  PRIVATE pending his TODOs. Framing critique saved at
+  ../tldr-framing-critique.md (outside public repo, deliberately).
 - PENDING: Shishir's TODOs — broadcast waveform frame-grab (replace placeholder
-  callout), voice pass on the LIVE Notion page.
+  callout), voice pass on the private Notion page. Then "publish it" = one move
+  back under Explorations.
   Then: Notion publish (next session), M1 round 3 (contact-duration cliff),
   M0 anatomy one-pager, M2 comparison, post 2.

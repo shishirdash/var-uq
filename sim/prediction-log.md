@@ -51,3 +51,30 @@ heartbeat spike therefore means: firmer-than-gentlest touch, OR a smarter detect
 than our threshold model, OR a rare false alarm — undecidable without the
 unpublished thresholds. Caveats: κ=2, 180 Hz ring, σ=1 m/s², single axis (cliff
 location moves with these; cliff existence doesn't).
+
+## Round 3 — 2026-07-07: the twist (gyro channel), from Shishir's own question
+
+Channel discovered by Shishir asking "wouldn't the gyro also be in play?" Socratic
+chain: air shoves but can't twist (Q1-Q2) → force decomposition, tangential feeds
+torque (his insight) → Δω ceiling 1.8°/s = 0.06% of baseline spin, 5× the push's
+fractional effect (Q3, his arithmetic after two unit gremlins) → single-reading
+SNR ≈ 12 (Q4a) → two-window mean-comparison detector (his design, Q4b) → Allan-U
+window limits: bias drift + non-stationary spin (Q5, both named by him).
+
+Envelope 1 (detector as designed): BLIND at all J — the aero spin-decay slides the
+baseline ~2.9°/s between windows, parking the null statistic above any step; a real
+graze partially CANCELS the slide (anti-correlated detector). His Q5(ii) enemy,
+live on the bench.
+
+Fix (his design, Q6b): fit line to before-window, extrapolate, subtract, re-compare.
+
+Envelope 2: Shishir predicted cliff at 0.07 mN·s ("5× lower than shudder's 0.35,
+mirroring the 5× stronger signal"). Result: detrended threshold 0.389°/s (13× the
+jitter-only ideal — the Allan tax priced in); cliff at f=1 ≈ 0.23 mN·s, at f=0.3
+≈ 0.7. Verdict: direction right (twist beats shudder, best case), magnitude 3×
+optimistic. Pattern across rounds: direction right, bullish on effect size.
+
+Key findings: (1) every channel carries one unmeasured coupling that decides its
+fate — shudder has κ, twist has f; (2) κ and f are independent → fusion hedges the
+geometry lottery; (3) the twist has engineering headroom (better gyro/drift model
+moves the cliff), the shudder doesn't.

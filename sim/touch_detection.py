@@ -258,3 +258,88 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# --- gyro channel: the twist (round 3, socratic session 2026-07-07) ---
+# Model: single gyro axis at 500 Hz. Baseline spin ~8 rev/s with slow aero
+# decay + MEMS white jitter + bias drift (random walk). Graze adds a permanent
+# step dw = f * J * r / I. Detector: two-window mean comparison (Shishir's
+# design, Q4b), 0.1 s per side, threshold set on noise-only runs at 1% FPR.
+# ponytail: scalar spin (no 3-axis precession); add axes if verdicts look marginal.
+
+R_BALL = 0.11
+I_BALL = (2 / 3) * M_BALL * R_BALL**2
+GYRO_JITTER = 0.15 * np.pi / 180 * 57.3 / 57.3  # keep everything in deg/s
+GYRO_JITTER_DPS = 0.15          # white noise per reading, deg/s
+DRIFT_RW_DPS = 0.02             # bias random-walk step per sample, deg/s/sqrt(sample)
+SPIN0_DPS = 2880.0
+AERO_DECAY = 0.01               # fractional spin decay per second
+WIN = int(0.1 * FS)             # 50 samples per side
+N_G = int(0.6 * FS)             # 0.6 s trace, graze at middle
+
+
+def gyro_trace(n_trials, J=0.0, f_split=1.0, rng=RNG):
+    t = np.arange(N_G) / FS
+    base = SPIN0_DPS * (1 - AERO_DECAY * t)
+    drift = np.cumsum(rng.standard_normal((n_trials, N_G)) * DRIFT_RW_DPS, axis=1)
+    white = rng.standard_normal((n_trials, N_G)) * GYRO_JITTER_DPS
+    step = np.zeros(N_G)
+    dw_dps = f_split * J * R_BALL / I_BALL * 57.2958
+    step[N_G // 2:] = dw_dps
+    return base[None, :] + drift + white + step[None, :]
+
+
+def twist_stat(traces):
+    mid = N_G // 2
+    before = traces[:, mid - WIN:mid].mean(axis=1)
+    after = traces[:, mid:mid + WIN].mean(axis=1)
+    return np.abs(after - before)
+
+
+def gyro_sweep():
+    noise = twist_stat(gyro_trace(3000))
+    th = np.quantile(noise, 0.99)
+    print(f"gyro two-window threshold @1% FPR: {th:.3f} deg/s")
+    print(f"{'J (mN.s)':>9} {'f=1.0':>7} {'f=0.3':>7}")
+    for J in [0.005, 0.01, 0.02, 0.035, 0.05, 0.07, 0.1, 0.2, 0.35, 1.0]:
+        row = []
+        for f_split in (1.0, 0.3):
+            tpr = (twist_stat(gyro_trace(400, J * 1e-3, f_split)) > th).mean()
+            row.append(tpr)
+        print(f"{J:9.3f} {row[0]:7.2f} {row[1]:7.2f}")
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "gyro":
+    gyro_sweep()
+
+
+def twist_stat_detrended(traces):
+    """Shishir's Q6b fix: fit a line to the before-window, extrapolate it
+    under the after-window, subtract, then compare residual means."""
+    mid = N_G // 2
+    x = np.arange(-WIN, 0) + 0.5          # before-window sample times, centered
+    yb = traces[:, mid - WIN:mid]
+    xc = x - x.mean()
+    slope = (yb * xc).sum(1) / (xc**2).sum()
+    intercept = yb.mean(1)
+    xa = np.arange(0, WIN) + 0.5 - x.mean()   # after-window, same time origin
+    pred = intercept[:, None] + slope[:, None] * xa[None, :]
+    resid = traces[:, mid:mid + WIN] - pred
+    return np.abs(resid.mean(1))
+
+
+def gyro_sweep_v2():
+    noise = twist_stat_detrended(gyro_trace(3000))
+    th = np.quantile(noise, 0.99)
+    print(f"detrended threshold @1% FPR: {th:.3f} deg/s")
+    print(f"{'J (mN.s)':>9} {'f=1.0':>7} {'f=0.3':>7}")
+    for J in [0.01, 0.02, 0.035, 0.05, 0.07, 0.1, 0.15, 0.2, 0.35, 0.7, 1.0]:
+        row = []
+        for f_split in (1.0, 0.3):
+            tpr = (twist_stat_detrended(gyro_trace(400, J * 1e-3, f_split)) > th).mean()
+            row.append(tpr)
+        print(f"{J:9.3f} {row[0]:7.2f} {row[1]:7.2f}")
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "gyro2":
+    gyro_sweep_v2()

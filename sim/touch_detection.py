@@ -6,8 +6,8 @@ Model: one accelerometer axis of a sensor suspended at the center of a ball in
 flight, sampled internally at 10 kHz, anti-alias filtered and decimated to the
 500 Hz the real KINEXON sensor reports. A touch adds (a) a rigid-body half-sine
 deceleration pulse with impulse J over contact time tau, and (b) a damped
-shell-vibration "ring" whose amplitude scales with peak contact force via an
-unknown coupling kappa — the honest big unknown, so we sweep it.
+shell-vibration "shudder" whose amplitude scales with peak contact force via an
+unknown coupling kappa_shudder — the honest big unknown, so we sweep it.
 
 Detector: high-pass at 100 Hz (above the aero-noise band), threshold on peak
 magnitude. Monte Carlo -> ROC and a detectability map over (J, tau).
@@ -40,7 +40,7 @@ A_SPIN = 0.7         # spin-wobble amplitude at f_spin
 F_SPIN = 8.0
 SIG_SENSOR = 0.02    # MEMS noise, ~125 ug/sqrt(Hz) over 250 Hz bandwidth
 
-# shell ring
+# shell shudder (the "ring" in early notes)
 F_RING = 180.0       # Hz, first shell mode reaching the sensor (below Nyquist)
 TAU_RING = 0.03      # s, decay time
 
@@ -74,7 +74,7 @@ def make_noise(n):
     return aero + spin + sensor
 
 
-def touch_pulse(J, tau, kappa):
+def touch_pulse(J, tau, kappa_shudder):
     """Touch signature at 10 kHz: half-sine rigid pulse + damped shell ring."""
     a = np.zeros(N_HI)
     t0 = T_WIN / 2
@@ -83,7 +83,7 @@ def touch_pulse(J, tau, kappa):
     a_peak = np.pi * J / (2 * M_BALL * tau)
     a[i0:i0 + n_c] += a_peak * np.sin(np.pi * np.arange(n_c) / n_c)
     t_rel = _t_hi[i0 + n_c:] - _t_hi[i0 + n_c]
-    a[i0 + n_c:] += kappa * a_peak * np.exp(-t_rel / TAU_RING) \
+    a[i0 + n_c:] += kappa_shudder * a_peak * np.exp(-t_rel / TAU_RING) \
         * np.sin(2 * np.pi * F_RING * t_rel)
     return a
 
@@ -108,10 +108,10 @@ def detect_stat(a_500):
     return np.abs(highpass(a_500)).max(axis=-1)
 
 
-def run_cell(J, tau, kappa, noise_stats):
-    """TPR at the FPR_TARGET threshold for one (J, tau, kappa)."""
+def run_cell(J, tau, kappa_shudder, noise_stats):
+    """TPR at the FPR_TARGET threshold for one (J, tau, kappa_shudder)."""
     thresh = np.quantile(noise_stats, 1 - FPR_TARGET)
-    sig = touch_pulse(J, tau, kappa)
+    sig = touch_pulse(J, tau, kappa_shudder)
     stats = detect_stat(to_sensor(make_noise(N_TRIALS) + sig))
     return (stats > thresh).mean()
 
@@ -129,15 +129,15 @@ def styled_axes(ax):
 
 def fig_traces(noise_stats, out):
     cases = [("no touch", 0.0, 0.5),
-             ("hair graze, J = 1 mN·s, ring κ = 0.5", 1e-3, 0.5),
-             ("same hair graze, loud ring κ = 2", 1e-3, 2.0),
-             ("firm graze, J = 5 mN·s, ring κ = 0.5", 5e-3, 0.5)]
+             ("hair graze, J = 1 mN·s, κ_shudder = 0.5", 1e-3, 0.5),
+             ("same hair graze, loud shudder κ_shudder = 2", 1e-3, 2.0),
+             ("firm graze, J = 5 mN·s, κ_shudder = 0.5", 5e-3, 0.5)]
     thresh = np.quantile(noise_stats, 1 - FPR_TARGET)
     fig, axes = plt.subplots(4, 1, figsize=(8, 7.6), sharex=True, sharey=True)
     fig.patch.set_facecolor(SURFACE)
     t = np.arange(N_HI // DECIM) / FS * 1000
-    for ax, (label, J, kappa) in zip(axes, cases):
-        sig = touch_pulse(J, 5e-3, kappa) if J else np.zeros(N_HI)
+    for ax, (label, J, kappa_shudder) in zip(axes, cases):
+        sig = touch_pulse(J, 5e-3, kappa_shudder) if J else np.zeros(N_HI)
         a = to_sensor(make_noise(1)[0] + sig)
         hp = highpass(a)
         styled_axes(ax)
@@ -166,16 +166,16 @@ def fig_traces(noise_stats, out):
 
 
 def fig_roc(noise_stats, out):
-    kappas = [(0.0, "κ = 0 (push only)"), (0.5, "κ = 0.5 (faint ring)"),
-              (2.0, "κ = 2 (loud ring)")]
+    kappas = [(0.0, "κ_shudder = 0 (push only)"), (0.5, "κ_shudder = 0.5 (faint shudder)"),
+              (2.0, "κ_shudder = 2 (loud shudder)")]
     fig, axes = plt.subplots(1, 3, figsize=(13, 4.8), sharey=True)
     fig.patch.set_facecolor(SURFACE)
     fpr = np.linspace(0, 1, 200)
     thr = np.quantile(noise_stats, 1 - fpr)
-    for ax, (kappa, title) in zip(axes, kappas):
+    for ax, (kappa_shudder, title) in zip(axes, kappas):
         styled_axes(ax)
         for J, color in zip([0.5e-3, 1e-3, 2e-3, 5e-3], CAT):
-            sig = touch_pulse(J, 5e-3, kappa)
+            sig = touch_pulse(J, 5e-3, kappa_shudder)
             stats = detect_stat(to_sensor(make_noise(N_TRIALS) + sig))
             tpr = (stats[:, None] > thr[None, :]).mean(axis=0)
             ax.plot(fpr, tpr, color=color, lw=2, label=f"J = {J*1e3:g} mN·s")
@@ -186,7 +186,7 @@ def fig_roc(noise_stats, out):
     leg = axes[0].legend(loc="lower right", fontsize=9, frameon=False)
     for txt in leg.get_texts():
         txt.set_color(INK)
-    fig.suptitle("ROC: graze detection, 5 ms contact — the ring makes the cliff",
+    fig.suptitle("ROC: graze detection, 5 ms contact — the shudder makes the cliff",
                  color=INK, fontsize=12, x=0.02, ha="left")
     fig.tight_layout()
     fig.savefig(out, dpi=150, facecolor=SURFACE)
@@ -199,8 +199,8 @@ def fig_detectability(noise_stats, out):
     cmap = LinearSegmentedColormap.from_list("seq", SEQ)
     fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2), sharey=True)
     fig.patch.set_facecolor(SURFACE)
-    for ax, kappa in zip(axes, [0.0, 0.5, 2.0]):
-        grid = np.array([[run_cell(J, tau, kappa, noise_stats)
+    for ax, kappa_shudder in zip(axes, [0.0, 0.5, 2.0]):
+        grid = np.array([[run_cell(J, tau, kappa_shudder, noise_stats)
                           for J in Js] for tau in taus])
         im = ax.imshow(grid, origin="lower", aspect="auto", cmap=cmap,
                        vmin=0, vmax=1)
@@ -210,8 +210,8 @@ def fig_detectability(noise_stats, out):
         for sp in ax.spines.values():
             sp.set_visible(False)
         ax.set_xlabel("impulse J (mN·s)", color=MUTED)
-        ax.set_title(f"ring coupling κ = {kappa:g}"
-                     + ("  (rigid body only)" if kappa == 0 else ""),
+        ax.set_title(f"shudder coupling κ_shudder = {kappa_shudder:g}"
+                     + ("  (rigid body only)" if kappa_shudder == 0 else ""),
                      color=INK, fontsize=10, loc="left")
         for (r, c), v in np.ndenumerate(grid):
             ax.text(c, r, f"{v:.2f}", ha="center", va="center", fontsize=7,
@@ -249,9 +249,9 @@ def main():
     fig_detectability(noise_stats, figs / "fig_detectability.png")
 
     for J in [0.5e-3, 1e-3, 2e-3, 5e-3]:
-        for kappa in [0.0, 0.5, 2.0]:
-            tpr = run_cell(J, 5e-3, kappa, noise_stats)
-            print(f"J={J*1e3:4.1f} mN·s  tau=5ms  kappa={kappa:3.1f}  "
+        for kappa_shudder in [0.0, 0.5, 2.0]:
+            tpr = run_cell(J, 5e-3, kappa_shudder, noise_stats)
+            print(f"J={J*1e3:4.1f} mN·s  tau=5ms  κ_shudder={kappa_shudder:3.1f}  "
                   f"TPR@1%FPR = {tpr:.2f}")
     print(f"figures -> {figs}")
 
@@ -278,13 +278,13 @@ WIN = int(0.1 * FS)             # 50 samples per side
 N_G = int(0.6 * FS)             # 0.6 s trace, graze at middle
 
 
-def gyro_trace(n_trials, J=0.0, f_split=1.0, rng=RNG):
+def gyro_trace(n_trials, J=0.0, kappa_twist=1.0, rng=RNG):
     t = np.arange(N_G) / FS
     base = SPIN0_DPS * (1 - AERO_DECAY * t)
     drift = np.cumsum(rng.standard_normal((n_trials, N_G)) * DRIFT_RW_DPS, axis=1)
     white = rng.standard_normal((n_trials, N_G)) * GYRO_JITTER_DPS
     step = np.zeros(N_G)
-    dw_dps = f_split * J * R_BALL / I_BALL * 57.2958
+    dw_dps = kappa_twist * J * R_BALL / I_BALL * 57.2958
     step[N_G // 2:] = dw_dps
     return base[None, :] + drift + white + step[None, :]
 
@@ -300,11 +300,11 @@ def gyro_sweep():
     noise = twist_stat(gyro_trace(3000))
     th = np.quantile(noise, 0.99)
     print(f"gyro two-window threshold @1% FPR: {th:.3f} deg/s")
-    print(f"{'J (mN.s)':>9} {'f=1.0':>7} {'f=0.3':>7}")
+    print(f"{'J (mN.s)':>9} {'κt=1.0':>7} {'κt=0.3':>7}")
     for J in [0.005, 0.01, 0.02, 0.035, 0.05, 0.07, 0.1, 0.2, 0.35, 1.0]:
         row = []
-        for f_split in (1.0, 0.3):
-            tpr = (twist_stat(gyro_trace(400, J * 1e-3, f_split)) > th).mean()
+        for kappa_twist in (1.0, 0.3):
+            tpr = (twist_stat(gyro_trace(400, J * 1e-3, kappa_twist)) > th).mean()
             row.append(tpr)
         print(f"{J:9.3f} {row[0]:7.2f} {row[1]:7.2f}")
 
@@ -332,11 +332,11 @@ def gyro_sweep_v2():
     noise = twist_stat_detrended(gyro_trace(3000))
     th = np.quantile(noise, 0.99)
     print(f"detrended threshold @1% FPR: {th:.3f} deg/s")
-    print(f"{'J (mN.s)':>9} {'f=1.0':>7} {'f=0.3':>7}")
+    print(f"{'J (mN.s)':>9} {'κt=1.0':>7} {'κt=0.3':>7}")
     for J in [0.01, 0.02, 0.035, 0.05, 0.07, 0.1, 0.15, 0.2, 0.35, 0.7, 1.0]:
         row = []
-        for f_split in (1.0, 0.3):
-            tpr = (twist_stat_detrended(gyro_trace(400, J * 1e-3, f_split)) > th).mean()
+        for kappa_twist in (1.0, 0.3):
+            tpr = (twist_stat_detrended(gyro_trace(400, J * 1e-3, kappa_twist)) > th).mean()
             row.append(tpr)
         print(f"{J:9.3f} {row[0]:7.2f} {row[1]:7.2f}")
 

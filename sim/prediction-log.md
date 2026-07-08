@@ -78,3 +78,12 @@ Key findings: (1) every channel carries one unmeasured coupling that decides its
 fate — shudder has κ, twist has f; (2) κ and f are independent → fusion hedges the
 geometry lottery; (3) the twist has engineering headroom (better gyro/drift model
 moves the cliff), the shudder doesn't.
+
+## Terminology note (2026-07-08)
+
+Post 1 unified the per-channel couplings under subscripted kappas: κ_push
+(perpendicular force share), κ_shudder (shell-transmission gain; called plain
+"κ" in rounds 1-2 above), κ_twist (tangential/grip share; called "f" or
+"f_split" in round 3 above). Code renamed to match (kappa_shudder,
+kappa_twist). The three are independent draws — the basis of the fusion
+argument for post 2.

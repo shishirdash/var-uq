@@ -12,21 +12,25 @@ Style: `blog` profile (first-person, warm, self-deprecating, em-dashes OK, anecd
 framing, optimistic close) + `personal` profile's curious-reader stance. Readable to a
 lay outsider; define every technical term on first use.
 
-## Post 1 — "The hair that ended a World Cup run"
+## Roadmap v2 (agreed 2026-07-07, supersedes the 3-post plan)
 
-Narrative anatomy of the decision. The play, the heartbeat graphic, then a lay-friendly
-tour of the tech stack (ball IMU at 500Hz, semi-automated offside limb tracking, sensor
-fusion) and every place uncertainty enters the pipeline. Curious, not prosecutorial.
-Sets up the question posts 2–3 answer.
+## Post 1 — "On offsides and uncertainty" (live draft, private)
 
-## Post 2 — "Can a chip in a ball feel a hair?"
+Anatomy of the decision, now covering ALL THREE channels: the push and the shudder
+(accelerometer) plus the twist (gyroscope — discovered via Shishir's own question,
+round 3). The rule, the chip, the three physical traces, κ and f as the twin
+unmeasured couplings. No sim details (post 2's job).
 
-The R&D post. Fermi estimates (a hair graze is ~1000× smaller impulse than a header),
-then a synthetic-IMU simulation: inject graze pulses into realistic aero noise, run a
-detector, produce ROC curves and a detectability map over (impulse, contact time).
-Key honest modeling point: rigid-body deceleration vs. shell-vibration "ring" — the
-latter is probably what makes detection feasible, and its coupling is the big unknown.
-Conclusion is whatever the physics says. Sim lives in `sim/`.
+## Post 2 — "Tinker, Tailor, Sampler, Spy" (the simulation ritual)
+
+The step-by-step detection ritual, visualized per channel: innocent trials set the
+threshold, guilty trials climb it, the sigmoid draws itself, the cliff emerges.
+Psychometric-curve fitting + adaptive sampling for precise cliffs with CIs. The
+playable-cliff interactive. Scaling laws via dimensional analysis (flight speed etc.
+collapse into ~3 dimensionless ratios). Finale: the JOINT sim — one graze, both
+sensor streams, fusion detector hedging the κ-vs-f lottery. Prediction-log excerpts
+as the honest thread. Kitchen experiment (phone IMU in/on a real ball) feeds the
+model's ring-frequency and κ inputs if done in time.
 
 ## Post 3 — "How sports measure doubt"
 
@@ -40,6 +44,21 @@ Comparative and descriptive, NOT prescriptive (no soccer policy takes).
   dangerous play (pure human judgment; "clear and obvious" as a crude uncertainty
   protocol).
 Ends with open questions, not policy.
+
+## Post 4 — "Verdicts as posteriors" (hierarchical Bayes)
+
+κ, f, J unknown per touch with priors; the trace yields a POSTERIOR probability of
+touch, not a binary. Build the object Collins & Evans (2008) said broadcasters
+should show. Hierarchical structure: population priors over touches, per-incident
+inference. The Matanović call re-run as a posterior.
+
+## Post 5 — "Can a world model learn the ball?" (JEPA exploration)
+
+Train a small self-supervised embedding-predictor (JEPA-style) on synthetic
+touchless flights; test whether prediction-error spikes at grazes and whether the
+latent encodes spin/decay/κ unprompted. We hold the answer key (we wrote the
+physics), so we can grade what the world model "discovered" against the socratically
+derived detector. Doubles as Shishir's JEPA learning goal.
 
 ## Woven thread (all posts) — "how I built this with an AI"
 
@@ -59,10 +78,18 @@ a capstone post 4.
   Shishir predicts each result before it's revealed; divergences drive model revisions.
   First prediction pending (question 6). Deliverable: revised sim + figures + a
   prediction-vs-result log → post 2 and the meta-thread.
+- M1.5 — The twist (gyro channel). ✅ DONE 2026-07-07 socratically: decomposition →
+  Δω ceiling → two-window detector → Allan-U limits → detrend fix → cliff at ~0.23
+  (f=1) / ~0.7 (f=0.3). Logged as round 3.
 - M2 — Cross-sport comparison. Work through the cricket/tennis research (banked in
   research/); build the measurement→judgment taxonomy. Deliverable: comparison table +
   post 3 skeleton.
-- M3 — Drafting. Posts 1→2→3 in blog style, workshop-notes sidebars from actual logs.
+- M3 — Drafting/publication, per roadmap v2: post 1 (3-channel rewrite) → 2 → 3.
+- M4 — Advanced arcs: post 4 (hierarchical Bayes) and post 5 (JEPA world model),
+  each preceded by its own socratic exploration phase.
+- Supporting builds queued: joint 3-channel sim + fusion detector; psychometric
+  cliff-fitting; scaling-law derivation; kitchen IMU experiment; broadcast-waveform
+  digitization (validation).
 
 Pace rule: one socratic question at a time; milestone gates move on Shishir's answers,
 not on artifact completion.

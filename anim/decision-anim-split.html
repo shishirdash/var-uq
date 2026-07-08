@@ -143,8 +143,7 @@
     <div class="note">Everyone is moving at once — the dashed offside line sits wherever the second-last defender
     stands, and after the graze the whole defense collapses goalward, dragging the line with it. That is why
     the verdict shows a second, frozen dashed line: the rule compares Pašalić to where the line was AT the
-    graze, not where it ended up. The one thing that decides everything is the one thing no human in the
-    frame can perceive.</div>
+    graze, not where it ended up. The graze itself is invisible to everyone in the frame; only the chip registers it.</div>
     <div class="cites">Play &amp; FIFA statement: <a href="https://www.espn.com/soccer/story/_/id/49256422/fifa-var-correctly-denied-croatia-equaliser-portugal">ESPN</a> ·
       <a href="https://www.goal.com/en/lists/fifa-defend-var-croatia-goal-disallowed-portugal-world-cup/bltc7118fa3e7cbdffb">Goal.com</a> ·
       <a href="https://www.tntsports.co.uk/football/world-cup/2026/croatia-var-goal-disallowed-portugal-bottles-thrown-last-32_sto23315655/story.shtml">TNT Sports</a>.
@@ -291,12 +290,11 @@
         <text x="550" y="469">lives IN the shell, so the shudder reaches it directly:</text>
         <text x="550" y="491"><tspan font-weight="650" fill="#b07500">κ likely higher — but depends where the graze lands</tspan></text>
       </g>
-      <text x="480" y="522" font-size="12" fill="#898781" text-anchor="middle">both panels slowed ~20×. wavy gray lines = the turbulent wake; the ball spins (~8 turns/s → your ~10 Hz wobble)</text>
-      <text x="480" y="540" font-size="12" fill="#898781" text-anchor="middle">and the chip jiggles faintly the whole time — that constant jiggle is the noise every real signal must beat.</text>
+      <text x="480" y="522" font-size="12" fill="#898781" text-anchor="middle">both panels slowed ~20×. wavy gray lines = the turbulent wake; the ball spins (~8 turns/s → the ~10 Hz force wobble)</text>
+      <text x="480" y="540" font-size="12" fill="#898781" text-anchor="middle">and the chip jiggles faintly the whole time — that constant jiggle is the noise floor.</text>
     </svg>
     <div class="note">Same graze, two different messages to the chip — delivered on top of a ride that never
-    stops. (A third channel — the twist, the gyroscope's — gets the next tab.) The push is honest about the ball's motion but absurdly faint. The shudder says nothing about where
-    the ball goes — but it may be loud. Which one would you build a detector around?</div>
+    stops. (A third channel — the twist, the gyroscope's — gets the next tab.) The push is real but tiny. The shudder says nothing about where the ball goes, but it may be loud.</div>
     <div class="cites">Physics numbers: our own order-of-magnitude estimates (this project's M0 dialogue) — drag F = ½ρC<tspan baseline-shift="sub" font-size="9">d</tspan>Av², graze impulse bracket 0.05–1 mN·s.
       Chip-in-panel placement: <a href="https://news.adidas.com/football/adidas-unveils--trionda----the-official-match-ball-of-the-fifa-world-cup26-/s/27042e3a-12ba-482d-8839-8a96e056b33e">Adidas</a>.
       Detection mechanism: <b>no primary source exists</b> — FIFA/Adidas/KINEXON have published no algorithm, threshold, or error rate (checked July 2026). The shudder channel and κ are our modeling hypothesis, not an official description.</div>
@@ -372,13 +370,13 @@
         <text id="s4det" x="640" y="462" font-size="13" font-weight="650" fill="#008300" opacity="0">detected ✓</text>
         <line id="s4cursor" x1="70" y1="446" x2="70" y2="574" stroke="#c3c2b7" stroke-width="1"/>
       </g>
-      <text x="480" y="612" font-size="12" fill="#898781" text-anchor="middle">the ball spins, the wake churns, the chip rides along — then a graze. watch the blue line, not the ball.</text>
+      <text x="480" y="612" font-size="12" fill="#898781" text-anchor="middle">the ride, then a graze — the response shows in the blue line.</text>
       <g>
         <rect x="60" y="628" width="880" height="118" fill="#f4f3ef" rx="8"/>
-        <text x="70" y="646" font-size="11" fill="#898781">the OTHER instrument — gyroscope: spin rate (calm weather up here)</text>
+        <text x="70" y="646" font-size="11" fill="#898781">gyroscope — spin rate</text>
         <polyline id="s4gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
-        <text id="s4gstep" x="700" y="668" font-size="12" font-weight="650" fill="#199e70" opacity="0">a step — and it stays ↗</text>
-        <text x="928" y="740" font-size="10" fill="#898781" text-anchor="end">step exaggerated for visibility — how big is it really? (open Fermi question)</text>
+        <text id="s4gstep" x="700" y="668" font-size="12" font-weight="650" fill="#199e70" opacity="0">a step — persists ↗</text>
+        <text x="928" y="740" font-size="10" fill="#898781" text-anchor="end">step exaggerated for visibility</text>
       </g>
     </svg>
     <div class="controls">
@@ -461,7 +459,7 @@
         <rect x="40" y="380" width="430" height="170" fill="#f4f3ef" rx="8"/>
         <text x="52" y="400" font-size="11" fill="#898781">accelerometer — the storm</text>
         <polyline id="s5acc" points="" fill="none" stroke="#0b0b0b" stroke-width="1.2" opacity="0.75"/>
-        <text id="s5acclbl" x="455" y="420" font-size="11" fill="#b07500" text-anchor="end" opacity="0">a blip… gone in 5 ms</text>
+        <text id="s5acclbl" x="455" y="420" font-size="11" fill="#b07500" text-anchor="end" opacity="0">a blip — gone in ~5 ms</text>
       </g>
       <g>
         <rect x="490" y="380" width="430" height="170" fill="#f4f3ef" rx="8"/>
@@ -469,16 +467,14 @@
         <polyline id="s5gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
         <text id="s5gylbl" x="905" y="420" font-size="11" fill="#199e70" text-anchor="end" opacity="0">a step… that never leaves</text>
       </g>
-      <text x="480" y="578" font-size="12" fill="#898781" text-anchor="middle">same graze, two signatures: the storm swallows its blip; the calm remembers its step. (step size exaggerated — how big is it really? that's the open Fermi question)</text>
+      <text x="480" y="578" font-size="12" fill="#898781" text-anchor="middle">same graze, two signatures: the blip fades within milliseconds; the step persists. (step size exaggerated)</text>
     </svg>
     <div class="controls"><button onclick="s5replay()">↺ replay</button></div>
     <div class="note">The twist is the third channel, and it plays by different rules: the evidence doesn't
     decay. The accelerometer must catch its blip in the 5 milliseconds it exists; the gyroscope can compare
-    "spin before" with "spin after" for as long as the flight lasts. Whether the step is big enough to see
-    over the gyro's own noise is the question currently under socratic construction.</div>
+    "spin before" with "spin after" for as long as the flight lasts.</div>
     <div class="cites">Schematic. Gyroscope = angular-rate sensor (reports degrees-per-second of rotation,
-    3 axes, 500/s). Step size deliberately unquantified here. Decomposition insight credit: the author,
-    mid-dialogue. <a href="https://github.com/shishirdash/var-uq">repo</a></div>
+    3 axes, 500/s). <a href="https://github.com/shishirdash/var-uq">repo</a></div>
   </div>
 </div>
 

@@ -142,8 +142,7 @@
     <div class="note">Everyone is moving at once — the dashed offside line sits wherever the second-last defender
     stands, and after the graze the whole defense collapses goalward, dragging the line with it. That is why
     the verdict shows a second, frozen dashed line: the rule compares Pašalić to where the line was AT the
-    graze, not where it ended up. The one thing that decides everything is the one thing no human in the
-    frame can perceive.</div>
+    graze, not where it ended up. The graze itself is invisible to everyone in the frame; only the chip registers it.</div>
     <div class="cites">Play &amp; FIFA statement: <a href="https://www.espn.com/soccer/story/_/id/49256422/fifa-var-correctly-denied-croatia-equaliser-portugal">ESPN</a> ·
       <a href="https://www.goal.com/en/lists/fifa-defend-var-croatia-goal-disallowed-portugal-world-cup/bltc7118fa3e7cbdffb">Goal.com</a> ·
       <a href="https://www.tntsports.co.uk/football/world-cup/2026/croatia-var-goal-disallowed-portugal-bottles-thrown-last-32_sto23315655/story.shtml">TNT Sports</a>.
@@ -297,38 +296,37 @@
         <text x="355" y="322">the shell rings like a struck drum:</text>
         <text x="355" y="340">100s of Hz for ~50 ms — long after</text>
         <text x="355" y="358">contact. the 2026 chip lives IN the shell:</text>
-        <text x="355" y="376">how loudly it arrives = <tspan font-weight="650" fill="#b07500">κ, unknown</tspan>.</text>
+        <text x="355" y="376">how loudly it arrives = <tspan font-weight="650" fill="#b07500">κ_shudder, unknown</tspan>.</text>
       </g>
       <g font-size="12" fill="#898781">
         <text x="660" y="322">the tangential part grabs the rim —</text>
         <text x="660" y="340">an 11 cm lever arm. the spin steps by</text>
         <text x="660" y="358">≤0.06% — tiny, but it <tspan font-weight="650" fill="#0b0b0b">persists</tspan>. how much</text>
-        <text x="660" y="376">of the force twists = <tspan font-weight="650" fill="#199e70">f, unknown</tspan>.</text>
+        <text x="660" y="376">of the force twists = <tspan font-weight="650" fill="#199e70">κ_twist, unknown</tspan>.</text>
       </g>
 
       <!-- instrument strips -->
       <g>
         <rect x="40" y="470" width="430" height="170" fill="#f4f3ef" rx="8"/>
-        <text x="52" y="490" font-size="11" fill="#898781">accelerometer — the storm (push + shudder land here)</text>
+        <text x="52" y="490" font-size="11" fill="#898781">accelerometer (the push and the shudder land here)</text>
         <polyline id="p3acc" points="" fill="none" stroke="#0b0b0b" stroke-width="1.2" opacity="0.75"/>
-        <text id="p3acclbl" x="455" y="510" font-size="11" fill="#b07500" text-anchor="end" opacity="0">a blip… gone in 5 ms</text>
+        <text id="p3acclbl" x="455" y="510" font-size="11" fill="#b07500" text-anchor="end" opacity="0">a blip — gone in ~5 ms</text>
       </g>
       <g>
         <rect x="490" y="470" width="430" height="170" fill="#f4f3ef" rx="8"/>
-        <text x="502" y="490" font-size="11" fill="#898781">gyroscope — the calm (the twist lands here)</text>
+        <text x="502" y="490" font-size="11" fill="#898781">gyroscope (the twist lands here)</text>
         <polyline id="p3gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
-        <text id="p3gylbl" x="905" y="510" font-size="11" fill="#199e70" text-anchor="end" opacity="0">a step… that stays</text>
+        <text id="p3gylbl" x="905" y="510" font-size="11" fill="#199e70" text-anchor="end" opacity="0">a step — persists</text>
       </g>
-      <text x="480" y="672" font-size="12" fill="#898781" text-anchor="middle">one graze, three signatures — the storm swallows its blip; the calm keeps its step.</text>
-      <text x="480" y="692" font-size="12" fill="#898781" text-anchor="middle">(all magnitudes exaggerated for visibility; the honest sizes are the post's whole subject)</text>
+      <text x="480" y="672" font-size="12" fill="#898781" text-anchor="middle">one graze, three signatures. the blip fades within milliseconds; the step persists.</text>
+      <text x="480" y="692" font-size="12" fill="#898781" text-anchor="middle">(magnitudes exaggerated for visibility)</text>
     </svg>
     <div class="controls"><button onclick="p3replay()">↺ replay</button></div>
-    <div class="note">Same graze, three different messages to the chip. The push is honest about the ball's
-    motion but absurdly faint. The shudder is loud but fleeting — and how loudly it reaches the chip is κ.
-    The twist is tiny but permanent — and how much of the force twists is f. Two instruments, two unknowns,
-    one verdict.</div>
+    <div class="note">Same graze, three signatures. The push is real but tiny. The shudder is louder but brief; how
+    loudly it arrives is κ_shudder. The twist is small but persists; how much of the force twists is
+    κ_twist.</div>
     <div class="cites">Physics numbers: our own order-of-magnitude estimates — graze impulse bracket 0.05–1 mN·s; twist ceiling from torque × time = I × Δω.
-      Detection mechanism: <b>no primary source exists</b> — FIFA/Adidas/KINEXON have published no algorithm, threshold, or error rate (checked July 2026). The shudder (κ) and twist (f) framings are our modeling hypotheses, not official descriptions. <a href="https://github.com/shishirdash/var-uq">repo</a></div>
+      Detection mechanism: <b>no primary source exists</b> — FIFA/Adidas/KINEXON have published no algorithm, threshold, or error rate (checked July 2026). The shudder (κ_shudder) and twist (κ_twist) framings are our modeling hypotheses, not official descriptions. <a href="https://github.com/shishirdash/var-uq">repo</a></div>
   </div>
 
   <!-- ============ SCENE 4: the full flight ============ -->
@@ -401,13 +399,13 @@
         <text id="s4det" x="640" y="462" font-size="13" font-weight="650" fill="#008300" opacity="0">detected ✓</text>
         <line id="s4cursor" x1="70" y1="446" x2="70" y2="574" stroke="#c3c2b7" stroke-width="1"/>
       </g>
-      <text x="480" y="612" font-size="12" fill="#898781" text-anchor="middle">the ball spins, the wake churns, the chip rides along — then a graze. watch the blue line, not the ball.</text>
+      <text x="480" y="612" font-size="12" fill="#898781" text-anchor="middle">the ride, then a graze — the response shows in the blue line.</text>
       <g>
         <rect x="60" y="628" width="880" height="118" fill="#f4f3ef" rx="8"/>
-        <text x="70" y="646" font-size="11" fill="#898781">the OTHER instrument — gyroscope: spin rate (calm weather up here)</text>
+        <text x="70" y="646" font-size="11" fill="#898781">gyroscope — spin rate</text>
         <polyline id="s4gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
-        <text id="s4gstep" x="700" y="668" font-size="12" font-weight="650" fill="#199e70" opacity="0">a step — and it stays ↗</text>
-        <text x="928" y="740" font-size="10" fill="#898781" text-anchor="end">step exaggerated for visibility — how big is it really? (open Fermi question)</text>
+        <text id="s4gstep" x="700" y="668" font-size="12" font-weight="650" fill="#199e70" opacity="0">a step — persists ↗</text>
+        <text x="928" y="740" font-size="10" fill="#898781" text-anchor="end">step exaggerated for visibility</text>
       </g>
     </svg>
     <div class="controls">

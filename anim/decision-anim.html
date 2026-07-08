@@ -41,9 +41,8 @@
   <div class="tabs">
     <button id="tab1" class="active" onclick="show(1)">1 · The play &amp; the rule</button>
     <button id="tab2" onclick="show(2)">2 · Inside the ball</button>
-    <button id="tab3" onclick="show(3)">3 · Push vs. shudder</button>
-    <button id="tab4" onclick="show(4)">4 · The twist</button>
-    <button id="tab5" onclick="show(5)">5 · The full flight</button>
+    <button id="tab3" onclick="show(3)">3 · The three channels</button>
+    <button id="tab4" onclick="show(4)">4 · The full flight</button>
   </div>
 
   <!-- ============ SCENE 1: zoomed to the final third ============ -->
@@ -217,93 +216,123 @@
       2022–24 center-suspension: Adidas Al Rihla release, TUM. Cross-section geometry is schematic.</div>
   </div>
 
-  <!-- ============ SCENE 3: push vs ring ============ -->
+  <!-- ============ SCENE 3: the three channels ============ -->
   <div class="panel scene" id="scene3">
-    <svg viewBox="0 0 960 560" width="100%">
-      <rect width="960" height="560" fill="#fcfcfb"/>
-      <text x="240" y="34" font-size="17" font-weight="650" text-anchor="middle">Channel 1 — THE PUSH</text>
-      <text x="240" y="52" font-size="11" fill="#898781" text-anchor="middle">felt by the accelerometer</text>
-      <text x="720" y="34" font-size="17" font-weight="650" text-anchor="middle">Channel 2 — THE SHUDDER</text>
-      <text x="720" y="52" font-size="11" fill="#898781" text-anchor="middle">also the accelerometer</text>
-      <line x1="480" y1="20" x2="480" y2="490" stroke="#e1e0d9"/>
+    <svg viewBox="0 0 960 710" width="100%">
+      <rect width="960" height="710" fill="#fcfcfb"/>
       <defs>
-        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#0b0b0b"/>
+        <marker id="arrP3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
         </marker>
       </defs>
+      <line x1="325" y1="24" x2="325" y2="445" stroke="#e1e0d9"/>
+      <line x1="635" y1="24" x2="635" y2="445" stroke="#e1e0d9"/>
+      <text x="170" y="36" font-size="15" font-weight="650" text-anchor="middle">1 · THE PUSH</text>
+      <text x="170" y="54" font-size="11" fill="#898781" text-anchor="middle">felt by the accelerometer</text>
+      <text x="480" y="36" font-size="15" font-weight="650" text-anchor="middle">2 · THE SHUDDER</text>
+      <text x="480" y="54" font-size="11" fill="#898781" text-anchor="middle">also the accelerometer</text>
+      <text x="790" y="36" font-size="15" font-weight="650" text-anchor="middle">3 · THE TWIST</text>
+      <text x="790" y="54" font-size="11" fill="#898781" text-anchor="middle">felt by the gyroscope</text>
 
-      <g id="wakeP" stroke="#c3c2b7" stroke-width="2" fill="none" opacity="0.5">
-        <path d="M 60 190 q 12 -8 24 0 t 24 0 t 24 0"/>
-        <path d="M 50 235 q 12 8 24 0 t 24 0 t 24 0"/>
-        <path d="M 62 280 q 12 -8 24 0 t 24 0 t 24 0"/>
-      </g>
-      <g id="wakeR" stroke="#c3c2b7" stroke-width="2" fill="none" opacity="0.5">
-        <path d="M 540 190 q 12 -8 24 0 t 24 0 t 24 0"/>
-        <path d="M 530 235 q 12 8 24 0 t 24 0 t 24 0"/>
-        <path d="M 542 280 q 12 -8 24 0 t 24 0 t 24 0"/>
-      </g>
-
-      <!-- PUSH panel -->
-      <g id="pushBall">
-        <circle cx="240" cy="230" r="110" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="5"/>
-        <g id="seamsP" stroke="#c3c2b7" stroke-width="2" fill="none">
-          <path d="M 240 120 C 190 180, 190 280, 240 340"/>
-          <path d="M 240 120 C 290 180, 290 280, 240 340"/>
+      <!-- push ball -->
+      <g id="p3ballA">
+        <circle cx="170" cy="200" r="85" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="4"/>
+        <g id="p3seamsA" stroke="#c3c2b7" stroke-width="1.8" fill="none">
+          <path d="M 170 115 C 132 161, 132 239, 170 285"/>
+          <path d="M 170 115 C 208 161, 208 239, 170 285"/>
+          <rect x="226" y="192" width="16" height="16" rx="4" fill="#2a78d6" stroke="none"/>
         </g>
-        <g fill="#898781">
-          <circle cx="179" cy="303" r="7"/><circle cx="145" cy="230" r="7"/><circle cx="179" cy="157" r="7"/>
-        </g>
-        <rect id="pushSensor" x="312" y="217" width="26" height="26" rx="5" fill="#2a78d6"/>
       </g>
-      <g id="pushFx" opacity="0">
-        <path d="M 150 158 L 196 196" stroke="#eda100" stroke-width="3" marker-end="url(#arr)"/>
-        <path d="M 240 230 L 300 282" stroke="#e34948" stroke-width="3" marker-end="url(#arr)" opacity="0.9"/>
-        <text x="255" y="305" font-size="12" fill="#e34948">Δv — exaggerated ×10,000</text>
+      <g id="p3hitA" opacity="0">
+        <line x1="98" y1="120" x2="126" y2="148" stroke="#eda100" stroke-width="3" marker-end="url(#arrP3)"/>
       </g>
-      <g font-size="13">
-        <text x="70" y="425">the whole ball (chip included) gets nudged once.</text>
-        <text x="70" y="447">your numbers: Δv ≈ 0.1–2 mm/s on a 20 m/s ball —</text>
-        <text x="70" y="469">deflection over the rest of flight ≈ <tspan font-weight="650">the width of a hair</tspan></text>
-        <text x="70" y="491" fill="#898781">one tiny shove, over in 5 ms, 10–200× below the aero ride</text>
+      <g id="p3dvA" opacity="0">
+        <line x1="170" y1="200" x2="216" y2="242" stroke="#e34948" stroke-width="2.5" marker-end="url(#arrP3)"/>
+        <text x="176" y="262" font-size="10" fill="#e34948">Δv — ×10,000</text>
       </g>
 
-      <!-- RING panel -->
-      <g id="ringBall">
-        <circle id="ringShell" cx="720" cy="230" r="110" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="5"/>
-        <g id="seamsR" stroke="#c3c2b7" stroke-width="2" fill="none">
-          <path d="M 720 120 C 670 180, 670 280, 720 340"/>
-          <path d="M 720 120 C 770 180, 770 280, 720 340"/>
+      <!-- shudder ball -->
+      <g id="p3ballB">
+        <circle cx="480" cy="200" r="85" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="4"/>
+        <g id="p3seamsB" stroke="#c3c2b7" stroke-width="1.8" fill="none">
+          <path d="M 480 115 C 442 161, 442 239, 480 285"/>
+          <path d="M 480 115 C 518 161, 518 239, 480 285"/>
         </g>
-        <g id="ringMass" fill="#898781">
-          <circle cx="659" cy="303" r="7"/><circle cx="625" cy="230" r="7"/><circle cx="659" cy="157" r="7"/>
+        <rect id="p3sensB" x="536" y="192" width="16" height="16" rx="4" fill="#2a78d6"/>
+        <g fill="none" stroke="#eda100" stroke-width="2.5">
+          <circle id="p3rip1" cx="422" cy="141" r="5" opacity="0"/>
+          <circle id="p3rip2" cx="422" cy="141" r="5" opacity="0"/>
+          <circle id="p3rip3" cx="422" cy="141" r="5" opacity="0"/>
         </g>
-        <rect id="ringSensor" x="792" y="217" width="26" height="26" rx="5" fill="#2a78d6"/>
-        <g fill="none" stroke="#eda100" stroke-width="3">
-          <circle id="rip1" cx="643" cy="153" r="8" opacity="0"/>
-          <circle id="rip2" cx="643" cy="153" r="8" opacity="0"/>
-          <circle id="rip3" cx="643" cy="153" r="8" opacity="0"/>
-        </g>
-        <path id="ringHit" d="M 610 118 L 636 146" stroke="#eda100" stroke-width="3" marker-end="url(#arr)" opacity="0"/>
       </g>
-      <g font-size="13">
-        <text x="550" y="425">the shell shudders like a struck drum — your pressure</text>
-        <text x="550" y="447">wave, ringing at 100s of Hz for ~50 ms. the 2026 chip</text>
-        <text x="550" y="469">lives IN the shell, so the shudder reaches it directly:</text>
-        <text x="550" y="491"><tspan font-weight="650" fill="#b07500">κ likely higher — but depends where the graze lands</tspan></text>
+      <g id="p3hitB" opacity="0">
+        <line x1="398" y1="110" x2="418" y2="134" stroke="#eda100" stroke-width="3" marker-end="url(#arrP3)"/>
       </g>
-      <text x="480" y="522" font-size="12" fill="#898781" text-anchor="middle">both panels slowed ~20×. wavy gray lines = the turbulent wake; the ball spins (~8 turns/s → your ~10 Hz wobble)</text>
-      <text x="480" y="540" font-size="12" fill="#898781" text-anchor="middle">and the chip jiggles faintly the whole time — that constant jiggle is the noise every real signal must beat.</text>
+
+      <!-- twist ball -->
+      <g id="p3ballC">
+        <circle cx="790" cy="200" r="85" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="4"/>
+        <g id="p3seamsC" stroke="#c3c2b7" stroke-width="1.8" fill="none">
+          <path d="M 790 115 C 752 161, 752 239, 790 285"/>
+          <path d="M 790 115 C 828 161, 828 239, 790 285"/>
+          <rect x="846" y="192" width="16" height="16" rx="4" fill="#2a78d6" stroke="none"/>
+        </g>
+        <path d="M 712 158 A 89 89 0 0 0 712 242" stroke="#199e70" stroke-width="2.5" fill="none" marker-end="url(#arrP3)"/>
+        <text x="700" y="205" font-size="10" fill="#199e70" text-anchor="end">spin</text>
+      </g>
+      <g id="p3hitC" opacity="0">
+        <line x1="836" y1="112" x2="812" y2="140" stroke="#eda100" stroke-width="3" marker-end="url(#arrP3)"/>
+        <path d="M 852 132 A 95 95 0 0 1 866 218" stroke="#199e70" stroke-width="2" stroke-dasharray="5 4" fill="none" marker-end="url(#arrP3)"/>
+        <text x="874" y="120" font-size="10" fill="#199e70">the twist</text>
+      </g>
+
+      <!-- captions -->
+      <g font-size="12" fill="#898781">
+        <text x="45" y="322">one tiny shove, over in 5 ms:</text>
+        <text x="45" y="340">Δv ≈ 0.1–2 mm/s on a 20 m/s ball —</text>
+        <text x="45" y="358">deflection ≈ <tspan font-weight="650" fill="#0b0b0b">the width of a hair</tspan>.</text>
+        <text x="45" y="376">10–200× below the aero ride.</text>
+      </g>
+      <g font-size="12" fill="#898781">
+        <text x="355" y="322">the shell rings like a struck drum:</text>
+        <text x="355" y="340">100s of Hz for ~50 ms — long after</text>
+        <text x="355" y="358">contact. the 2026 chip lives IN the shell:</text>
+        <text x="355" y="376">how loudly it arrives = <tspan font-weight="650" fill="#b07500">κ, unknown</tspan>.</text>
+      </g>
+      <g font-size="12" fill="#898781">
+        <text x="660" y="322">the tangential part grabs the rim —</text>
+        <text x="660" y="340">an 11 cm lever arm. the spin steps by</text>
+        <text x="660" y="358">≤0.06% — tiny, but it <tspan font-weight="650" fill="#0b0b0b">persists</tspan>. how much</text>
+        <text x="660" y="376">of the force twists = <tspan font-weight="650" fill="#199e70">f, unknown</tspan>.</text>
+      </g>
+
+      <!-- instrument strips -->
+      <g>
+        <rect x="40" y="470" width="430" height="170" fill="#f4f3ef" rx="8"/>
+        <text x="52" y="490" font-size="11" fill="#898781">accelerometer — the storm (push + shudder land here)</text>
+        <polyline id="p3acc" points="" fill="none" stroke="#0b0b0b" stroke-width="1.2" opacity="0.75"/>
+        <text id="p3acclbl" x="455" y="510" font-size="11" fill="#b07500" text-anchor="end" opacity="0">a blip… gone in 5 ms</text>
+      </g>
+      <g>
+        <rect x="490" y="470" width="430" height="170" fill="#f4f3ef" rx="8"/>
+        <text x="502" y="490" font-size="11" fill="#898781">gyroscope — the calm (the twist lands here)</text>
+        <polyline id="p3gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
+        <text id="p3gylbl" x="905" y="510" font-size="11" fill="#199e70" text-anchor="end" opacity="0">a step… that stays</text>
+      </g>
+      <text x="480" y="672" font-size="12" fill="#898781" text-anchor="middle">one graze, three signatures — the storm swallows its blip; the calm keeps its step.</text>
+      <text x="480" y="692" font-size="12" fill="#898781" text-anchor="middle">(all magnitudes exaggerated for visibility; the honest sizes are the post's whole subject)</text>
     </svg>
-    <div class="note">Same graze, two different messages to the chip — delivered on top of a ride that never
-    stops. (A third channel — the twist, the gyroscope's — gets the next tab.) The push is honest about the ball's motion but absurdly faint. The shudder says nothing about where
-    the ball goes — but it may be loud. Which one would you build a detector around?</div>
-    <div class="cites">Physics numbers: our own order-of-magnitude estimates (this project's M0 dialogue) — drag F = ½ρC<tspan baseline-shift="sub" font-size="9">d</tspan>Av², graze impulse bracket 0.05–1 mN·s.
-      Chip-in-panel placement: <a href="https://news.adidas.com/football/adidas-unveils--trionda----the-official-match-ball-of-the-fifa-world-cup26-/s/27042e3a-12ba-482d-8839-8a96e056b33e">Adidas</a>.
-      Detection mechanism: <b>no primary source exists</b> — FIFA/Adidas/KINEXON have published no algorithm, threshold, or error rate (checked July 2026). The shudder channel and κ are our modeling hypothesis, not an official description.</div>
+    <div class="controls"><button onclick="p3replay()">↺ replay</button></div>
+    <div class="note">Same graze, three different messages to the chip. The push is honest about the ball's
+    motion but absurdly faint. The shudder is loud but fleeting — and how loudly it reaches the chip is κ.
+    The twist is tiny but permanent — and how much of the force twists is f. Two instruments, two unknowns,
+    one verdict.</div>
+    <div class="cites">Physics numbers: our own order-of-magnitude estimates — graze impulse bracket 0.05–1 mN·s; twist ceiling from torque × time = I × Δω.
+      Detection mechanism: <b>no primary source exists</b> — FIFA/Adidas/KINEXON have published no algorithm, threshold, or error rate (checked July 2026). The shudder (κ) and twist (f) framings are our modeling hypotheses, not official descriptions. <a href="https://github.com/shishirdash/var-uq">repo</a></div>
   </div>
 
   <!-- ============ SCENE 4: the full flight ============ -->
-  <div class="panel scene" id="scene5">
+  <div class="panel scene" id="scene4">
     <svg viewBox="0 0 960 775" width="100%">
       <rect width="960" height="775" fill="#fcfcfb"/>
       <defs>
@@ -398,88 +427,6 @@
     (<a href="https://github.com/shishirdash/var-uq">repo</a>). Physics numbers are our own order-of-magnitude estimates.</div>
   </div>
 
-  <!-- ============ SCENE 5: the twist (gyro channel) ============ -->
-  <div class="panel scene" id="scene4">
-    <svg viewBox="0 0 960 600" width="100%">
-      <rect width="960" height="600" fill="#fcfcfb"/>
-      <defs>
-        <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
-        </marker>
-      </defs>
-      <text x="40" y="34" font-size="17" font-weight="650">Channel 3 — THE TWIST</text>
-      <text x="40" y="52" font-size="11" fill="#898781">felt by the gyroscope — the other instrument in the same chip</text>
-
-      <!-- ball -->
-      <g>
-        <circle cx="250" cy="225" r="110" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="5"/>
-        <g id="s5seams" stroke="#c3c2b7" stroke-width="2" fill="none">
-          <path d="M 250 115 C 200 175, 200 275, 250 335"/>
-          <path d="M 250 115 C 300 175, 300 275, 250 335"/>
-          <rect x="322" y="220" width="8" height="8" rx="2" fill="#2a78d6" stroke="none"/>
-        </g>
-        <path d="M 148 168 A 116 116 0 0 0 148 282" stroke="#199e70" stroke-width="2.5" fill="none" marker-end="url(#arr5)"/>
-        <text x="118" y="228" font-size="11" fill="#199e70" text-anchor="end">spin (slowed)</text>
-        <!-- graze contact at rim, upper right -->
-        <g id="s5hair" opacity="0">
-          <path d="M 348 128 q 8 -6 16 -8 M 352 138 q 9 -4 17 -4 M 354 148 q 9 -2 17 0" stroke="#52514e" stroke-width="1.5" fill="none"/>
-        </g>
-        <circle id="s5spark" cx="334" cy="154" r="12" fill="none" stroke="#eda100" stroke-width="2.5" opacity="0"/>
-        <!-- force vector + decomposition -->
-        <g id="s5F" opacity="0">
-          <line x1="334" y1="154" x2="274" y2="126" stroke="#eda100" stroke-width="3.5" marker-end="url(#arr5)"/>
-          <text x="268" y="118" font-size="12" fill="#b07500" text-anchor="end">the graze force</text>
-        </g>
-        <g id="s5Fn" opacity="0">
-          <line x1="334" y1="154" x2="310" y2="174" stroke="#898781" stroke-width="2.5" stroke-dasharray="5 3" marker-end="url(#arr5)"/>
-          <text x="392" y="196" font-size="11" fill="#898781">toward the center →</text>
-          <text x="392" y="211" font-size="11" fill="#898781">the push + the shudder</text>
-        </g>
-        <g id="s5Ft" opacity="0">
-          <line x1="334" y1="154" x2="298" y2="106" stroke="#199e70" stroke-width="3" marker-end="url(#arr5)"/>
-          <text x="352" y="112" font-size="11" fill="#199e70">along the rim →</text>
-          <text x="352" y="127" font-size="11" fill="#199e70">the twist (full 11 cm lever)</text>
-          <path id="s5torque" d="M 322 96 A 130 130 0 0 1 380 200" stroke="#199e70" stroke-width="2" fill="none" stroke-dasharray="6 4" marker-end="url(#arr5)" opacity="0"/>
-        </g>
-      </g>
-
-      <!-- story text -->
-      <g font-size="13">
-        <text x="520" y="100">Turbulence shoves the ball through its middle:</text>
-        <text x="520" y="120" fill="#898781">no lever arm, no grip. It moves the ball (the</text>
-        <text x="520" y="140" fill="#898781">accelerometer's storm) but cannot twist it.</text>
-        <text x="520" y="180">The graze grabs the rim as it slides past:</text>
-        <text x="520" y="200" fill="#898781">maximum lever arm, real grip. Its tangential</text>
-        <text x="520" y="220" fill="#898781">component goes entirely into changing the spin.</text>
-        <text x="520" y="260" font-weight="650">One contact, three channels:</text>
-        <text x="520" y="280" fill="#898781">the perpendicular part feeds the push and the</text>
-        <text x="520" y="300" fill="#898781">shudder; the tangential part feeds the twist.</text>
-      </g>
-
-      <!-- two instrument strips -->
-      <g>
-        <rect x="40" y="380" width="430" height="170" fill="#f4f3ef" rx="8"/>
-        <text x="52" y="400" font-size="11" fill="#898781">accelerometer — the storm</text>
-        <polyline id="s5acc" points="" fill="none" stroke="#0b0b0b" stroke-width="1.2" opacity="0.75"/>
-        <text id="s5acclbl" x="455" y="420" font-size="11" fill="#b07500" text-anchor="end" opacity="0">a blip… gone in 5 ms</text>
-      </g>
-      <g>
-        <rect x="490" y="380" width="430" height="170" fill="#f4f3ef" rx="8"/>
-        <text x="502" y="400" font-size="11" fill="#898781">gyroscope — the calm</text>
-        <polyline id="s5gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
-        <text id="s5gylbl" x="905" y="420" font-size="11" fill="#199e70" text-anchor="end" opacity="0">a step… that never leaves</text>
-      </g>
-      <text x="480" y="578" font-size="12" fill="#898781" text-anchor="middle">same graze, two signatures: the storm swallows its blip; the calm remembers its step. (step size exaggerated — how big is it really? that's the open Fermi question)</text>
-    </svg>
-    <div class="controls"><button onclick="s5replay()">↺ replay</button></div>
-    <div class="note">The twist is the third channel, and it plays by different rules: the evidence doesn't
-    decay. The accelerometer must catch its blip in the 5 milliseconds it exists; the gyroscope can compare
-    "spin before" with "spin after" for as long as the flight lasts. Whether the step is big enough to see
-    over the gyro's own noise is the question currently under socratic construction.</div>
-    <div class="cites">Schematic. Gyroscope = angular-rate sensor (reports degrees-per-second of rotation,
-    3 axes, 500/s). Step size deliberately unquantified here. Decomposition insight credit: the author,
-    mid-dialogue. <a href="https://github.com/shishirdash/var-uq">repo</a></div>
-  </div>
 </div>
 
 <script>
@@ -487,7 +434,7 @@
 const _params = new URLSearchParams(location.search);
 window.addEventListener('DOMContentLoaded', () => {
   const sc = parseInt(_params.get('scene'));
-  if (sc >= 1 && sc <= 5) show(sc);
+  if (sc >= 1 && sc <= 4) show(sc);
   if (_params.get('solo') === '1') {
     for (const sel of ['.tabs', 'h1', '.sub'])
       document.querySelector(sel).style.display = 'none';
@@ -496,7 +443,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // ---------- tabs ----------
 function show(n) {
-  for (const k of [1,2,3,4,5]) {
+  for (const k of [1,2,3,4]) {
     document.getElementById('scene'+k).classList.toggle('on', k===n);
     document.getElementById('tab'+k).classList.toggle('active', k===n);
   }
@@ -592,43 +539,44 @@ function tick(now){
 }
 requestAnimationFrame(tick);
 
-// ---------- scene 3 loop ----------
-function s3(now){
-  const u = (now % 3500) / 3500;
-  const spin = (now/1000 * 55) % 360;
-  const nj = 0.6*Math.sin(now*0.037) + 0.35*Math.sin(now*0.081);
-
-  $('seamsP').setAttribute('transform', `rotate(${spin} 240 230)`);
-  $('seamsR').setAttribute('transform', `rotate(${spin} 720 230)`);
-  $('wakeP').setAttribute('opacity', 0.35 + 0.2*Math.sin(now*0.004));
-  $('wakeR').setAttribute('opacity', 0.35 + 0.2*Math.sin(now*0.0047));
-  $('wakeP').setAttribute('transform', `translate(${2*Math.sin(now*0.003)},${1.5*Math.cos(now*0.004)})`);
-  $('wakeR').setAttribute('transform', `translate(${2*Math.sin(now*0.0035)},${1.5*Math.cos(now*0.0042)})`);
-
-  const push = $('pushFx'), pb = $('pushBall');
-  if (u < 0.08){ push.setAttribute('opacity', u/0.08); pb.setAttribute('transform','translate(0,0)'); }
-  else if (u < 0.75){ push.setAttribute('opacity', 1);
-    const v = Math.min(1,(u-0.08)/0.1);
-    pb.setAttribute('transform', `translate(${v*5},${v*4})`); }
-  else { push.setAttribute('opacity', Math.max(0, 1-(u-0.75)/0.15)); pb.setAttribute('transform','translate(0,0)'); }
-  $('pushSensor').setAttribute('transform', `translate(${nj*0.7},${nj*0.5})`);
-
-  $('ringHit').setAttribute('opacity', u<0.1 ? 1 : Math.max(0,1-(u-0.1)/0.1));
-  [['rip1',0],['rip2',0.07],['rip3',0.14]].forEach(([id,d])=>{
-    const v = (u-0.08-d)/0.5;
-    const el = $(id);
-    if (v>0 && v<1){ el.setAttribute('opacity', 0.9*(1-v)); el.setAttribute('r', 8+v*150); }
-    else el.setAttribute('opacity',0);
+// ---------- scene 3: three channels ----------
+const p3 = { t0: performance.now(), accPts: [], gyPts: [] };
+function p3replay(){ p3.t0=performance.now(); p3.accPts=[]; p3.gyPts=[]; }
+function p3tick(now){
+  if (!document.getElementById('scene3').classList.contains('on')) { requestAnimationFrame(p3tick); return; }
+  let w=(now-p3.t0)/1000; const T=7, tc=2.8;
+  if (w>T){ p3replay(); w=0; }
+  const spin=(now/1000*40)%360;
+  $('p3seamsA').setAttribute('transform',`rotate(${spin} 170 200)`);
+  $('p3seamsB').setAttribute('transform',`rotate(${spin} 480 200)`);
+  const extra = w>tc ? (w-tc)*22 : 0;   // twist: spin gently accumulates extra angle
+  $('p3seamsC').setAttribute('transform',`rotate(${(spin+extra)%360} 790 200)`);
+  const ph=(a,b)=>w>=a&&w<b;
+  for (const id of ['p3hitA','p3hitB','p3hitC']) $(id).setAttribute('opacity', ph(tc-0.15,tc+0.5)?1:0);
+  const nud = w>tc ? Math.min(1,(w-tc)*3)*5 : 0;
+  $('p3ballA').setAttribute('transform',`translate(${nud*0.7},${nud*0.7})`);
+  $('p3dvA').setAttribute('opacity', ph(tc,T-0.4)?1:0);
+  [['p3rip1',0],['p3rip2',0.1],['p3rip3',0.2]].forEach(([id,d])=>{
+    const v=(w-tc-d)/0.9; const e=$(id);
+    if (v>0&&v<1){ e.setAttribute('opacity',0.9*(1-v)); e.setAttribute('r',5+v*110);} else e.setAttribute('opacity',0);
   });
-  const ringing = u>0.08 && u<0.7;
-  const decay = ringing ? Math.exp(-(u-0.08)*6) : 0;
-  const jig = decay * Math.sin(u*400) * 3;
-  $('ringShell').setAttribute('transform', `translate(${jig*0.4},0)`);
-  $('ringSensor').setAttribute('transform', `translate(${jig + nj*0.7},${-jig*0.6 + nj*0.5})`);
-  $('ringMass').setAttribute('transform', `translate(${jig*0.7},0)`);
-  requestAnimationFrame(s3);
+  const ring = w>tc&&w<tc+1.2 ? Math.exp(-(w-tc)*4)*Math.sin(w*70)*2.5 : 0;
+  $('p3sensB').setAttribute('transform',`translate(${ring},${-ring*0.6})`);
+  const ax=40+(w/T)*420, gx=490+(w/T)*420;
+  const storm=20*Math.sin(w*9)+13*Math.sin(w*17+1)+8*Math.sin(w*29+2);
+  const blip=w>tc?42*Math.exp(-(w-tc)*9)*Math.sin((w-tc)*90):0;
+  p3.accPts.push(`${ax.toFixed(1)},${(560-(storm+blip)).toFixed(1)}`);
+  const calm=2.2*Math.sin(w*21)+1.2*Math.sin(w*47);
+  const step=w>tc?26:0;
+  p3.gyPts.push(`${gx.toFixed(1)},${(585-calm-step).toFixed(1)}`);
+  if (p3.accPts.length>1200){p3.accPts.shift(); p3.gyPts.shift();}
+  $('p3acc').setAttribute('points',p3.accPts.join(' '));
+  $('p3gy').setAttribute('points',p3.gyPts.join(' '));
+  $('p3acclbl').setAttribute('opacity', ph(tc+0.5,T)?1:0);
+  $('p3gylbl').setAttribute('opacity', ph(tc+0.5,T)?1:0);
+  requestAnimationFrame(p3tick);
 }
-requestAnimationFrame(s3);
+requestAnimationFrame(p3tick);
 
 // ---------- scene 4: the full flight ----------
 const s4 = {
@@ -665,7 +613,7 @@ function s4noiseRaw(t){ return 1.5*Math.sin(t*44)+1.0*Math.sin(t*86+1)+0.6*Math.
 function s4burst(t){ const tc=s4.ST*s4.UC; if (t<tc) return 0;
   return 3.1*Math.exp(-(t-tc)*55)*Math.sin((t-tc)*900); }
 function s4tick(now){
-  if (!document.getElementById('scene5').classList.contains('on')) { requestAnimationFrame(s4tick); return; }
+  if (!document.getElementById('scene4').classList.contains('on')) { requestAnimationFrame(s4tick); return; }
   let w = (now - s4.t0)/1000;
   if (w > 10.5) { s4replay(); w = 0; }
   const t = s4time(w), u = t/s4.ST, tc = s4.ST*s4.UC;
@@ -728,38 +676,6 @@ function s4tick(now){
 }
 requestAnimationFrame(s4tick);
 
-// ---------- scene 5: the twist ----------
-const s5 = { t0: performance.now(), accPts: [], gyPts: [] };
-function s5replay(){ s5.t0=performance.now(); s5.accPts=[]; s5.gyPts=[]; }
-function s5tick(now){
-  if (!document.getElementById('scene4').classList.contains('on')) { requestAnimationFrame(s5tick); return; }
-  let w=(now-s5.t0)/1000; const T=7, tc=2.8;
-  if (w>T){ s5replay(); w=0; }
-  $('s5seams').setAttribute('transform', `rotate(${(now/1000*30)%360} 250 225)`);
-  // graze fx sequence
-  const ph=(a,b)=>w>=a&&w<b;
-  $('s5hair').setAttribute('opacity', ph(tc-0.5,tc+1.6)?1:0);
-  $('s5spark').setAttribute('opacity', ph(tc,tc+0.35)?1:0);
-  $('s5F').setAttribute('opacity', ph(tc+0.2,tc+1.6)?1:0);
-  $('s5Fn').setAttribute('opacity', w>=tc+1.0?Math.min(1,(w-tc-1.0)*2):0);
-  $('s5Ft').setAttribute('opacity', w>=tc+1.4?Math.min(1,(w-tc-1.4)*2):0);
-  $('s5torque').setAttribute('opacity', w>=tc+1.9?Math.min(1,(w-tc-1.9)*2):0);
-  // strips (x maps cycle time)
-  const ax=40+ (w/T)*420, gx=490+(w/T)*420;
-  const storm = 20*Math.sin(w*9)+13*Math.sin(w*17+1)+8*Math.sin(w*29+2);
-  const blip = w>tc ? 42*Math.exp(-(w-tc)*9)*Math.sin((w-tc)*90) : 0;
-  s5.accPts.push(`${ax.toFixed(1)},${(475-(storm+blip)).toFixed(1)}`);
-  const calm = 2.2*Math.sin(w*21)+1.2*Math.sin(w*47);
-  const step = w>tc ? 26 : 0;
-  s5.gyPts.push(`${gx.toFixed(1)},${(495-calm-step).toFixed(1)}`);
-  if (s5.accPts.length>1200){s5.accPts.shift(); s5.gyPts.shift();}
-  $('s5acc').setAttribute('points', s5.accPts.join(' '));
-  $('s5gy').setAttribute('points', s5.gyPts.join(' '));
-  $('s5acclbl').setAttribute('opacity', ph(tc+0.6,T)?1:0);
-  $('s5gylbl').setAttribute('opacity', ph(tc+0.6,T)?1:0);
-  requestAnimationFrame(s5tick);
-}
-requestAnimationFrame(s5tick);
 </script>
 </body>
 </html>

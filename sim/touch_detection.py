@@ -343,3 +343,35 @@ def gyro_sweep_v2():
 
 if __name__ == "__main__" and __import__("sys").argv[-1] == "gyro2":
     gyro_sweep_v2()
+
+
+def fig_twist_detectability(out):
+    Js = np.array([0.01, 0.02, 0.035, 0.05, 0.07, 0.1, 0.15, 0.2, 0.35, 0.7, 1.0])
+    th_naive = np.quantile(twist_stat(gyro_trace(3000)), 0.99)
+    th_detr = np.quantile(twist_stat_detrended(gyro_trace(3000)), 0.99)
+    fig, ax = plt.subplots(figsize=(7.5, 4.5))
+    fig.patch.set_facecolor(SURFACE)
+    styled_axes(ax)
+    for kappa_twist, color in [(1.0, SEQ[5]), (0.3, SEQ[2])]:
+        tpr = [(twist_stat_detrended(gyro_trace(400, J * 1e-3, kappa_twist))
+                > th_detr).mean() for J in Js]
+        ax.plot(Js, tpr, "o-", color=color, lw=2, ms=5,
+                label=f"detrended, κ_twist = {kappa_twist:g}")
+    tpr_naive = [(twist_stat(gyro_trace(400, J * 1e-3, 1.0)) > th_naive).mean()
+                 for J in Js]
+    ax.plot(Js, tpr_naive, "s--", color=MUTED, lw=1.5, ms=4,
+            label="naive two-window, κ_twist = 1 (blinded by spin decay)")
+    ax.set_xscale("log")
+    ax.set_xlabel("impulse J (mN·s)", color=MUTED)
+    ax.set_ylabel("detection rate at 1% false-alarm", color=MUTED)
+    ax.set_ylim(-0.03, 1.05)
+    ax.legend(frameon=False, fontsize=9, labelcolor=INK)
+    ax.set_title("Detectability via the twist (gyro), 500 Hz ball IMU",
+                 color=INK, fontsize=12, loc="left")
+    fig.savefig(out, dpi=150, facecolor=SURFACE, bbox_inches="tight")
+    plt.close(fig)
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "gyrofig":
+    fig_twist_detectability("figs/fig_twist_detectability.png")
+    print("wrote figs/fig_twist_detectability.png")

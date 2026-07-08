@@ -23,8 +23,8 @@
   .controls { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
   .controls button { border: 1px solid var(--grid); background: var(--surface);
     padding: 6px 12px; border-radius: 8px; font-size: 13px; cursor: pointer; }
-  .note { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5; }
-  .cites { color: var(--muted); font-size: 11px; margin-top: 6px; line-height: 1.5;
+  .note { color: var(--muted); font-size: 13px; margin-top: 8px; line-height: 1.5; }
+  .cites { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.5;
     border-top: 1px solid var(--grid); padding-top: 6px; }
   .cites a { color: #52514e; }
   .verdictBox { opacity: 0; transition: opacity .4s; border: 1px solid var(--grid);
@@ -62,48 +62,48 @@
         <path d="M 30 478 q 60 6 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0"/>
         <path d="M 30 492 q 60 6 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0"/>
       </g>
-      <text x="480" y="612" font-size="11" fill="#a9b2a6" text-anchor="middle">≈ 40 m of pitch, compressed — everything above is true to scale (box: 40.23 × 16.5 m)</text>
+      <text x="480" y="612" font-size="13.2" fill="#a9b2a6" text-anchor="middle">≈ 40 m of pitch, compressed — everything above is true to scale (box: 40.23 × 16.5 m)</text>
       <!-- goal (top) -->
       <rect x="431" y="16" width="98" height="14" fill="#c3c2b7"/>
 
       <!-- offside line, tracks the second-last defender (horizontal now) -->
       <line id="offline" x1="34" y1="260" x2="926" y2="260" stroke="#e34948"
             stroke-width="2" stroke-dasharray="7 6"/>
-      <text id="offlbl" x="38" y="252" fill="#e34948" font-size="13">offside line</text>
+      <text id="offlbl" x="38" y="252" fill="#e34948" font-size="15.6">offside line</text>
 
       <!-- ghost freeze-frames -->
       <g id="ghostPass" opacity="0">
         <circle cx="588" cy="268" r="11" fill="none" stroke="#008300" stroke-width="2" stroke-dasharray="3 3"/>
-        <text x="612" y="296" font-size="13" fill="#008300">✓ onside at the cross</text>
+        <text x="612" y="296" font-size="15.6" fill="#008300">✓ onside at the cross</text>
       </g>
       <g id="ghostGraze" opacity="0">
         <line x1="220" y1="252" x2="836" y2="252" stroke="#e34948" stroke-width="1.5" stroke-dasharray="3 5" opacity="0.85"/>
-        <text x="390" y="244" font-size="10" fill="#e34948">the line, frozen at the graze</text>
+        <text x="390" y="244" font-size="12" fill="#e34948">the line, frozen at the graze</text>
         <circle cx="560" cy="246" r="14" fill="none" stroke="#e34948" stroke-width="2" stroke-dasharray="3 3"/>
-        <text x="600" y="228" font-size="13" fill="#e34948">✗ offside at the graze</text>
+        <text x="600" y="228" font-size="15.6" fill="#e34948">✗ offside at the graze</text>
       </g>
 
       <!-- Portugal (red), GK (orange) -->
-      <g font-size="12">
+      <g font-size="14.4">
         <circle id="gk" cx="480" cy="54" r="11" fill="#eda100"/>
         <text id="gklbl" x="504" y="58" fill="#b07500">GK</text>
         <circle id="def2l" cx="620" cy="260" r="11" fill="#1baf7a"/>
-        <text id="def2lbl" x="638" y="250" font-size="12" fill="#199e70">2nd-last defender</text>
+        <text id="def2lbl" x="638" y="250" font-size="14.4" fill="#199e70">2nd-last defender</text>
         <circle id="defA" cx="230" cy="330" r="11" fill="#1baf7a"/>
         <circle id="defB" cx="800" cy="318" r="11" fill="#1baf7a"/>
       </g>
 
       <!-- officials (violet) -->
-      <g font-size="12" fill="#eb6834">
+      <g font-size="14.4" fill="#eb6834">
         <circle id="ref" cx="250" cy="385" r="9" fill="none" stroke="#eb6834" stroke-width="3"/>
         <text id="reflbl" x="250" y="363" text-anchor="middle">referee</text>
         <rect id="ar" x="938" y="500" width="13" height="13" fill="#eb6834"/>
-        <text transform="rotate(90 952 330)" x="952" y="330" text-anchor="middle" font-size="11">assistant referee — level with the line</text>
-        <text id="arThought" x="666" y="278" opacity="0" fill="#b05010" font-weight="600">…must judge line AND touch, together, live</text>
+        <text transform="rotate(90 952 460)" x="952" y="460" text-anchor="middle" font-size="13.2">assistant referee</text>
+        <text id="arThought" x="666" y="278" opacity="0" fill="#b05010" font-weight="600">…must judge line AND touch, live</text>
       </g>
 
       <!-- Croatia (blue) -->
-      <g font-size="12" fill="#2a78d6">
+      <g font-size="14.4" fill="#2a78d6">
         <circle id="perisic" cx="300" cy="560" r="11" fill="#2a78d6"/>
         <text id="perlbl" x="300" y="538" text-anchor="middle">Perišić</text>
         <circle id="matanovic" cx="490" cy="262" r="11" fill="#2a78d6"/>
@@ -120,13 +120,13 @@
       <!-- graze marker + heartbeat -->
       <g id="grazeMark" opacity="0">
         <circle cx="502" cy="260" r="15" fill="none" stroke="#eda100" stroke-width="2"/>
-        <text x="466" y="230" font-size="13" fill="#b07500" text-anchor="end">graze — invisible to every camera…</text>
-        <text x="458" y="248" font-size="12" fill="#b07500" text-anchor="end">…but the chip blips</text>
+        <text x="466" y="230" font-size="15.6" fill="#b07500" text-anchor="end">graze — invisible to every camera…</text>
+        <text x="458" y="248" font-size="14.4" fill="#b07500" text-anchor="end">…but the chip blips</text>
         <path d="M 400 262 l 10 0 4 -12 6 24 5 -12 12 0" fill="none" stroke="#eda100" stroke-width="2.5"/>
       </g>
 
       <!-- goal -->
-      <text id="goalTxt" x="770" y="72" font-size="30" font-weight="700" opacity="0">GOAL?</text>
+      <text id="goalTxt" x="770" y="72" font-size="36" font-weight="700" opacity="0">GOAL?</text>
     </svg>
     <div class="controls">
       <button onclick="replay()">↺ replay</button>
@@ -164,7 +164,7 @@
       <!-- the chip, embedded in that layer -->
       <g id="sensor2">
         <rect x="566" y="254" width="34" height="32" rx="6" fill="#2a78d6"/>
-        <text x="583" y="275" font-size="12" fill="#fff" text-anchor="middle" font-weight="600">IMU</text>
+        <text x="583" y="275" font-size="14.4" fill="#fff" text-anchor="middle" font-weight="600">IMU</text>
       </g>
       <!-- counterweights in the other three panels -->
       <g fill="#898781">
@@ -174,8 +174,8 @@
       </g>
       <!-- graze contact, top-left -->
       <circle cx="299" cy="139" r="10" fill="none" stroke="#eda100" stroke-width="3"/>
-      <text x="40" y="70" font-size="13" fill="#b07500">a graze can land anywhere on the shell — maybe the</text>
-      <text x="40" y="88" font-size="13" fill="#b07500">chip's panel, maybe the far side (the shudder then travels around)</text>
+      <text x="40" y="70" font-size="15.6" fill="#b07500">a graze can land anywhere on the shell — maybe the</text>
+      <text x="40" y="88" font-size="15.6" fill="#b07500">chip's panel, maybe the far side (the shudder then travels around)</text>
       <path d="M 250 96 C 275 110, 290 122, 296 131" fill="none" stroke="#eda100" stroke-width="2"/>
       <!-- old design inset -->
       <g>
@@ -185,24 +185,24 @@
         <line x1="78" y1="400" x2="112" y2="400" stroke="#c3c2b7" stroke-width="1.5"/>
         <line x1="162" y1="400" x2="128" y2="400" stroke="#c3c2b7" stroke-width="1.5"/>
         <rect x="113" y="393" width="14" height="14" rx="3" fill="#9ec5f4"/>
-        <text x="120" y="466" font-size="11" fill="#898781" text-anchor="middle">2022–24 balls: chip suspended</text>
-        <text x="120" y="480" font-size="11" fill="#898781" text-anchor="middle">at the center on tethers</text>
+        <text x="120" y="466" font-size="13.2" fill="#898781" text-anchor="middle">2022–24 balls: chip suspended</text>
+        <text x="120" y="480" font-size="13.2" fill="#898781" text-anchor="middle">at the center on tethers</text>
       </g>
       <!-- labels -->
-      <g font-size="14">
-        <text x="655" y="120">outer shell — the "drum skin".</text>
-        <text x="655" y="140" fill="#898781">4 bonded panels, pressurized air behind it</text>
-        <text x="655" y="190">the chip: embedded in a special layer</text>
-        <text x="655" y="210">INSIDE one panel — new for 2026</text>
-        <text x="655" y="230" fill="#898781">accelerometer + gyroscope, 500 reports/s —</text>
-        <text x="655" y="250" fill="#898781">no mic, no camera; it only feels motion</text>
-        <text x="655" y="300">counterweights in the other three</text>
-        <text x="655" y="320">panels keep the spinning ball balanced</text>
-        <text x="655" y="370" fill="#898781">chip IN the shell = shell vibration</text>
-        <text x="655" y="390" fill="#898781">reaches it directly, no tethers to cross</text>
+      <g font-size="15.5">
+        <text x="632" y="120">outer shell — the "drum skin".</text>
+        <text x="632" y="140" fill="#898781">4 bonded panels, pressurized air behind it</text>
+        <text x="632" y="190">the chip: embedded in a special layer</text>
+        <text x="632" y="210">INSIDE one panel — new for 2026</text>
+        <text x="632" y="230" fill="#898781">accelerometer + gyroscope, 500 reports/s</text>
+        <text x="632" y="250" fill="#898781">no mic, no camera; it only feels motion</text>
+        <text x="632" y="300">counterweights in the other three</text>
+        <text x="632" y="320">panels keep the spinning ball balanced</text>
+        <text x="632" y="370" fill="#898781">chip IN the shell = shell vibration</text>
+        <text x="632" y="390" fill="#898781">reaches it directly, no tethers to cross</text>
       </g>
-      <path d="M 650 200 C 632 210, 616 232, 605 252" fill="none" stroke="#898781" stroke-width="1.5"/>
-      <path d="M 650 305 C 500 330, 360 350, 344 392" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <path d="M 628 200 C 616 210, 610 232, 605 252" fill="none" stroke="#898781" stroke-width="1.5"/>
+      <path d="M 628 305 C 500 330, 360 350, 344 392" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="4 4"/>
     </svg>
     <div class="note">Verified update (this changed our model): the 2026 Trionda embeds the chip in a layer of
     ONE panel, with counterweights in the other three — earlier connected balls hung it at the center on
@@ -226,12 +226,12 @@
       </defs>
       <line x1="325" y1="24" x2="325" y2="445" stroke="#e1e0d9"/>
       <line x1="635" y1="24" x2="635" y2="445" stroke="#e1e0d9"/>
-      <text x="170" y="36" font-size="15" font-weight="650" text-anchor="middle">1 · THE PUSH</text>
-      <text x="170" y="54" font-size="11" fill="#898781" text-anchor="middle">felt by the accelerometer</text>
-      <text x="480" y="36" font-size="15" font-weight="650" text-anchor="middle">2 · THE SHUDDER</text>
-      <text x="480" y="54" font-size="11" fill="#898781" text-anchor="middle">also the accelerometer</text>
-      <text x="790" y="36" font-size="15" font-weight="650" text-anchor="middle">3 · THE TWIST</text>
-      <text x="790" y="54" font-size="11" fill="#898781" text-anchor="middle">felt by the gyroscope</text>
+      <text x="170" y="36" font-size="18" font-weight="650" text-anchor="middle">1 · THE PUSH</text>
+      <text x="170" y="54" font-size="13.2" fill="#898781" text-anchor="middle">felt by the accelerometer</text>
+      <text x="480" y="36" font-size="18" font-weight="650" text-anchor="middle">2 · THE SHUDDER</text>
+      <text x="480" y="54" font-size="13.2" fill="#898781" text-anchor="middle">also the accelerometer</text>
+      <text x="790" y="36" font-size="18" font-weight="650" text-anchor="middle">3 · THE TWIST</text>
+      <text x="790" y="54" font-size="13.2" fill="#898781" text-anchor="middle">felt by the gyroscope</text>
 
       <!-- push ball -->
       <g id="p3ballA">
@@ -247,7 +247,7 @@
       </g>
       <g id="p3dvA" opacity="0">
         <line x1="170" y1="200" x2="216" y2="242" stroke="#e34948" stroke-width="2.5" marker-end="url(#arrP3)"/>
-        <text x="176" y="262" font-size="10" fill="#e34948">Δv — ×10,000</text>
+        <text x="176" y="262" font-size="12" fill="#e34948">Δv — ×10,000</text>
       </g>
 
       <!-- shudder ball -->
@@ -277,28 +277,28 @@
           <rect x="846" y="192" width="16" height="16" rx="4" fill="#2a78d6" stroke="none"/>
         </g>
         <path d="M 712 158 A 89 89 0 0 0 712 242" stroke="#199e70" stroke-width="2.5" fill="none" marker-end="url(#arrP3)"/>
-        <text x="700" y="205" font-size="10" fill="#199e70" text-anchor="end">spin</text>
+        <text x="700" y="205" font-size="12" fill="#199e70" text-anchor="end">spin</text>
       </g>
       <g id="p3hitC" opacity="0">
         <line x1="836" y1="112" x2="812" y2="140" stroke="#eda100" stroke-width="3" marker-end="url(#arrP3)"/>
         <path d="M 852 132 A 95 95 0 0 1 866 218" stroke="#199e70" stroke-width="2" stroke-dasharray="5 4" fill="none" marker-end="url(#arrP3)"/>
-        <text x="874" y="120" font-size="10" fill="#199e70">the twist</text>
+        <text x="874" y="120" font-size="12" fill="#199e70">the twist</text>
       </g>
 
       <!-- captions -->
-      <g font-size="12" fill="#898781">
+      <g font-size="14.4" fill="#898781">
         <text x="45" y="322">one tiny shove, over in 5 ms:</text>
         <text x="45" y="340">Δv ≈ 0.1–2 mm/s on a 20 m/s ball —</text>
         <text x="45" y="358">deflection ≈ <tspan font-weight="650" fill="#0b0b0b">the width of a hair</tspan>.</text>
         <text x="45" y="376">10–200× below the aero ride.</text>
       </g>
-      <g font-size="12" fill="#898781">
+      <g font-size="14.4" fill="#898781">
         <text x="355" y="322">the shell rings like a struck drum:</text>
         <text x="355" y="340">100s of Hz for ~50 ms — long after</text>
         <text x="355" y="358">contact. the 2026 chip lives IN the shell:</text>
         <text x="355" y="376">how loudly it arrives = <tspan font-weight="650" fill="#b07500">κ_shudder, unknown</tspan>.</text>
       </g>
-      <g font-size="12" fill="#898781">
+      <g font-size="14.4" fill="#898781">
         <text x="660" y="322">the tangential part grabs the rim —</text>
         <text x="660" y="340">an 11 cm lever arm. the spin steps by</text>
         <text x="660" y="358">≤0.06% — tiny, but it <tspan font-weight="650" fill="#0b0b0b">persists</tspan>. how much</text>
@@ -308,18 +308,18 @@
       <!-- instrument strips -->
       <g>
         <rect x="40" y="470" width="430" height="170" fill="#f4f3ef" rx="8"/>
-        <text x="52" y="490" font-size="11" fill="#898781">accelerometer (the push and the shudder land here)</text>
+        <text x="52" y="490" font-size="13.2" fill="#898781">accelerometer (the push and the shudder land here)</text>
         <polyline id="p3acc" points="" fill="none" stroke="#0b0b0b" stroke-width="1.2" opacity="0.75"/>
-        <text id="p3acclbl" x="455" y="510" font-size="11" fill="#b07500" text-anchor="end" opacity="0">a blip — gone in ~5 ms</text>
+        <text id="p3acclbl" x="455" y="510" font-size="13.2" fill="#b07500" text-anchor="end" opacity="0">a blip — gone in ~5 ms</text>
       </g>
       <g>
         <rect x="490" y="470" width="430" height="170" fill="#f4f3ef" rx="8"/>
-        <text x="502" y="490" font-size="11" fill="#898781">gyroscope (the twist lands here)</text>
+        <text x="502" y="490" font-size="13.2" fill="#898781">gyroscope (the twist lands here)</text>
         <polyline id="p3gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
-        <text id="p3gylbl" x="905" y="510" font-size="11" fill="#199e70" text-anchor="end" opacity="0">a step — persists</text>
+        <text id="p3gylbl" x="905" y="510" font-size="13.2" fill="#199e70" text-anchor="end" opacity="0">a step — persists</text>
       </g>
-      <text x="480" y="672" font-size="12" fill="#898781" text-anchor="middle">one graze, three signatures. the blip fades within milliseconds; the step persists.</text>
-      <text x="480" y="692" font-size="12" fill="#898781" text-anchor="middle">(magnitudes exaggerated for visibility)</text>
+      <text x="480" y="672" font-size="14.4" fill="#898781" text-anchor="middle">one graze, three signatures. the blip fades within milliseconds; the step persists.</text>
+      <text x="480" y="692" font-size="14.4" fill="#898781" text-anchor="middle">(magnitudes exaggerated for visibility)</text>
     </svg>
     <div class="controls"><button onclick="p3replay()">↺ replay</button></div>
     <div class="note">Same graze, three signatures. The push is real but tiny. The shudder is louder but brief; how
@@ -338,7 +338,7 @@
           <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
         </marker>
       </defs>
-      <text id="s4slomo" x="480" y="34" font-size="15" font-weight="650" text-anchor="middle" fill="#b07500" opacity="0">— slow motion, ×35 —</text>
+      <text id="s4slomo" x="480" y="34" font-size="18" font-weight="650" text-anchor="middle" fill="#b07500" opacity="0">— slow motion, ×35 —</text>
 
       <!-- ghost (untouched) path, revealed after contact -->
       <path id="s4ghost" d="" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="5 5" opacity="0"/>
@@ -349,7 +349,7 @@
       <g id="s4head">
         <circle cx="524" cy="218" r="26" fill="#f4f3ef" stroke="#0b0b0b" stroke-width="2"/>
         <path d="M 502 204 q 6 -8 12 -12 M 512 198 q 5 -7 12 -10 M 524 194 q 5 -5 11 -7 M 535 196 q 6 -4 11 -3" stroke="#52514e" stroke-width="1.5" fill="none"/>
-        <text x="524" y="262" font-size="11" fill="#898781" text-anchor="middle">Matanović (schematic)</text>
+        <text x="524" y="262" font-size="13.2" fill="#898781" text-anchor="middle">Matanović (schematic)</text>
       </g>
 
       <!-- the ball assembly, positioned by JS -->
@@ -378,34 +378,34 @@
       </g>
       <g id="s4impulse" opacity="0">
         <line x1="522" y1="210" x2="516" y2="180" stroke="#eda100" stroke-width="3" marker-end="url(#arr4)"/>
-        <text x="560" y="168" font-size="12" fill="#b07500">graze impulse (not to scale)</text>
+        <text x="560" y="168" font-size="14.4" fill="#b07500">graze impulse (not to scale)</text>
       </g>
-      <g font-size="11" fill="#898781">
+      <g font-size="13.2" fill="#898781">
         <text id="s4vlbl" x="0" y="0">v ≈ 20 m/s</text>
         <text id="s4dlbl" x="0" y="0">drag</text>
         <text id="s4slbl" x="0" y="0">spin ~8 rev/s</text>
       </g>
-      <text id="s4devlbl" x="900" y="240" font-size="12" fill="#2a78d6" text-anchor="end" opacity="0">actual deviation ≈ 0.5 mm</text>
+      <text id="s4devlbl" x="900" y="240" font-size="14.4" fill="#2a78d6" text-anchor="end" opacity="0">actual deviation ≈ 0.5 mm</text>
 
       <!-- signal strip -->
       <g>
         <rect x="60" y="420" width="880" height="160" fill="#f4f3ef" rx="8"/>
-        <text x="70" y="438" font-size="11" fill="#898781">what the chip records (illustrative, patterned on our sim)</text>
+        <text x="70" y="438" font-size="13.2" fill="#898781">what the chip records (illustrative, patterned on our sim)</text>
         <line x1="70" y1="472" x2="930" y2="472" stroke="#eda100" stroke-width="1" stroke-dasharray="4 4"/>
         <line x1="70" y1="528" x2="930" y2="528" stroke="#eda100" stroke-width="1" stroke-dasharray="4 4"/>
         <polyline id="s4raw" points="" fill="none" stroke="#0b0b0b" stroke-width="1" opacity="0.3"/>
         <polyline id="s4hp" points="" fill="none" stroke="#2a78d6" stroke-width="1.6"/>
-        <text x="928" y="443" font-size="10" fill="#898781" text-anchor="end">gray: raw · blue: filtered &gt;100 Hz · dashes: threshold</text>
-        <text id="s4det" x="640" y="462" font-size="13" font-weight="650" fill="#008300" opacity="0">detected ✓</text>
+        <text x="928" y="443" font-size="12" fill="#898781" text-anchor="end">gray: raw · blue: filtered &gt;100 Hz · dashes: threshold</text>
+        <text id="s4det" x="640" y="462" font-size="15.6" font-weight="650" fill="#008300" opacity="0">detected ✓</text>
         <line id="s4cursor" x1="70" y1="446" x2="70" y2="574" stroke="#c3c2b7" stroke-width="1"/>
       </g>
-      <text x="480" y="612" font-size="12" fill="#898781" text-anchor="middle">the ride, then a graze — the response shows in the blue line.</text>
+      <text x="480" y="612" font-size="14.4" fill="#898781" text-anchor="middle">the ride, then a graze — the response shows in the blue line.</text>
       <g>
         <rect x="60" y="628" width="880" height="118" fill="#f4f3ef" rx="8"/>
-        <text x="70" y="646" font-size="11" fill="#898781">gyroscope — spin rate</text>
+        <text x="70" y="646" font-size="13.2" fill="#898781">gyroscope — spin rate</text>
         <polyline id="s4gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
-        <text id="s4gstep" x="700" y="668" font-size="12" font-weight="650" fill="#199e70" opacity="0">a step — persists ↗</text>
-        <text x="928" y="740" font-size="10" fill="#898781" text-anchor="end">step exaggerated for visibility</text>
+        <text id="s4gstep" x="700" y="668" font-size="14.4" font-weight="650" fill="#199e70" opacity="0">a step — persists ↗</text>
+        <text x="928" y="740" font-size="12" fill="#898781" text-anchor="end">step exaggerated for visibility</text>
       </g>
     </svg>
     <div class="controls">
@@ -418,8 +418,7 @@
     </div>
     <div class="note">Everything at once, to one scale: the ride (spin, drag, turbulent wake), the graze in
     slow motion, and the two detection channels responding. The dashed gray path is where the untouched ball
-    would have gone. Press ×1 to see reality: nothing visible happens to the flight — the entire verdict
-    lives in the blue line below.</div>
+    would have gone. Press ×1 to see the true scale: the flight path barely changes; the response appears only in the signal strips.</div>
     <div class="cites">Schematic. The flight deviation is exaggerated as labeled (real value ≈ 0.05–1 mm);
     the impulse arrow is not to scale; the signal strip is illustrative, patterned on our simulation
     (<a href="https://github.com/shishirdash/var-uq">repo</a>). Physics numbers are our own order-of-magnitude estimates.</div>

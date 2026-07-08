@@ -171,8 +171,15 @@ not on artifact completion.
   post 1; workshop-notes callout flattened to a plain section. Post 1 remains
   PRIVATE pending his TODOs. Framing critique saved at
   ../tldr-framing-critique.md (outside public repo, deliberately).
-- PENDING: Shishir's TODOs — broadcast waveform frame-grab (replace placeholder
-  callout), voice pass on the private Notion page. Then "publish it" = one move
-  back under Explorations.
+- 2026-07-08: 🚀 POST 1 PUBLISHED — "On offsides and uncertainty" live under
+  Explorations on crudraven.notion.site (Socratic Parroting). Final form: three
+  channels + κ_push/κ_shudder/κ_twist taxonomy, two detection-rule sections,
+  translation-dictionary table, 5 footnotes (process, Trionda, Nyquist, the ride,
+  MEMS tremble mechanisms), orange links, embeds from both animation variants.
+  Route to publish: 3 socratic milestones, 3 critic-panel rounds (6 personas),
+  fact-check green, author voice passes throughout.
+- NEXT: post 2 ("Tinker, Tailor, Sampler, Spy") — the sim ritual. Queued builds:
+  joint 3-channel sim + fusion detector, psychometric cliff-fitting, scaling laws,
+  playable-cliff interactive, kitchen IMU experiment, waveform digitization.
   Then: Notion publish (next session), M1 round 3 (contact-duration cliff),
   M0 anatomy one-pager, M2 comparison, post 2.

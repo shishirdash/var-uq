@@ -77,3 +77,10 @@ women ~21.5, 1990 World Cup match play 32-35). A cross is submaximal, so
 ~20 m/s sits low-middle of the measured range. Verdict upgraded
 PLAUSIBLE -> SUPPORTED; linked inline in post 1.
 https://pmc.ncbi.nlm.nih.gov/articles/PMC3786235/
+
+Second sweep (2026-07-09, Shishir caught the miss): shudder frequency now
+declared as an estimate IN the post with the basketball modal anchor linked
+(Russell/PSU, ~400-900 Hz shell/breathing modes); spin-wobble ~8 Hz linked
+to Physics Today free-kick spin benchmarks. Remaining deliberately unlinked:
+hair-force bracket (uncitable, declared), 11 cm lever arm (derived from the
+already-linked Law 2 circumference), push-vs-ride ratio (our own derivation).

@@ -26,7 +26,12 @@ unmeasured couplings. No sim details (post 2's job).
 The step-by-step detection ritual, visualized per channel: innocent trials set the
 threshold, guilty trials climb it, the sigmoid draws itself, the cliff emerges.
 Psychometric-curve fitting + adaptive sampling for precise cliffs with CIs. The
-playable-cliff interactive. Scaling laws via dimensional analysis (flight speed etc.
+playable-cliff interactive. Payoff sections brought forward from round 4
+(2026-07-08): the disagreement curve 2p(1−p) (verdict instability between
+matches; zone width per channel) and the beep/silence likelihood-ratio
+asymmetry (50× vs ~2× — convicting on a beep is defensible, exonerating on
+silence is not; Gvardiol call sat on the strong side). LR-only here; the
+prior-odds/posterior step stays post 4. Scaling laws via dimensional analysis (flight speed etc.
 collapse into ~3 dimensionless ratios). Finale: the JOINT sim — one graze, both
 sensor streams, fusion detector hedging the κ-vs-f lottery. Prediction-log excerpts
 as the honest thread. Kitchen experiment (phone IMU in/on a real ball) feeds the

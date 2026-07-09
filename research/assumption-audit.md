@@ -70,3 +70,10 @@ make-force 0.47 N and Rose (1991) recommended 0.50 N activation force.
 https://www.resna.org/sites/default/files/legacy/conference/proceedings/2004/Papers/StudentDesign/OUT/KeyboardForce.html
 Post 1 now inline-links all four corrected numbers + Law 2 + spin decay +
 turbulence band + gyro datasheet, and the sources footer links this audit.
+
+Flight-speed source added (2026-07-09): peer-reviewed instep-kick review
+(PMC3786235) reports maximal-kick ball speeds 18-35 m/s (pros ~30, elite
+women ~21.5, 1990 World Cup match play 32-35). A cross is submaximal, so
+~20 m/s sits low-middle of the measured range. Verdict upgraded
+PLAUSIBLE -> SUPPORTED; linked inline in post 1.
+https://pmc.ncbi.nlm.nih.gov/articles/PMC3786235/

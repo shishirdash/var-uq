@@ -36,7 +36,13 @@ playable-cliff interactive. Payoff sections brought forward from round 4
 matches; zone width per channel) and the beep/silence likelihood-ratio
 asymmetry (50× vs ~2× — convicting on a beep is defensible, exonerating on
 silence is not; Gvardiol call sat on the strong side). LR-only here; the
-prior-odds/posterior step stays post 4. Scaling laws via dimensional analysis (flight speed etc.
+prior-odds/posterior step stays post 4. Goff-derived additions (2026-07-09,
+see research/goff-implications.md): per-flight baseline estimation for the
+accelerometer (drag-crisis non-stationarity, mirror of the gyro detrend);
+sigma_ride(spin) knuckle axis; joint sim via theta-decomposition prior
+(kappa_push = cos theta, kappa_twist = sin theta x slip, kappa_shudder
+independent); the Magnus-echo aside (twist regenerates a push-sized path
+deviation via the air). Scaling laws via dimensional analysis (flight speed etc.
 collapse into ~3 dimensionless ratios). Finale: the JOINT sim — one graze, both
 sensor streams, fusion detector hedging the κ-vs-f lottery. Prediction-log excerpts
 as the honest thread. Kitchen experiment (phone IMU in/on a real ball) feeds the

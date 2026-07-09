@@ -87,3 +87,25 @@ Post 1 unified the per-channel couplings under subscripted kappas: κ_push
 "f_split" in round 3 above). Code renamed to match (kappa_shudder,
 kappa_twist). The three are independent draws — the basis of the fusion
 argument for post 2.
+
+## Round 4 — 2026-07-08: verdict stability and the beep/silence asymmetry
+
+Socratic session post-publish (recap quiz first: channels/rules solid, κ
+definitions drifted and were re-anchored). Two derived quantities, both
+Shishir-computed:
+
+1. Verdict disagreement: same graze, two matches, independent noise →
+   P(disagree) = 2p(1−p), peaking at 50% where the detectability curve
+   crosses p = 0.5. Cliff-vs-slope debate resolved: a gentle slope doesn't
+   buy reliability, it widens the coin-flip zone. Cliffs confine it.
+   Sim deliverable for post 2: width of the band where 2p(1−p) exceeds
+   tolerance, per channel (twist's zone is visibly wider than shudder's —
+   see fig_twist_detectability.png, ~3× in J vs the shudder's snap).
+2. Likelihood-ratio asymmetry at the 50% point, FPR 1%: beep → LR 50
+   toward touch; silence → LR ~2 toward no-touch. Convicting on a beep is
+   defensible; exonerating on silence is not. The broadcast graphic only
+   ever shows the beep case.
+
+Planted flag (post 4): Shishir phrased the beep as "50× more likely there's
+a touch" — LR/posterior conflation, deliberately left open. Needs prior
+odds of a graze per flight → hierarchical Bayes post.

@@ -61,3 +61,12 @@ InvenSense, 2.8 mdps/√Hz); ADI EngineerZone on in-run bias stability; Wrona,
 Gyro Noise and Allan Deviation; Russell (Penn State), Basketballs as Spherical
 Acoustic Cavities; Springer Sports Eng. soccer-ball SLDV modal paper (paywalled,
 methodology only).
+
+## Addendum (2026-07-09)
+
+Keyboard actuation force primary source located and verified: RESNA 2004
+proceedings page quoting Martin et al. (U. Michigan) minimum key actuation
+make-force 0.47 N and Rose (1991) recommended 0.50 N activation force.
+https://www.resna.org/sites/default/files/legacy/conference/proceedings/2004/Papers/StudentDesign/OUT/KeyboardForce.html
+Post 1 now inline-links all four corrected numbers + Law 2 + spin decay +
+turbulence band + gyro datasheet, and the sources footer links this audit.

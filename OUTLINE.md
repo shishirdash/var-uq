@@ -12,9 +12,14 @@ Style: `blog` profile (first-person, warm, self-deprecating, em-dashes OK, anecd
 framing, optimistic close) + `personal` profile's curious-reader stance. Readable to a
 lay outsider; define every technical term on first use.
 
-## Roadmap v2 (agreed 2026-07-07, supersedes the 3-post plan)
+## Roadmap v3 (agreed 2026-07-08, supersedes v2): soccer-first series
 
-## Post 1 — "On offsides and uncertainty" (live draft, private)
+Stick with the soccer/VAR thread end to end; sprinkle analogies or contrasts
+with other sports where they teach, but park the full cross-sport treatment
+until after post 5. Order: sims → posteriors → JEPA → real-video validation →
+other sports.
+
+## Post 1 — "On offsides and uncertainty" (PUBLISHED 2026-07-08)
 
 Anatomy of the decision, now covering ALL THREE channels: the push and the shudder
 (accelerometer) plus the twist (gyroscope — discovered via Shishir's own question,
@@ -37,7 +42,31 @@ sensor streams, fusion detector hedging the κ-vs-f lottery. Prediction-log exce
 as the honest thread. Kitchen experiment (phone IMU in/on a real ball) feeds the
 model's ring-frequency and κ inputs if done in time.
 
-## Post 3 — "How sports measure doubt"
+## Post 3 — "Verdicts as posteriors" (hierarchical Bayes)
+
+κ, f, J unknown per touch with priors; the trace yields a POSTERIOR probability of
+touch, not a binary. Build the object Collins & Evans (2008) said broadcasters
+should show. Hierarchical structure: population priors over touches, per-incident
+inference. The Matanović call re-run as a posterior.
+
+## Post 4 — "Can a world model learn the ball?" (JEPA exploration)
+
+Train a small self-supervised embedding-predictor (JEPA-style) on synthetic
+touchless flights; test whether prediction-error spikes at grazes and whether the
+latent encodes spin/decay/κ unprompted. We hold the answer key (we wrote the
+physics), so we can grade what the world model "discovered" against the socratically
+derived detector. Doubles as Shishir's JEPA learning goal.
+
+## Post 5 — "Validation from real video" (new in v3)
+
+Confront the sims with reality: digitize the broadcast heartbeat waveform
+(frame-grab → trace) and compare its shape/timing against the synthetic shudder;
+kitchen IMU experiment (phone in/on a real ball) to ground the sim's inputs —
+shudder frequency, noise floor, κ ranges. Honest scoring: which sim assumptions
+survived contact with data, which didn't. (Validation artifacts can start
+accumulating earlier — they feed sim inputs for posts 2–4.)
+
+## Post 6 — "How sports measure doubt" (parked until after post 5)
 
 Comparative and descriptive, NOT prescriptive (no soccer policy takes).
 - Cricket DRS: umpire's call = uncertainty made explicit in protocol; snicko/UltraEdge
@@ -48,22 +77,9 @@ Comparative and descriptive, NOT prescriptive (no soccer policy takes).
   (measurement + ML pose models) → touch detection (signal detection) → handball /
   dangerous play (pure human judgment; "clear and obvious" as a crude uncertainty
   protocol).
-Ends with open questions, not policy.
-
-## Post 4 — "Verdicts as posteriors" (hierarchical Bayes)
-
-κ, f, J unknown per touch with priors; the trace yields a POSTERIOR probability of
-touch, not a binary. Build the object Collins & Evans (2008) said broadcasters
-should show. Hierarchical structure: population priors over touches, per-incident
-inference. The Matanović call re-run as a posterior.
-
-## Post 5 — "Can a world model learn the ball?" (JEPA exploration)
-
-Train a small self-supervised embedding-predictor (JEPA-style) on synthetic
-touchless flights; test whether prediction-error spikes at grazes and whether the
-latent encodes spin/decay/κ unprompted. We hold the answer key (we wrote the
-physics), so we can grade what the world model "discovered" against the socratically
-derived detector. Doubles as Shishir's JEPA learning goal.
+Ends with open questions, not policy. Until then, other sports appear only as
+sprinkled analogies/contrasts inside the soccer posts. Research stays banked in
+research/.
 
 ## Woven thread (all posts) — "how I built this with an AI"
 
@@ -86,12 +102,14 @@ a capstone post 4.
 - M1.5 — The twist (gyro channel). ✅ DONE 2026-07-07 socratically: decomposition →
   Δω ceiling → two-window detector → Allan-U limits → detrend fix → cliff at ~0.23
   (f=1) / ~0.7 (f=0.3). Logged as round 3.
-- M2 — Cross-sport comparison. Work through the cricket/tennis research (banked in
-  research/); build the measurement→judgment taxonomy. Deliverable: comparison table +
-  post 3 skeleton.
-- M3 — Drafting/publication, per roadmap v2: post 1 (3-channel rewrite) → 2 → 3.
-- M4 — Advanced arcs: post 4 (hierarchical Bayes) and post 5 (JEPA world model),
-  each preceded by its own socratic exploration phase.
+- M2 — Post 2 sim ritual: sigmoid/cliff fitting, disagreement-zone widths,
+  beep/silence asymmetry section, joint/fusion sim, playable-cliff interactive.
+- M3 — Advanced arcs, per roadmap v3 order: post 3 (hierarchical Bayes) then
+  post 4 (JEPA world model), each preceded by its own socratic exploration phase.
+- M4 — Real-video validation (post 5): waveform digitization + kitchen IMU;
+  artifacts can start accumulating during M2–M3.
+- M5 — Cross-sport comparison (post 6, parked): work through the cricket/tennis
+  research (banked in research/); build the measurement→judgment taxonomy.
 - Supporting builds queued: joint 3-channel sim + fusion detector; psychometric
   cliff-fitting; scaling-law derivation; kitchen IMU experiment; broadcast-waveform
   digitization (validation).

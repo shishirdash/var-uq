@@ -375,3 +375,76 @@ def fig_twist_detectability(out):
 if __name__ == "__main__" and __import__("sys").argv[-1] == "gyrofig":
     fig_twist_detectability("figs/fig_twist_detectability.png")
     print("wrote figs/fig_twist_detectability.png")
+
+
+# --- round 5: audit-corrected inputs (2026-07-08) ---------------------------
+# Corrections from research/assumption-audit.md: ride band 80->20 Hz, ride
+# amplitude x0.65 (drag 2->1.3 N), gyro white jitter 0.15->0.06 dps.
+
+def _sweep_shudder(Js, kappa=2.0, tau=5e-3, n=400):
+    th = np.quantile(detect_stat(to_sensor(make_noise(3000))), 1 - FPR_TARGET)
+    return np.array([(detect_stat(to_sensor(make_noise(n) + touch_pulse(J, tau, kappa)))
+                      > th).mean() for J in Js])
+
+
+def _sweep_twist(Js, kappa_twist=1.0, n=400):
+    th = np.quantile(twist_stat_detrended(gyro_trace(3000)), 1 - FPR_TARGET)
+    return np.array([(twist_stat_detrended(gyro_trace(n, J * 1e-3, kappa_twist))
+                      > th).mean() for J in Js])
+
+
+def _crossing(Js, tpr, level):
+    """First J where tpr crosses `level`, log-interpolated. None if never."""
+    for i in range(1, len(Js)):
+        if tpr[i - 1] < level <= tpr[i]:
+            f = (level - tpr[i - 1]) / (tpr[i] - tpr[i - 1])
+            return float(np.exp(np.log(Js[i - 1]) + f * np.log(Js[i] / Js[i - 1])))
+    return None
+
+
+def round5():
+    global SIG_AERO, F_AERO, GYRO_JITTER_DPS
+    Js_s = np.geomspace(0.02, 2.0, 15)   # mN·s, shudder sweep
+    Js_t = np.geomspace(0.01, 1.0, 15)   # mN·s, twist sweep
+
+    results = {}
+    old = (SIG_AERO, F_AERO, GYRO_JITTER_DPS)
+    for tag, (sig, fa, gj) in [("baseline", old), ("corrected", (0.65, 20.0, 0.06))]:
+        SIG_AERO, F_AERO, GYRO_JITTER_DPS = sig, fa, gj
+        results[tag] = {"shudder": _sweep_shudder(Js_s * 1e-3),
+                        "twist": _sweep_twist(Js_t)}
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = old
+
+    for ch, Js in [("shudder", Js_s), ("twist", Js_t)]:
+        for tag in ("baseline", "corrected"):
+            tpr = results[tag][ch]
+            c50 = _crossing(Js, tpr, 0.5)
+            c10, c90 = _crossing(Js, tpr, 0.1), _crossing(Js, tpr, 0.9)
+            width = (c90 / c10) if (c10 and c90) else float("nan")
+            print(f"{ch:8s} {tag:9s}  J50={c50 and f'{c50:.3f}'} mN·s  "
+                  f"10->90% width x{width:.2f}")
+
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.3), sharey=True)
+    fig.patch.set_facecolor(SURFACE)
+    for ax, (ch, Js, title) in zip(axes, [
+            ("shudder", Js_s, "shudder (κ_shudder = 2, τ = 5 ms)"),
+            ("twist", Js_t, "twist (κ_twist = 1, detrended)")]):
+        styled_axes(ax)
+        ax.plot(Js, results["baseline"][ch], "o--", color=SEQ[2], lw=1.8, ms=4,
+                label="post-1 inputs")
+        ax.plot(Js, results["corrected"][ch], "o-", color=SEQ[5], lw=2, ms=5,
+                label="audit-corrected inputs")
+        ax.set_xscale("log")
+        ax.set_xlabel("impulse J (mN·s)", color=MUTED)
+        ax.set_title(title, color=INK, fontsize=11, loc="left")
+        ax.legend(frameon=False, fontsize=9, labelcolor=INK)
+    axes[0].set_ylabel("detection rate at 1% false-alarm", color=MUTED)
+    fig.suptitle("Round 5: the cliffs under audit-corrected inputs", color=INK,
+                 fontsize=12, x=0.02, ha="left")
+    fig.savefig("figs/fig_round5_audit.png", dpi=150, facecolor=SURFACE,
+                bbox_inches="tight")
+    print("wrote figs/fig_round5_audit.png")
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "round5":
+    round5()

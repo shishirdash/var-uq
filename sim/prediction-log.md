@@ -109,3 +109,31 @@ Shishir-computed:
 Planted flag (post 4): Shishir phrased the beep as "50× more likely there's
 a touch" — LR/posterior conflation, deliberately left open. Needs prior
 odds of a graze per flight → hierarchical Bayes post.
+
+## Round 5 — 2026-07-08: cliffs under audit-corrected inputs
+
+Inputs corrected per research/assumption-audit.md: ride band 80→20 Hz, ride
+amplitude ×0.65 (drag 2→1.3 N), gyro white jitter 0.15→0.06 dps (drift
+unchanged). Shishir waived predictions this round ("just proceed").
+
+Results (fig_round5_audit.png):
+- Shudder (κ=2): J50 0.346 → 0.246 mN·s (−29%); 10→90% width ×1.84 → ×1.60.
+- Twist (κ_twist=1, detrended): J50 0.213 → 0.188 mN·s (−12%); width ~×3 both.
+
+Findings:
+1. Post 1's "early insight" SURVIVES: both transitions stay abrupt (shudder
+   even steeper). Cliff existence is structural; only locations moved. No
+   post-1 edit needed for that line.
+2. TWIST SURPRISE: white jitter dropped 2.5× but the cliff moved only 12%.
+   The detrended detector's floor is dominated by bias drift (random walk),
+   which the audit left unchanged — the Allan tax is the binding constraint,
+   not the chip's white noise. Sharpens round 3's finding: a quieter gyro
+   buys almost nothing; a better drift model is the engineering headroom.
+3. Shudder moved less than the noise reduction naively suggests: with the
+   aero band at 20 Hz, almost nothing aero leaks past the 100 Hz filter —
+   the new floor is the accelerometer's own white noise (SIG_SENSOR), i.e.,
+   the shudder channel is now sensor-limited, not aero-limited.
+
+Decision: sim defaults stay at post-1 values for reproducibility of rounds
+1–4; corrected values become the post-2 baseline when the psychometric-fit
+refactor lands.

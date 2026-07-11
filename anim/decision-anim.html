@@ -332,8 +332,8 @@
 
   <!-- ============ SCENE 4: the full flight ============ -->
   <div class="panel scene" id="scene4">
-    <svg viewBox="0 0 960 775" width="100%">
-      <rect width="960" height="775" fill="#fcfcfb"/>
+    <svg viewBox="0 0 960 705" width="100%">
+      <rect width="960" height="705" fill="#fcfcfb"/>
       <defs>
         <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
@@ -390,24 +390,24 @@
 
       <!-- signal strip -->
       <g>
-        <rect x="60" y="420" width="880" height="160" fill="#f4f3ef" rx="8"/>
-        <text x="70" y="438" font-size="13.2" fill="#898781">what the chip records (illustrative, patterned on our sim)</text>
-        <line x1="70" y1="472" x2="930" y2="472" stroke="#eda100" stroke-width="1" stroke-dasharray="4 4"/>
-        <line x1="70" y1="528" x2="930" y2="528" stroke="#eda100" stroke-width="1" stroke-dasharray="4 4"/>
+        <rect x="60" y="380" width="880" height="150" fill="#f4f3ef" rx="8"/>
+        <text x="70" y="398" font-size="13.2" fill="#898781">what the chip records (illustrative, patterned on our sim)</text>
+        <line x1="70" y1="427" x2="930" y2="427" stroke="#eda100" stroke-width="1" stroke-dasharray="4 4"/>
+        <line x1="70" y1="483" x2="930" y2="483" stroke="#eda100" stroke-width="1" stroke-dasharray="4 4"/>
         <polyline id="s4raw" points="" fill="none" stroke="#0b0b0b" stroke-width="1" opacity="0.3"/>
         <polyline id="s4hp" points="" fill="none" stroke="#2a78d6" stroke-width="1.6"/>
-        <text x="928" y="443" font-size="12" fill="#898781" text-anchor="end">gray: raw · blue: filtered &gt;100 Hz · dashes: threshold</text>
-        <text id="s4det" x="640" y="462" font-size="15.6" font-weight="650" fill="#008300" opacity="0">detected ✓</text>
-        <line id="s4cursor" x1="70" y1="446" x2="70" y2="574" stroke="#c3c2b7" stroke-width="1"/>
+        <text x="928" y="403" font-size="12" fill="#898781" text-anchor="end">gray: raw · blue: filtered &gt;100 Hz · dashes: threshold</text>
+        <text id="s4det" x="640" y="422" font-size="15.6" font-weight="650" fill="#008300" opacity="0">detected ✓</text>
+        <line id="s4cursor" x1="70" y1="386" x2="70" y2="526" stroke="#c3c2b7" stroke-width="1"/>
       </g>
-      <text x="480" y="612" font-size="14.4" fill="#898781" text-anchor="middle">the ride, then a graze — the response shows in the blue line.</text>
+      <text x="480" y="558" font-size="14.4" fill="#898781" text-anchor="middle">the ride, then a graze — the response shows in the blue line.</text>
       <g>
-        <rect x="60" y="628" width="880" height="118" fill="#f4f3ef" rx="8"/>
-        <text x="70" y="646" font-size="13.2" fill="#898781">gyroscope — spin rate</text>
+        <rect x="60" y="574" width="880" height="118" fill="#f4f3ef" rx="8"/>
+        <text x="70" y="592" font-size="13.2" fill="#898781">gyroscope — spin rate</text>
         <polyline id="s4gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
-        <text id="s4gstep" x="700" y="668" font-size="14.4" font-weight="650" fill="#199e70" opacity="0">a step — persists ↗</text>
-        <text id="s4gnope" x="920" y="668" font-size="14.4" fill="#898781" text-anchor="end" opacity="0">the step is in there — buried in the tremble</text>
-        <text x="928" y="740" font-size="12" fill="#898781" text-anchor="end">step exaggerated for visibility</text>
+        <text id="s4gstep" x="700" y="614" font-size="14.4" font-weight="650" fill="#199e70" opacity="0">a step — persists ↗</text>
+        <text id="s4gnope" x="920" y="614" font-size="14.4" fill="#898781" text-anchor="end" opacity="0">the step is in there — buried in the tremble</text>
+        <text x="928" y="686" font-size="12" fill="#898781" text-anchor="end">step exaggerated for visibility</text>
       </g>
     </svg>
     <div class="controls">
@@ -417,6 +417,8 @@
       <button id="s4gm" onclick="s4setJ(0.35)">medium (0.35)</button>
       <button id="s4gh" onclick="s4setJ(1)" style="border-color:#0b0b0b;font-weight:600">firm (1.0)</button>
       <button id="s4gx" onclick="s4setJ(1000)">real header (~1,000)</button>
+    </div>
+    <div class="controls">
       <span class="note">deviation:</span>
       <button id="s4x1" onclick="s4setEx(1)">×1 (reality)</button>
       <button id="s4x1k" onclick="s4setEx(1000)">×1,000</button>
@@ -682,10 +684,10 @@ function s4tick(now){
   });
   // signal strip
   const sx = 70 + (t/s4.ST)*860;
-  const clip=v=>Math.max(-4.7,Math.min(4.7,v));
+  const clip=v=>Math.max(-4.4,Math.min(4.4,v));
   const raw = clip(s4noiseRaw(t)+s4burst(t)), hp = clip(0.12*Math.sin(t*400)+s4burst(t));
-  s4.rawPts.push(`${sx.toFixed(1)},${(500-raw*16).toFixed(1)}`);
-  s4.hpPts.push(`${sx.toFixed(1)},${(500-hp*16).toFixed(1)}`);
+  s4.rawPts.push(`${sx.toFixed(1)},${(455-raw*16).toFixed(1)}`);
+  s4.hpPts.push(`${sx.toFixed(1)},${(455-hp*16).toFixed(1)}`);
   if (s4.rawPts.length>1500){s4.rawPts.shift(); s4.hpPts.shift();}
   $('s4raw').setAttribute('points', s4.rawPts.join(' '));
   $('s4hp').setAttribute('points', s4.hpPts.join(' '));
@@ -693,7 +695,7 @@ function s4tick(now){
   $('s4det').setAttribute('opacity', t>tc+0.01 ? 1 : 0);
   // gyro strip: calm jitter, permanent step after contact
   const gjit = 1.1*Math.sin(t*33)+0.5*Math.sin(t*57+1);
-  const gbase = t > tc ? 704 - Math.min(22*s4.J, 48) : 704;
+  const gbase = t > tc ? 650 - Math.min(22*s4.J, 44) : 650;
   s4.gyPts.push(`${sx.toFixed(1)},${(gbase - gjit*2).toFixed(1)}`);
   if (s4.gyPts.length>1500) s4.gyPts.shift();
   $('s4gy').setAttribute('points', s4.gyPts.join(' '));

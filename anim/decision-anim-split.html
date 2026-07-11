@@ -302,8 +302,8 @@
 
   <!-- ============ SCENE 4: the full flight ============ -->
   <div class="panel scene" id="scene5">
-    <svg viewBox="0 0 960 775" width="100%">
-      <rect width="960" height="775" fill="#fcfcfb"/>
+    <svg viewBox="0 0 960 705" width="100%">
+      <rect width="960" height="705" fill="#fcfcfb"/>
       <defs>
         <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
@@ -360,27 +360,35 @@
 
       <!-- signal strip -->
       <g>
-        <rect x="60" y="420" width="880" height="160" fill="#f4f3ef" rx="8"/>
-        <text x="70" y="438" font-size="13.2" fill="#898781">what the chip records (illustrative, patterned on our sim)</text>
-        <line x1="70" y1="472" x2="930" y2="472" stroke="#eda100" stroke-width="1" stroke-dasharray="4 4"/>
-        <line x1="70" y1="528" x2="930" y2="528" stroke="#eda100" stroke-width="1" stroke-dasharray="4 4"/>
+        <rect x="60" y="380" width="880" height="150" fill="#f4f3ef" rx="8"/>
+        <text x="70" y="398" font-size="13.2" fill="#898781">what the chip records (illustrative, patterned on our sim)</text>
+        <line x1="70" y1="427" x2="930" y2="427" stroke="#eda100" stroke-width="1" stroke-dasharray="4 4"/>
+        <line x1="70" y1="483" x2="930" y2="483" stroke="#eda100" stroke-width="1" stroke-dasharray="4 4"/>
         <polyline id="s4raw" points="" fill="none" stroke="#0b0b0b" stroke-width="1" opacity="0.3"/>
         <polyline id="s4hp" points="" fill="none" stroke="#2a78d6" stroke-width="1.6"/>
-        <text x="928" y="443" font-size="12" fill="#898781" text-anchor="end">gray: raw · blue: filtered &gt;100 Hz · dashes: threshold</text>
-        <text id="s4det" x="640" y="462" font-size="15.6" font-weight="650" fill="#008300" opacity="0">detected ✓</text>
-        <line id="s4cursor" x1="70" y1="446" x2="70" y2="574" stroke="#c3c2b7" stroke-width="1"/>
+        <text x="928" y="403" font-size="12" fill="#898781" text-anchor="end">gray: raw · blue: filtered &gt;100 Hz · dashes: threshold</text>
+        <text id="s4det" x="640" y="422" font-size="15.6" font-weight="650" fill="#008300" opacity="0">detected ✓</text>
+        <line id="s4cursor" x1="70" y1="386" x2="70" y2="526" stroke="#c3c2b7" stroke-width="1"/>
       </g>
-      <text x="480" y="612" font-size="14.4" fill="#898781" text-anchor="middle">the ride, then a graze — the response shows in the blue line.</text>
+      <text x="480" y="558" font-size="14.4" fill="#898781" text-anchor="middle">the ride, then a graze — the response shows in the blue line.</text>
       <g>
-        <rect x="60" y="628" width="880" height="118" fill="#f4f3ef" rx="8"/>
-        <text x="70" y="646" font-size="13.2" fill="#898781">gyroscope — spin rate</text>
+        <rect x="60" y="574" width="880" height="118" fill="#f4f3ef" rx="8"/>
+        <text x="70" y="592" font-size="13.2" fill="#898781">gyroscope — spin rate</text>
         <polyline id="s4gy" points="" fill="none" stroke="#199e70" stroke-width="1.8"/>
-        <text id="s4gstep" x="700" y="668" font-size="14.4" font-weight="650" fill="#199e70" opacity="0">a step — persists ↗</text>
-        <text x="928" y="740" font-size="12" fill="#898781" text-anchor="end">step exaggerated for visibility</text>
+        <text id="s4gstep" x="700" y="614" font-size="14.4" font-weight="650" fill="#199e70" opacity="0">a step — persists ↗</text>
+        <text id="s4gnope" x="920" y="614" font-size="14.4" fill="#898781" text-anchor="end" opacity="0">the step is in there — buried in the tremble</text>
+        <text x="928" y="686" font-size="12" fill="#898781" text-anchor="end">step exaggerated for visibility</text>
       </g>
     </svg>
     <div class="controls">
       <button onclick="s4replay()">↺ replay</button>
+      <span class="note">graze:</span>
+      <button id="s4gf" onclick="s4setJ(0.05)">faint (0.05 mN·s)</button>
+      <button id="s4gm" onclick="s4setJ(0.35)">medium (0.35)</button>
+      <button id="s4gh" onclick="s4setJ(1)" style="border-color:#0b0b0b;font-weight:600">firm (1.0)</button>
+      <button id="s4gx" onclick="s4setJ(1000)">real header (~1,000)</button>
+    </div>
+    <div class="controls">
       <span class="note">deviation:</span>
       <button id="s4x1" onclick="s4setEx(1)">×1 (reality)</button>
       <button id="s4x1k" onclick="s4setEx(1000)">×1,000</button>
@@ -389,7 +397,11 @@
     </div>
     <div class="note">Everything at once, to one scale: the ride (spin, drag, turbulent wake), the graze in
     slow motion, and the two detection channels responding. The dashed gray path is where the untouched ball
-    would have gone. Press ×1 to see the true scale: the flight path barely changes; the response appears only in the signal strips.</div>
+    would have gone. Press ×1 to see the true scale: the flight path barely changes; the response appears only in the signal strips.
+    The graze buttons change the strength: a faint graze hides inside the noise of both instruments; a firm one is
+    unmistakable; the middle sits at the edge, where the couplings decide. The header button is the contrast:
+    at that strength the deflection and the spin change are visible to the naked eye — the chip matters
+    precisely for the regime below sight.</div>
     <div class="cites">Schematic. The flight deviation is exaggerated as labeled (real value ≈ 0.05–1 mm);
     the impulse arrow is not to scale; the signal strip is illustrative, patterned on our simulation
     (<a href="https://github.com/shishirdash/var-uq">repo</a>). Physics numbers are our own order-of-magnitude estimates.</div>
@@ -631,7 +643,7 @@ const s4 = {
   p0: [60,190], c: [360,40], p2: [900,330],
   UC: 0.625,            // contact point along the bezier
   ST: 1.6,              // total "match time" seconds of flight
-  exagg: 10000, t0: performance.now(),
+  exagg: 10000, J: 1, Jlbl: '≈ 1 mm', t0: performance.now(),
   rawPts: [], hpPts: [], gyPts: [],
 };
 function s4bez(u){
@@ -650,6 +662,20 @@ function s4setEx(e){ s4.exagg=e;
   }
 }
 function s4replay(){ s4.t0=performance.now(); s4.rawPts=[]; s4.hpPts=[]; s4.gyPts=[]; }
+function s4setJ(j){ s4.J=j;
+  s4.Jlbl = j>=100 ? '≈ 1 m' : j>=1 ? '≈ 1 mm' : j>=0.3 ? '≈ 0.35 mm' : '≈ 0.05 mm';
+  const det=$('s4det');
+  if (j>=100){ det.textContent='detected ✓ — and visible to the eye'; det.setAttribute('fill','#008300'); }
+  else if (j>=1){ det.textContent='detected ✓'; det.setAttribute('fill','#008300'); }
+  else if (j>=0.3){ det.textContent='just under the threshold — κ_shudder decides'; det.setAttribute('fill','#b07500'); }
+  else { det.textContent='hidden in the noise'; det.setAttribute('fill','#898781'); }
+  for (const [id,v] of [['s4gf',0.05],['s4gm',0.35],['s4gh',1],['s4gx',1000]]){
+    const b=document.getElementById(id);
+    b.style.borderColor = v===j ? '#0b0b0b' : ''; b.style.fontWeight = v===j ? '600' : '';
+  }
+  if (j>=100) s4setEx(1);   // a header needs no exaggeration
+  s4replay();
+}
 // wall-time -> match-time: normal, x35 slow-mo through contact, normal, hold
 function s4time(w){
   if (w < 2.5) return w/2.5*0.95;
@@ -659,7 +685,7 @@ function s4time(w){
 }
 function s4noiseRaw(t){ return 1.5*Math.sin(t*44)+1.0*Math.sin(t*86+1)+0.6*Math.sin(t*147+2); }
 function s4burst(t){ const tc=s4.ST*s4.UC; if (t<tc) return 0;
-  return 3.1*Math.exp(-(t-tc)*55)*Math.sin((t-tc)*900); }
+  return 3.1*s4.J*Math.exp(-(t-tc)*55)*Math.sin((t-tc)*900); }
 function s4tick(now){
   if (!document.getElementById('scene5').classList.contains('on')) { requestAnimationFrame(s4tick); return; }
   let w = (now - s4.t0)/1000;
@@ -671,11 +697,12 @@ function s4tick(now){
 
   // ball position + deviation
   let [x,y] = s4bez(u);
-  const realDevPx = 0.012; // ~0.5 mm at 24 px/m
+  const realDevPx = 0.024*s4.J; // deflection ≈ J in mm, at 24 px/m
   if (u > s4.UC) { const d = realDevPx*s4.exagg*(u-s4.UC)/(1-s4.UC); y -= Math.min(d,150); }
   const [tx,ty] = s4tan(u);
   const ang = Math.atan2(ty,tx)*180/Math.PI;
-  const spin = (t*8*360) % 360;
+  const dwrev = s4.J>=100 ? 5 : 0.0018*s4.J;   // rev/s lost to the contact
+  const spin = ((t<tc ? t*8 : tc*8 + (8-dwrev)*(t-tc))*360) % 360;
   $('s4ball').setAttribute('transform', `translate(${x},${y})`);
   $('s4seams').setAttribute('transform', `rotate(${spin})`);
   $('s4varrow').setAttribute('transform', `rotate(${ang})`);
@@ -694,7 +721,9 @@ function s4tick(now){
     for (let k=0;k<=20;k++){ const uu=s4.UC+(1-s4.UC)*k/20; const [gx,gy]=s4bez(uu); gd += ` ${gx.toFixed(0)} ${gy.toFixed(0)}`; if(k===0) gd+=' L'; }
     $('s4ghost').setAttribute('d', gd); $('s4ghost').setAttribute('opacity', 0.9);
     $('s4devlbl').setAttribute('opacity', u>0.9?1:0);
-    $('s4devlbl').textContent = s4.exagg===1 ? 'actual deviation ≈ 0.5 mm (invisible)' : `deviation shown ×${s4.exagg.toLocaleString()} (real ≈ 0.5 mm)`;
+    $('s4devlbl').textContent = s4.exagg===1
+      ? (s4.J>=100 ? `actual deviation ${s4.Jlbl} — visible, no chip needed` : `actual deviation ${s4.Jlbl} (invisible)`)
+      : (s4.J>=100 ? 'press ×1 — this one is visible at true scale' : `deviation shown ×${s4.exagg.toLocaleString()} (real ${s4.Jlbl})`);
   }
   // graze fx
   const nearC = Math.abs(t-tc) < 0.02;
@@ -705,9 +734,10 @@ function s4tick(now){
   });
   // signal strip
   const sx = 70 + (t/s4.ST)*860;
-  const raw = s4noiseRaw(t)+s4burst(t), hp = 0.12*Math.sin(t*400)+s4burst(t);
-  s4.rawPts.push(`${sx.toFixed(1)},${(500-raw*16).toFixed(1)}`);
-  s4.hpPts.push(`${sx.toFixed(1)},${(500-hp*16).toFixed(1)}`);
+  const clip=v=>Math.max(-4.4,Math.min(4.4,v));
+  const raw = clip(s4noiseRaw(t)+s4burst(t)), hp = clip(0.12*Math.sin(t*400)+s4burst(t));
+  s4.rawPts.push(`${sx.toFixed(1)},${(455-raw*16).toFixed(1)}`);
+  s4.hpPts.push(`${sx.toFixed(1)},${(455-hp*16).toFixed(1)}`);
   if (s4.rawPts.length>1500){s4.rawPts.shift(); s4.hpPts.shift();}
   $('s4raw').setAttribute('points', s4.rawPts.join(' '));
   $('s4hp').setAttribute('points', s4.hpPts.join(' '));
@@ -715,14 +745,19 @@ function s4tick(now){
   $('s4det').setAttribute('opacity', t>tc+0.01 ? 1 : 0);
   // gyro strip: calm jitter, permanent step after contact
   const gjit = 1.1*Math.sin(t*33)+0.5*Math.sin(t*57+1);
-  const gbase = t > tc ? 682 : 704;
+  const gbase = t > tc ? 650 - Math.min(22*s4.J, 44) : 650;
   s4.gyPts.push(`${sx.toFixed(1)},${(gbase - gjit*2).toFixed(1)}`);
   if (s4.gyPts.length>1500) s4.gyPts.shift();
   $('s4gy').setAttribute('points', s4.gyPts.join(' '));
-  $('s4gstep').setAttribute('opacity', t>tc+0.05 ? 1 : 0);
+  $('s4gstep').setAttribute('opacity', t>tc+0.05 && s4.J>=0.3 ? 1 : 0);
+  $('s4gnope').setAttribute('opacity', t>tc+0.05 && s4.J<0.3 ? 1 : 0);
   requestAnimationFrame(s4tick);
 }
 requestAnimationFrame(s4tick);
+const _j = parseFloat(_params.get('j'));
+if (_j) s4setJ(_j);
+const _w = parseFloat(_params.get('w'));
+if (_w) s4.t0 = performance.now() - _w*1000;
 
 // ---------- scene 5: the twist ----------
 const s5 = { t0: performance.now(), accPts: [], gyPts: [] };

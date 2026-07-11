@@ -448,3 +448,122 @@ def round5():
 
 if __name__ == "__main__" and __import__("sys").argv[-1] == "round5":
     round5()
+
+
+# --- round 6: psychometric fit (2026-07-11) ----------------------------------
+# Logistic in log-J with the detector's 1% FPR floor:
+#   p(J) = 0.01 + 0.99 * sigmoid(s * (logJ - logJ50))
+# Binomial MLE by vectorized zooming grid search (no scipy in the venv);
+# parametric bootstrap for the 95% CI. Inputs = audit-corrected post-2
+# baseline (round-5 decision).
+# ponytail: grid-search MLE, swap in scipy.optimize if params grow past 2.
+
+CORRECTED = (0.65, 20.0, 0.06)   # SIG_AERO, F_AERO, GYRO_JITTER_DPS
+
+
+def _psy(logJ, mu, s):
+    return FPR_TARGET + (1 - FPR_TARGET) / (1 + np.exp(-s * (logJ - mu)))
+
+
+def fit_psychometric(Js, k, n, mu0=None, half_mu=1.2, s0=25.0, half_s=24.8):
+    """MLE of (logJ50, steepness); zooming grid, 4 rounds of x5 refinement."""
+    logJ = np.log(Js)
+    mu, s = (np.median(logJ) if mu0 is None else mu0), s0
+    for _ in range(4):
+        mus = np.linspace(mu - half_mu, mu + half_mu, 41)
+        ss = np.linspace(max(s - half_s, 0.2), s + half_s, 41)
+        p = np.clip(_psy(logJ, mus[:, None, None], ss[None, :, None]),
+                    1e-12, 1 - 1e-12)
+        nll = -(k * np.log(p) + (n - k) * np.log1p(-p)).sum(-1)
+        i, j = np.unravel_index(nll.argmin(), nll.shape)
+        mu, s = mus[i], ss[j]
+        half_mu, half_s = half_mu / 5, half_s / 5
+    return mu, s
+
+
+def boot_ci(Js, k, n, n_boot=1000):
+    """Parametric bootstrap from the fitted curve -> percentile CIs."""
+    mu, s = fit_psychometric(Js, k, n)
+    p_hat = _psy(np.log(Js), mu, s)
+    draws = np.array([fit_psychometric(Js, kb, n, mu0=mu, half_mu=0.6,
+                                       s0=s, half_s=6.0)
+                      for kb in RNG.binomial(n, p_hat, (n_boot, len(Js)))])
+    return (mu, s), np.percentile(draws[:, 0], [2.5, 97.5]), \
+        np.percentile(draws[:, 1], [2.5, 97.5])
+
+
+def profile_ci(Js, k, n, mu_hat, s_hat):
+    """Profile-likelihood 95% CI on logJ50 (chi2, 1 df): independent
+    cross-check on the bootstrap — they should agree when the transition
+    is well sampled."""
+    logJ = np.log(Js)
+    mus = mu_hat + np.linspace(-0.15, 0.15, 301)
+    ss = np.geomspace(max(s_hat / 5, 0.5), s_hat * 5, 301)
+    p = np.clip(_psy(logJ, mus[:, None, None], ss[None, :, None]),
+                1e-12, 1 - 1e-12)
+    prof = (-(k * np.log(p) + (n - k) * np.log1p(-p)).sum(-1)).min(1)
+    ok = mus[prof <= prof.min() + 1.92]
+    return np.exp(ok[0]), np.exp(ok[-1])
+
+
+def round6():
+    global SIG_AERO, F_AERO, GYRO_JITTER_DPS
+    old = (SIG_AERO, F_AERO, GYRO_JITTER_DPS)
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = CORRECTED
+
+    # self-check: fit recovers a known curve from clean synthetic counts
+    Js_chk = np.geomspace(0.05, 1.0, 11)
+    mu_c, s_c = fit_psychometric(
+        Js_chk, np.round(400 * _psy(np.log(Js_chk), np.log(0.2), 4.0)), 400)
+    assert abs(mu_c - np.log(0.2)) < 0.02 and abs(s_c - 4.0) < 0.3, \
+        f"fit self-check failed: {mu_c:.3f}, {s_c:.2f}"
+
+    n = 400
+    Js_t = np.array([0.01, 0.02, 0.035, 0.05, 0.07, 0.1, 0.15, 0.2, 0.35, 0.7, 1.0])
+    th_t = np.quantile(twist_stat_detrended(gyro_trace(3000)), 1 - FPR_TARGET)
+    k_t = np.array([(twist_stat_detrended(gyro_trace(n, J * 1e-3, 1.0)) > th_t).sum()
+                    for J in Js_t])
+
+    Js_s = np.geomspace(0.02, 2.0, 15)
+    th_s = np.quantile(detect_stat(to_sensor(make_noise(3000))), 1 - FPR_TARGET)
+    k_s = np.array([(detect_stat(to_sensor(make_noise(n) + touch_pulse(J * 1e-3, 5e-3, 2.0)))
+                     > th_s).sum() for J in Js_s])
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = old
+
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.3), sharey=True)
+    fig.patch.set_facecolor(SURFACE)
+    Jf = np.geomspace(0.008, 2.5, 300)
+    for ax, (name, Js, k) in zip(axes, [
+            ("twist (κ_twist = 1, detrended)", Js_t, k_t),
+            ("shudder (κ_shudder = 2, τ = 5 ms)", Js_s, k_s)]):
+        (mu, s), ci_mu, ci_s = boot_ci(Js, k, n)
+        J50, lo, hi = np.exp(mu), np.exp(ci_mu[0]), np.exp(ci_mu[1])
+        half_pct = (hi - lo) / 2 / J50 * 100
+        plo, phi = profile_ci(Js, k, n, mu, s)
+        print(f"{name}  counts/{n}: {k.tolist()}")
+        w1090 = np.exp(2 * np.log(9) / s)   # 10->90% span of the sigmoid, x-factor in J
+        print(f"{name}\n  J50 = {J50:.4f} mN·s\n"
+              f"  bootstrap 95% CI [{lo:.4f}, {hi:.4f}] -> ±{half_pct:.1f}%\n"
+              f"  profile   95% CI [{plo:.4f}, {phi:.4f}]"
+              f" -> ±{(phi - plo) / 2 / J50 * 100:.1f}%\n"
+              f"  steepness s = {s:.2f}"
+              f" [{ci_s[0]:.2f}, {ci_s[1]:.2f}] -> 10->90% width x{w1090:.2f}")
+        styled_axes(ax)
+        ax.axvspan(plo, phi, color=SEQ[1], alpha=0.5, lw=0)
+        ax.plot(Jf, _psy(np.log(Jf), mu, s), color=SEQ[5], lw=2, label="fitted curve")
+        ax.plot(Js, k / n, "o", color=INK, ms=5, label=f"data ({n} trials/point)")
+        ax.axvline(J50, color=SEQ[5], lw=1, ls=":")
+        ax.set_xscale("log")
+        ax.set_xlabel("impulse J (mN·s)", color=MUTED)
+        ax.set_title(name, color=INK, fontsize=11, loc="left")
+        ax.legend(frameon=False, fontsize=9, labelcolor=INK, loc="upper left")
+    axes[0].set_ylabel("detection rate at 1% false-alarm", color=MUTED)
+    fig.suptitle("Round 6: psychometric fits, audit-corrected inputs "
+                 "(band = 95% CI on J50)", color=INK, fontsize=12, x=0.02, ha="left")
+    fig.savefig("figs/fig_round6_fit.png", dpi=150, facecolor=SURFACE,
+                bbox_inches="tight")
+    print("wrote figs/fig_round6_fit.png")
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "round6":
+    round6()

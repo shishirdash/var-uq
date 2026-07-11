@@ -137,3 +137,35 @@ Findings:
 Decision: sim defaults stay at post-1 values for reproducibility of rounds
 1–4; corrected values become the post-2 baseline when the psychometric-fit
 refactor lands.
+
+## Round 6 — 2026-07-11: psychometric fit (logistic in log-J, 1% floor)
+
+First round on the audit-corrected inputs (post-2 baseline per the round-5
+decision). Model: p(J) = 0.01 + 0.99·sigmoid(s·(log J − log J50)), binomial
+MLE (numpy zooming grid search — no scipy in the venv), parametric bootstrap
+CI cross-checked against a profile-likelihood CI. Twist: the 11-value ×1.4
+grid × 400 trials; shudder: the round-5 15-point grid × 400.
+
+SEALED ENVELOPE — 95% CI half-width (±%) on fitted J50, twist κ_twist = 1,
+detrended. Shishir predicted ±0.3–0.4% ("tighter by a factor of 10" than his
+single-point ±3–4% dot-noise derivation). Result: **±3.3%** (bootstrap;
+profile agrees, ±3.2%). Verdict: direction right — pooling does tighten —
+but ~10× optimistic on the size of the gain. Round-3 pattern holds.
+
+Fitted values (corrected inputs):
+- Twist: J50 = 0.176 mN·s, 95% CI [0.171, 0.182]; steepness s = 3.86
+  [3.57, 4.19] → 10→90% width ×3.12. Six points sit mid-transition
+  (counts 10/25/62/119/225/394 of 400) — the grid resolves this slope.
+- Shudder: J50 = 0.270 mN·s; s = 30.4 → width ×1.16. Exactly ONE point
+  mid-transition (283/400); bootstrap CI ±0.1% vs profile ±2.3% — the two
+  methods disagree 20× here and agree on the twist.
+
+Open threads (worked socratically; findings appended when resolved):
+1. Where did the predicted factor 10 go? (his diagnosis pending)
+2. Why do bootstrap and profile agree on the twist and split 20× on the
+   shudder — and which one do you trust? (pending; motivates the adaptive-
+   sampling round)
+3. Fitted twist J50 0.176 sits ~7% below round 5's crossing estimate 0.188 —
+   outside the new CI. Something the CI doesn't cover moved. (pending)
+
+Figure: figs/fig_round6_fit.png.

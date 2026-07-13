@@ -163,8 +163,7 @@ Fitted values (corrected inputs):
 Open threads (worked socratically; findings appended when resolved):
 1. Where did the predicted factor 10 go? RESOLVED 2026-07-13 — see below.
 2. Why do bootstrap and profile agree on the twist and split 20× on the
-   shudder — and which one do you trust? (pending; motivates the adaptive-
-   sampling round)
+   shudder — and which one do you trust? RESOLVED 2026-07-13 — see below.
 3. Fitted twist J50 0.176 sits ~7% below round 5's crossing estimate 0.188 —
    outside the new CI. Something the CI doesn't cover moved. (pending)
 
@@ -193,3 +192,36 @@ tighter CI costs ~100× the informative data; the residual ×2 was the
 1σ-vs-95% quote. Meta-note for the pacing thread: round 6 originally landed
 fit + bootstrap + profile in one delivery — too many new ideas per step;
 the rung-by-rung rebuild is the corrective pattern.
+
+### Thread 2 resolution — 2026-07-13 (worked socratically)
+
+Shishir's chain: one ramp dot can't set the slope alone → he pushed back
+that the flanking floor/ceiling dots DO carry slope information (correct;
+sharpened to: they bound steepness from below — the rise must fit inside
+the ×1.9 gap — but nothing punishes an arbitrarily steep cliff, so no
+upper bound) → high slope uncertainty means J50 slides along a ridge of
+(J50, s) pairs that all match the single mid-dot (his words: "depending on
+what the slope is, the J50 number could vary significantly") → bootstrap
+±0.1% fails the sniff test → steepness knob absorbs each replay's mid-dot
+wobble (after one terminology stumble on "absorbing" — relocated, not
+reduced).
+
+Mechanism: the parametric bootstrap crowns the fitted curve as truth and
+measures only the replay scatter the refits FAIL to absorb. On a ridge the
+free knob (s) drains all of it — smoking gun: the bootstrap's s-interval
+[24.5, 37.4] (±21%) is the mid-dot's binomial wobble laundered through the
+s knob, while J50 stays glued (±0.1%). Reproducibility ≠ identifiability.
+The profile likelihood crowns no one — it sweeps the whole unruled-out
+family → honest ±2.3%. Twist: six witnesses leave no free knob; both
+methods agree; agreement-vs-split of the two CI methods is itself the
+diagnostic (post-2 keeper).
+
+Honesty note: the fitted shudder steepness s = 30.4 is search-budget-
+limited, not measured — the likelihood creeps monotonically toward an
+infinitely steep step glued to the mid-dot; the optimizer's patience wears
+the number. Same caveat applies to the drawn curve in fig_round6_fit.png
+(right panel): the cliff's steepness there is illustrative.
+
+Consequence for sequencing: adaptive sampling moves AHEAD of the
+disagreement-zone overlay — the shudder's disagreement-zone width needs an
+identified steepness first, which the ×1.4 grid cannot deliver.

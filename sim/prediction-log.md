@@ -225,3 +225,44 @@ the number. Same caveat applies to the drawn curve in fig_round6_fit.png
 Consequence for sequencing: adaptive sampling moves AHEAD of the
 disagreement-zone overlay — the shudder's disagreement-zone width needs an
 identified steepness first, which the ×1.4 grid cannot deliver.
+
+## Round 7 — 2026-07-13: the staircase (adaptive sampling, shudder)
+
+Design (Shishir's): blind 15-point seed grid (6,000 flights), then six waves
+of 1,000; before each wave refit on ALL accumulated data, draw the surviving
+family (joint-95% likelihood region — "the fan"), place the wave 5×200 where
+the fan is widest. His criterion, refined en route: not sparsity — "sparsity
++ how fast the change is," made robust as "where the surviving curves
+disagree most."
+
+SEALED ENVELOPE: final 95% profile CI half-width on shudder J50 after 12k
+flights (was ±2.3–2.4% on the blind 6k). Shishir predicted ±1.62%, reasoning
+2.3/√2 — √N applied to total flights. Side bet: does steepness get a finite
+upper bound — YES, hedged ("steepness is so high I wouldn't be surprised if
+No").
+
+Results (fig_round7_staircase.png):
+
+| wave | flights | profile CI on J50 |
+|---|---|---|
+| 0 (blind) | 6,000 | ±2.40% |
+| 1 | 7,000 | ±0.25% |
+| 2 | 8,000 | ±0.20% |
+| 3 | 9,000 | ±0.15% |
+| 4–6 | 10–12,000 | ±0.10% |
+
+Final: J50 = 0.2721 mN·s, profile ±0.10%, bootstrap ±0.16% — the two
+methods RECONCILE once the ridge is broken (the round-6 diagnostic confirmed
+in both directions). Steepness profile [40.6, 43.5] — bounded, finite,
+enormous (10→90% width ×1.11: the shudder cliff is genuinely near-vertical).
+
+Score: prediction ±1.62% vs actual ±0.10% — off 16×, and for the FIRST time
+in the log the miss is PESSIMISTIC. Side bet: primary call (yes) correct;
+hedge unnecessary. Narrative keeper: his round-6 sealed prediction (±0.35%)
+was wrong for the blind experiment but is almost exactly what the adaptive
+experiment delivers — he predicted the smart experiment's precision, one
+round early, for the wrong design.
+
+Open thread 4: why did √N-on-total-flights fail here, in the pessimistic
+direction — what did wave 1's 1,000 flights have that the seed's 6,000
+didn't? (his diagnosis pending; observable in the wave table)

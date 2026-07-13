@@ -567,3 +567,122 @@ def round6():
 
 if __name__ == "__main__" and __import__("sys").argv[-1] == "round6":
     round6()
+
+
+# --- round 7: the staircase (2026-07-13) --------------------------------------
+# Shishir's design: blind 15-point grid (6k flights) as the seed, then six
+# adaptive waves of 1,000; before each wave, refit on ALL accumulated data,
+# draw the surviving curve family (joint 95% likelihood region), and place the
+# wave's J values where the family fans widest. Shudder channel, corrected
+# inputs. Envelope: final 95% profile CI on J50; side bet: does steepness get
+# a finite upper bound.
+
+S_GRID = np.geomspace(5, 500, 201)   # generous: "bounded" must beat the edge
+
+
+def _nll_grid(Js, k, n, mus, ss):
+    p = np.clip(_psy(np.log(Js), mus[:, None, None], ss[None, :, None]),
+                1e-12, 1 - 1e-12)
+    return -(k * np.log(p) + (n - k) * np.log1p(-p)).sum(-1)
+
+
+def fan(Js, k, n, mu_hat, Jgrid):
+    """Min/max p(J) across the joint-95% surviving family (dnll <= 3.0)."""
+    mus = mu_hat + np.linspace(-0.4, 0.4, 201)
+    nll = _nll_grid(Js, k, n, mus, S_GRID)
+    keep = nll <= nll.min() + 3.0
+    p = _psy(np.log(Jgrid), mus[np.where(keep)[0], None],
+             S_GRID[np.where(keep)[1], None])
+    return p.min(0), p.max(0)
+
+
+def profile_s(Js, k, n, mu_hat):
+    """Profile-likelihood 95% interval on steepness; flags a search-edge hit."""
+    mus = mu_hat + np.linspace(-0.4, 0.4, 201)
+    prof = _nll_grid(Js, k, n, mus, S_GRID).min(0)
+    ok = S_GRID[prof <= prof.min() + 1.92]
+    return ok[0], ok[-1], bool(ok[-1] == S_GRID[-1])
+
+
+def round7():
+    global SIG_AERO, F_AERO, GYRO_JITTER_DPS
+    old = (SIG_AERO, F_AERO, GYRO_JITTER_DPS)
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = CORRECTED
+    th = np.quantile(detect_stat(to_sensor(make_noise(3000))), 1 - FPR_TARGET)
+
+    def run_dot(J, n):
+        sig = touch_pulse(J * 1e-3, 5e-3, 2.0)
+        return int((detect_stat(to_sensor(make_noise(n) + sig)) > th).sum())
+
+    Js = list(np.geomspace(0.02, 2.0, 15))          # blind seed grid
+    ns = [400] * 15
+    ks = [run_dot(J, 400) for J in Js]
+
+    Jgrid = np.geomspace(0.05, 1.0, 400)
+    fans = {}
+    for wave in range(7):                            # wave 0 = seed only
+        Jsa, ka, na = map(np.array, (Js, ks, ns))
+        mu, s = fit_psychometric(Jsa, ka, na)
+        plo, phi = profile_ci(Jsa, ka, na, mu, s)
+        J50 = np.exp(mu)
+        print(f"wave {wave}: {int(na.sum())} flights, J50 = {J50:.4f}, "
+              f"profile CI ±{(phi - plo) / 2 / J50 * 100:.2f}%")
+        if wave in (0, 6):
+            fans[wave] = fan(Jsa, ka, na, mu, Jgrid)
+        if wave == 6:
+            break
+        pmin, pmax = fan(Jsa, ka, na, mu, Jgrid)
+        wide = Jgrid[(pmax - pmin) > 0.5 * (pmax - pmin).max()]
+        picks = np.geomspace(wide.min(), wide.max(), 5)
+        print(f"  fan widest {wide.min():.3f}-{wide.max():.3f} -> "
+              f"placing 5x200 at {[f'{p:.3f}' for p in picks]}")
+        for J in picks:
+            Js.append(float(J)); ns.append(200); ks.append(run_dot(float(J), 200))
+
+    (mu, s), ci_mu, _ = boot_ci(Jsa, ka, na)
+    J50, blo, bhi = np.exp(mu), np.exp(ci_mu[0]), np.exp(ci_mu[1])
+    s_lo, s_hi, edge = profile_s(Jsa, ka, na, mu)
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = old
+    print(f"\nFINAL (12k flights): J50 = {J50:.4f} mN·s")
+    print(f"  profile  95% CI ±{(phi - plo) / 2 / J50 * 100:.2f}%  "
+          f"[{plo:.4f}, {phi:.4f}]")
+    print(f"  bootstrap 95% CI ±{(bhi - blo) / 2 / J50 * 100:.2f}%  "
+          f"[{blo:.4f}, {bhi:.4f}]")
+    print(f"  steepness profile [{s_lo:.1f}, {s_hi:.1f}]"
+          f"{' — HIT SEARCH EDGE (unbounded)' if edge else ' — bounded'}")
+
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.3), sharey=True)
+    fig.patch.set_facecolor(SURFACE)
+    for w, color, label in [(0, SEQ[2], "after blind grid (6k)"),
+                            (6, SEQ[5], "after staircase (12k)")]:
+        axes[0].fill_between(Jgrid, *fans[w], color=color, alpha=0.45,
+                             lw=0, label=label)
+    styled_axes(axes[0])
+    axes[0].set_xscale("log")
+    axes[0].legend(frameon=False, fontsize=9, labelcolor=INK, loc="upper left")
+    axes[0].set_title("the fan: every curve the data can't rule out",
+                      color=INK, fontsize=11, loc="left")
+    axes[0].set_ylabel("detection rate at 1% false-alarm", color=MUTED)
+    styled_axes(axes[1])
+    axes[1].axvspan(plo, phi, color=SEQ[1], alpha=0.5, lw=0)
+    axes[1].plot(Jgrid, _psy(np.log(Jgrid), mu, s), color=SEQ[5], lw=2,
+                 label="final fit")
+    sizes = 12 + 30 * (na / 400)
+    axes[1].scatter(Jsa, ka / na, s=sizes, color=INK, zorder=3,
+                    label="dots (area ~ flights)")
+    axes[1].axvline(J50, color=SEQ[5], lw=1, ls=":")
+    axes[1].set_xscale("log")
+    axes[1].legend(frameon=False, fontsize=9, labelcolor=INK, loc="upper left")
+    axes[1].set_title("final fit, 12k flights (band = profile CI)",
+                      color=INK, fontsize=11, loc="left")
+    for ax in axes:
+        ax.set_xlabel("impulse J (mN·s)", color=MUTED)
+    fig.suptitle("Round 7: the staircase closes the shudder fan", color=INK,
+                 fontsize=12, x=0.02, ha="left")
+    fig.savefig("figs/fig_round7_staircase.png", dpi=150, facecolor=SURFACE,
+                bbox_inches="tight")
+    print("wrote figs/fig_round7_staircase.png")
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "round7":
+    round7()

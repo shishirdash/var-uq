@@ -161,7 +161,7 @@ Fitted values (corrected inputs):
   methods disagree 20× here and agree on the twist.
 
 Open threads (worked socratically; findings appended when resolved):
-1. Where did the predicted factor 10 go? (his diagnosis pending)
+1. Where did the predicted factor 10 go? RESOLVED 2026-07-13 — see below.
 2. Why do bootstrap and profile agree on the twist and split 20× on the
    shudder — and which one do you trust? (pending; motivates the adaptive-
    sampling round)
@@ -169,3 +169,27 @@ Open threads (worked socratically; findings appended when resolved):
    outside the new CI. Something the CI doesn't cover moved. (pending)
 
 Figure: figs/fig_round6_fit.png.
+
+### Thread 1 resolution — 2026-07-13, revision arc (rungs a–e)
+
+Shishir asked for a from-scratch rebuild of the CI chain ("start fresh on
+sims, step by step"); rungs (a) one dot = 400 flights counted, (b) binomial
+wobble, were solid; revision ran (c) onward. All numbers his:
+
+- Rung (c): dot at J=0.20 reads 0.56; wobble √(0.56·0.44/400) = ±2.5 POINTS
+  (absolute — the relative-vs-absolute currency slip was caught and fixed en
+  route, same family as round 3's unit gremlins); local grade from the
+  straddling dots = 26 pp over a 33% rise ≈ 0.8 pp per 1% of J; slide of the
+  50% crossing = 2.5/0.8 ≈ ±3.1% at 1σ. Reproduces his week-old ±3–4%.
+- Rung (d): six ramp dots pooled → ±3.1/√6 ≈ ±1.2%. Pooling pays in √N.
+- Rung (e): ×~2 for a 95% quote → ±2.4%, vs the sim's ±3.3%. Leftover gap =
+  unequal witnesses (edge-of-ramp dots are blunter; effective N < 6) + the
+  steepness knob being fit from the same data.
+
+The factor-10 autopsy, his closing computation: delivering his sealed
+±0.31% as a 95% CI requires 3.1·2/√N = 0.31 → N ≈ 400 equally sharp ramp
+dots (160,000 ramp flights) vs the 6 dots (2,400) actually run. A 10×
+tighter CI costs ~100× the informative data; the residual ×2 was the
+1σ-vs-95% quote. Meta-note for the pacing thread: round 6 originally landed
+fit + bootstrap + profile in one delivery — too many new ideas per step;
+the rung-by-rung rebuild is the corrective pattern.

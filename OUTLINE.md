@@ -28,25 +28,41 @@ unmeasured couplings. No sim details (post 2's job).
 
 ## Post 2 — "Tinker, Tailor, Sampler, Spy" (the simulation ritual)
 
-The step-by-step detection ritual, visualized per channel: innocent trials set the
-threshold, guilty trials climb it, the sigmoid draws itself, the cliff emerges.
-Psychometric-curve fitting + adaptive sampling for precise cliffs with CIs. The
-playable-cliff interactive. Payoff sections brought forward from round 4
-(2026-07-08): the disagreement curve 2p(1−p) (verdict instability between
-matches; zone width per channel) and the beep/silence likelihood-ratio
-asymmetry (50× vs ~2× — convicting on a beep is defensible, exonerating on
-silence is not; Gvardiol call sat on the strong side). LR-only here; the
-prior-odds/posterior step stays post 4. Goff-derived additions (2026-07-09,
-see research/goff-implications.md): per-flight baseline estimation for the
-accelerometer (drag-crisis non-stationarity, mirror of the gyro detrend);
-sigma_ride(spin) knuckle axis; joint sim via theta-decomposition prior
-(kappa_push = cos theta, kappa_twist = sin theta x slip, kappa_shudder
-independent); the Magnus-echo aside (twist regenerates a push-sized path
-deviation via the air). Scaling laws via dimensional analysis (flight speed etc.
-collapse into ~3 dimensionless ratios). Finale: the JOINT sim — one graze, both
-sensor streams, fusion detector hedging the κ-vs-f lottery. Prediction-log excerpts
-as the honest thread. Kitchen experiment (phone IMU in/on a real ball) feeds the
-model's ring-frequency and κ inputs if done in time.
+RESCOPED 2026-07-13 (joint sim moved out — see post 2.5). One theme: turning
+noisy detections into knowledge, and catching your own uncertainty estimate
+lying. The arc = rounds 4 + 6–8 of the prediction log:
+1. The ritual: innocent trials set the threshold, guilty trials climb it,
+   dots draw the sigmoid, the cliff emerges.
+2. The fit: psychometric curve in log-J with the 1% floor; pooling; what a
+   CI on J50 means (the factor-10 autopsy — √N, informative dots, 1σ vs 95%).
+3. The CI that lied: one ramp-dot + two knobs = ridge; bootstrap ±0.1% vs
+   profile ±2.3%; reproducibility ≠ identifiability; method-agreement as a
+   working diagnostic.
+4. The staircase: place flights where the surviving-curve fan is widest;
+   1,000 well-placed flights beat 6,000 blind ones; regime change, then √N
+   resumes on informative-flight count.
+5. The coin-flip zones: 2p(1−p), dome vs needle (×4.70 vs ×1.15); the
+   sensitive channel is the irreproducible one.
+6. Beep/silence LR asymmetry (50× vs ~2×; Gvardiol call on the strong
+   side). LR-only; the prior-odds/posterior step stays post 3.
+Playable-cliff interactive CONFIRMED: the prose builds up to it so the
+playable sim lands as the payoff, not a gadget. Prediction-log excerpts as
+the honest thread (including the first pessimistic miss, round 7). If depth
+strains lay readability, spin derivations (the cliff, 2p(1−p), the
+disagreement zone) into short lay companion explainers rather than cutting
+them — Shishir wants one deep post, companions allowed. Kitchen experiment
+feeds inputs if done in time.
+
+## Post 2.5 — "One graze, three channels" (the geometry lottery; bridge to post 3)
+
+NEW 2026-07-13, carved out of post 2. The joint sim: draw a contact angle θ
+per graze → κ_push = cos θ, κ_twist = sin θ × slip, κ_shudder independent;
+one graze, both sensor streams; the fusion detector hedging the κ-vs-f
+lottery. Carries the Goff sim upgrades (per-flight accelerometer baseline,
+σ_ride(spin) knuckle axis, within-flight C_d drift, the Magnus-echo aside)
+and the scaling-laws section (dimensionless ratios). Its θ prior IS a
+prior — hands post 3 the prior-odds ingredient the round-4 planted flag
+(LR ≠ posterior) needs.
 
 ## Post 3 — "Verdicts as posteriors" (hierarchical Bayes)
 
@@ -108,8 +124,10 @@ a capstone post 4.
 - M1.5 — The twist (gyro channel). ✅ DONE 2026-07-07 socratically: decomposition →
   Δω ceiling → two-window detector → Allan-U limits → detrend fix → cliff at ~0.23
   (f=1) / ~0.7 (f=0.3). Logged as round 3.
-- M2 — Post 2 sim ritual: sigmoid/cliff fitting, disagreement-zone widths,
-  beep/silence asymmetry section, joint/fusion sim, playable-cliff interactive.
+- M2 — Post 2 sim ritual: sigmoid/cliff fitting ✅ + adaptive staircase ✅ +
+  disagreement-zone widths ✅ (rounds 6–8, 2026-07-13); beep/silence
+  asymmetry section (derived round 4, to write); playable-cliff interactive
+  (build queued). Joint/fusion sim MOVED to post 2.5.
 - M3 — Advanced arcs, per roadmap v3 order: post 3 (hierarchical Bayes) then
   post 4 (JEPA world model), each preceded by its own socratic exploration phase.
 - M4 — Real-video validation (post 5): waveform digitization + kitchen IMU;
@@ -212,3 +230,11 @@ not on artifact completion.
   playable-cliff interactive, kitchen IMU experiment, waveform digitization.
   Then: Notion publish (next session), M1 round 3 (contact-duration cliff),
   M0 anatomy one-pager, M2 comparison, post 2.
+- 2026-07-13: M2 sim arc COMPLETE — rounds 6–8 in sim/prediction-log.md
+  (psychometric fit + bootstrap/profile CIs, adaptive staircase, disagreement
+  overlay; figures fig_round6_fit / fig_round7_staircase /
+  fig_round8_disagreement). Post 2 RESCOPED (joint sim → new post 2.5,
+  bridge to posteriors); playable-cliff interactive confirmed in scope; lay
+  companion explainers allowed if depth strains readability. NEXT: Shishir's
+  closed-book post-2 skeleton brain-dump → draft assembly vs the log →
+  interactive build → critic rounds.

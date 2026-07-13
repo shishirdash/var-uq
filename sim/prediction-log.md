@@ -278,3 +278,31 @@ second witness and killed the ridge — identifiability isn't bought in
 increments. Confirmation: post-ridge, √N resumed on ramp-flight count
 (waves 2–6: predicted 2.1×, observed 2.5×). His envelope math was right
 one regime too late, applied to the wrong N.
+
+## Round 8 — 2026-07-13: disagreement-zone overlay (round-4 payoff, quantified)
+
+Deliverable: J-band per channel where P(two matches disagree) = 2p(1−p)
+exceeds tolerance 0.10, computed from the FITTED curves (twist round 6,
+shudder round 7). Deterministic — no Monte Carlo.
+
+Envelope attempt: p-edges {0.053, 0.947} correct (his quadratic). The
+p→z conversion ran the sigmoid FORWARD (fed p in where z belongs); caught
+via his own round-4 sanity check (the slope's zone must beat the cliff's —
+his output had the ordering inverted). Redo waived ("assume i know the
+math") — second waiver in the log; like round 5's, a one-off. Closed-form:
+z = ln(p/(1−p)), edges ±2.88, span ÷ s, exponentiate.
+
+Results (fig_round8_disagreement.png):
+- Shudder: 0.253 → 0.291 mN·s, ×1.15 — a sliver. Nearly binary verdicts.
+- Twist: 0.079 → 0.371 mN·s, ×4.70 — covers ~half the graze bracket
+  (0.05–1 mN·s) in log measure. The sensitive channel is the
+  irreproducible one: lower J50 (0.176 vs 0.272) bought at the price of a
+  wide coin-flip zone.
+- Round-4 eyeball ("twist ~3× wider") revised: true log-width contrast is
+  ~11×. The eyeball wasn't wrong about the twist — it was fooled by the
+  shudder, whose blind-grid curve looked ~4× shallower than the staircase
+  proved it to be. Grid-limited steepness compressed the apparent contrast.
+
+Post-2 keeper: reach and reproducibility trade off ACROSS channels — the
+twist detects fainter grazes but re-referees them differently match to
+match; the shudder almost always returns the same verdict, right or wrong.

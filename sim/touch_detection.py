@@ -686,3 +686,55 @@ def round7():
 
 if __name__ == "__main__" and __import__("sys").argv[-1] == "round7":
     round7()
+
+
+# --- round 8: disagreement-zone overlay (2026-07-13) --------------------------
+# Round-4 payoff made quantitative: same graze, two matches, independent
+# noise -> P(disagree) = 2p(1-p). Zone = J-band where that exceeds 10%.
+# Curves are the FITTED psychometrics (round 6 twist, round 7 shudder) —
+# deterministic, no Monte Carlo.
+
+FITTED = {"twist":   (np.log(0.1761), 3.86),   # round 6, corrected inputs
+          "shudder": (np.log(0.2721), 42.0)}   # round 7, staircase
+
+
+def round8(tol=0.10):
+    p_edges = np.roots([2, -2, tol])           # 2p(1-p) = tol
+    zones = {}
+    for name, (mu, s) in FITTED.items():
+        sig = np.clip((p_edges - FPR_TARGET) / (1 - FPR_TARGET), 1e-9, 1 - 1e-9)
+        z = np.log(sig / (1 - sig))            # inverse sigmoid, floor-corrected
+        Jlo, Jhi = np.exp(mu + np.sort(z) / s)
+        zones[name] = (Jlo, Jhi)
+        print(f"{name:8s} zone: {Jlo:.4f} -> {Jhi:.4f} mN·s  = x{Jhi / Jlo:.2f}")
+    assert zones["twist"][1] / zones["twist"][0] \
+        > zones["shudder"][1] / zones["shudder"][0], "slope must beat cliff"
+
+    Jgrid = np.geomspace(0.02, 2.0, 600)
+    fig, ax = plt.subplots(figsize=(8, 4.5))
+    fig.patch.set_facecolor(SURFACE)
+    styled_axes(ax)
+    for (name, (mu, s)), color in zip(FITTED.items(), (SEQ[5], SEQ[2])):
+        p = _psy(np.log(Jgrid), mu, s)
+        ax.plot(Jgrid, 2 * p * (1 - p), color=color, lw=2,
+                label=f"{name} (s = {s:g})")
+        ax.axvspan(*zones[name], color=color, alpha=0.18, lw=0)
+        Jlo, Jhi = zones[name]
+        ax.text(np.sqrt(Jlo * Jhi), 0.54, f"×{Jhi / Jlo:.2f}", ha="center",
+                fontsize=10, color=color)
+    ax.axhline(tol, color=CAT[2], lw=1.2, ls="--")
+    ax.text(0.021, tol + 0.015, f"tolerance {tol:g}", fontsize=9, color=MUTED)
+    ax.set_xscale("log")
+    ax.set_xlabel("impulse J (mN·s)", color=MUTED)
+    ax.set_ylabel("P(two matches disagree) = 2p(1−p)", color=MUTED)
+    ax.set_ylim(0, 0.62)
+    ax.legend(frameon=False, fontsize=9, labelcolor=INK, loc="upper right")
+    ax.set_title("The coin-flip zones: same graze, two matches, two verdicts",
+                 color=INK, fontsize=12, loc="left")
+    fig.savefig("figs/fig_round8_disagreement.png", dpi=150, facecolor=SURFACE,
+                bbox_inches="tight")
+    print("wrote figs/fig_round8_disagreement.png")
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "round8":
+    round8()

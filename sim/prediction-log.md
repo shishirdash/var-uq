@@ -265,4 +265,16 @@ round early, for the wrong design.
 
 Open thread 4: why did √N-on-total-flights fail here, in the pessimistic
 direction — what did wave 1's 1,000 flights have that the seed's 6,000
-didn't? (his diagnosis pending; observable in the wave table)
+didn't? RESOLVED 2026-07-13:
+
+Shishir's diagnosis: wave 1 carried "more structural signal" — the flight
+distributions aren't equivalent, √N presumes exchangeable contributions.
+Sharpened in two steps: (1) the binding condition isn't gaussianity (his
+guess) but equal INFORMATION per flight — flats contribute ~zero, ramp
+flights contribute ∝ grade²; √N is bookkeeping for equal contributions.
+(2) Wave 1's 10× decomposes as ~1.9× honest √N (ramp flights 400→1,400)
+times ~5× REGIME CHANGE: dots at several ramp heights gave steepness its
+second witness and killed the ridge — identifiability isn't bought in
+increments. Confirmation: post-ridge, √N resumed on ramp-flight count
+(waves 2–6: predicted 2.1×, observed 2.5×). His envelope math was right
+one regime too late, applied to the wrong N.

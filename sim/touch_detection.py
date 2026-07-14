@@ -165,7 +165,7 @@ def fig_traces(noise_stats, out):
     plt.close(fig)
 
 
-def fig_roc(noise_stats, out):
+def fig_roc(noise_stats, out, Js=(0.5e-3, 1e-3, 2e-3, 5e-3)):
     kappas = [(0.0, "κ_shudder = 0 (push only)"), (0.5, "κ_shudder = 0.5 (faint shudder)"),
               (2.0, "κ_shudder = 2 (loud shudder)")]
     fig, axes = plt.subplots(1, 3, figsize=(13, 4.8), sharey=True)
@@ -174,7 +174,7 @@ def fig_roc(noise_stats, out):
     thr = np.quantile(noise_stats, 1 - fpr)
     for ax, (kappa_shudder, title) in zip(axes, kappas):
         styled_axes(ax)
-        for J, color in zip([0.5e-3, 1e-3, 2e-3, 5e-3], CAT):
+        for J, color in zip(Js, CAT):
             sig = touch_pulse(J, 5e-3, kappa_shudder)
             stats = detect_stat(to_sensor(make_noise(N_TRIALS) + sig))
             tpr = (stats[:, None] > thr[None, :]).mean(axis=0)
@@ -193,7 +193,7 @@ def fig_roc(noise_stats, out):
     plt.close(fig)
 
 
-def fig_detectability(noise_stats, out):
+def fig_detectability(noise_stats, out, highlight=None):
     Js = np.geomspace(0.2e-3, 10e-3, 8)
     taus = np.array([1, 2, 5, 10, 20]) * 1e-3
     cmap = LinearSegmentedColormap.from_list("seq", SEQ)
@@ -216,6 +216,11 @@ def fig_detectability(noise_stats, out):
         for (r, c), v in np.ndenumerate(grid):
             ax.text(c, r, f"{v:.2f}", ha="center", va="center", fontsize=7,
                     color=INK if v < 0.6 else SURFACE)
+        if highlight is not None:
+            hj = int(np.abs(Js - highlight[0]).argmin())
+            ht = int(np.abs(taus - highlight[1]).argmin())
+            ax.add_patch(plt.Rectangle((hj - 0.5, ht - 0.5), 1, 1, fill=False,
+                                       edgecolor=CAT[2], lw=2))
     axes[0].set_ylabel("contact time τ (ms)", color=MUTED)
     fig.colorbar(im, ax=axes, fraction=0.03, pad=0.02,
                  label="detection rate at 1% false-alarm")
@@ -738,3 +743,89 @@ def round8(tol=0.10):
 
 if __name__ == "__main__" and __import__("sys").argv[-1] == "round8":
     round8()
+
+
+# --- post-2 Act I assets (2026-07-13) ------------------------------------------
+# All rendered under the audit-corrected inputs (post-2 baseline). Post-1
+# figures are left untouched for reproducibility; these get a p2_ prefix.
+
+def fig_kappa_lottery(noise_stats, out, J=0.35e-3):
+    """Same graze, same noise, different κ draws — the geometry lottery.
+    Left column: filtered accelerometer, κ_shudder tiers. Right column:
+    gyro (known baseline removed), κ_twist tiers."""
+    thresh = np.quantile(noise_stats, 1 - FPR_TARGET)
+    acc_noise = make_noise(1)                      # one draw, reused per row
+    gyro_base = gyro_trace(1)                      # noise + baseline, no touch
+    t_acc = np.arange(N_HI // DECIM) / FS * 1000
+    t_gyr = np.arange(N_G) / FS * 1000
+    ride = SPIN0_DPS * (1 - AERO_DECAY * np.arange(N_G) / FS)
+
+    fig, axes = plt.subplots(3, 2, figsize=(11, 6.6), sharex="col")
+    fig.patch.set_facecolor(SURFACE)
+    for row, (ks, kt) in enumerate([(2.0, 1.0), (0.5, 0.3), (0.0, 0.1)]):
+        axL, axR = axes[row]
+        styled_axes(axL)
+        hp = highpass(to_sensor(acc_noise + touch_pulse(J, 5e-3, ks))[0])
+        axL.plot(t_acc, hp, color=SEQ[5], lw=1.1)
+        axL.axhline(thresh, color=CAT[2], lw=1, ls="--")
+        axL.axhline(-thresh, color=CAT[2], lw=1, ls="--")
+        beep = np.abs(hp).max() > thresh
+        axL.text(0.01, 0.9, f"κ_shudder = {ks:g} — {'BEEP' if beep else 'silent'}",
+                 transform=axL.transAxes, fontsize=10, color=INK, va="top")
+        styled_axes(axR)
+        dw = kt * J * R_BALL / I_BALL * 57.2958
+        step = np.where(np.arange(N_G) >= N_G // 2, dw, 0.0)
+        axR.plot(t_gyr, gyro_base[0] - ride + step, color=SEQ[3], lw=1.1)
+        axR.axvline(t_gyr[N_G // 2], color=MUTED, lw=0.8, ls=":")
+        axR.text(0.01, 0.9, f"κ_twist = {kt:g} — step {dw:.2f}°/s",
+                 transform=axR.transAxes, fontsize=10, color=INK, va="top")
+    axes[0, 0].set_title("accelerometer after the >100 Hz filter", color=INK,
+                         fontsize=11, loc="left")
+    axes[0, 1].set_title("gyroscope, known spin-decay removed", color=INK,
+                         fontsize=11, loc="left")
+    for ax in axes[-1]:
+        ax.set_xlabel("time (ms)", color=MUTED)
+    axes[1, 0].set_ylabel("m/s²", color=MUTED)
+    axes[1, 1].set_ylabel("°/s", color=MUTED)
+    fig.suptitle(f"One graze (J = {J*1e3:g} mN·s), same noise — only κ changes",
+                 color=INK, fontsize=12, x=0.02, ha="left")
+    fig.tight_layout()
+    fig.savefig(out, dpi=150, facecolor=SURFACE)
+    plt.close(fig)
+
+
+def post2_assets():
+    global SIG_AERO, F_AERO, GYRO_JITTER_DPS
+    old = (SIG_AERO, F_AERO, GYRO_JITTER_DPS)
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = CORRECTED
+    noise_stats = detect_stat(to_sensor(make_noise(3000)))
+
+    # teaser: one channel, one curve, the cliff
+    Js = np.geomspace(0.02, 2.0, 21)
+    tpr = _sweep_shudder(Js * 1e-3, kappa=2.0, n=300)
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    fig.patch.set_facecolor(SURFACE)
+    styled_axes(ax)
+    ax.plot(Js, tpr, "o-", color=SEQ[5], lw=2, ms=5)
+    ax.set_xscale("log")
+    ax.set_xlabel("graze strength: impulse J (mN·s)", color=MUTED)
+    ax.set_ylabel("detection rate at 1% false-alarm", color=MUTED)
+    ax.set_title("The cliff: blind to near-perfect, abruptly (shudder, κ_shudder = 2)",
+                 color=INK, fontsize=12, loc="left")
+    fig.savefig("figs/p2_fig_cliff_teaser.png", dpi=150, facecolor=SURFACE,
+                bbox_inches="tight")
+    plt.close(fig)
+    print("wrote figs/p2_fig_cliff_teaser.png")
+
+    fig_kappa_lottery(noise_stats, "figs/p2_fig_kappa_lottery.png")
+    print("wrote figs/p2_fig_kappa_lottery.png")
+    fig_roc(noise_stats, "figs/p2_fig_roc.png", Js=(0.2e-3, 0.5e-3, 1e-3, 2e-3))
+    print("wrote figs/p2_fig_roc.png")
+    fig_detectability(noise_stats, "figs/p2_fig_detectability.png",
+                      highlight=(0.35e-3, 5e-3))
+    print("wrote figs/p2_fig_detectability.png")
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = old
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "p2assets":
+    post2_assets()

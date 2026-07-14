@@ -2,3 +2,4 @@ sim/.venv/
 __pycache__/
 .DS_Store
 posts/post1-*.md
+posts/

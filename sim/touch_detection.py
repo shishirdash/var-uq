@@ -165,7 +165,7 @@ def fig_traces(noise_stats, out):
     plt.close(fig)
 
 
-def fig_roc(noise_stats, out, Js=(0.5e-3, 1e-3, 2e-3, 5e-3)):
+def fig_roc(noise_stats, out, Js=(0.5e-3, 1e-3, 2e-3, 5e-3), n=N_TRIALS):
     kappas = [(0.0, "κ_shudder = 0 (push only)"), (0.5, "κ_shudder = 0.5 (faint shudder)"),
               (2.0, "κ_shudder = 2 (loud shudder)")]
     fig, axes = plt.subplots(1, 3, figsize=(13, 4.8), sharey=True)
@@ -176,7 +176,7 @@ def fig_roc(noise_stats, out, Js=(0.5e-3, 1e-3, 2e-3, 5e-3)):
         styled_axes(ax)
         for J, color in zip(Js, CAT):
             sig = touch_pulse(J, 5e-3, kappa_shudder)
-            stats = detect_stat(to_sensor(make_noise(N_TRIALS) + sig))
+            stats = detect_stat(to_sensor(make_noise(n) + sig))
             tpr = (stats[:, None] > thr[None, :]).mean(axis=0)
             ax.plot(fpr, tpr, color=color, lw=2, label=f"J = {J*1e3:g} mN·s")
         ax.plot([0, 1], [0, 1], color=GRID, lw=1, ls=":")
@@ -210,8 +210,8 @@ def fig_detectability(noise_stats, out, highlight=None):
         for sp in ax.spines.values():
             sp.set_visible(False)
         ax.set_xlabel("impulse J (mN·s)", color=MUTED)
-        ax.set_title(f"shudder coupling κ_shudder = {kappa_shudder:g}"
-                     + ("  (rigid body only)" if kappa_shudder == 0 else ""),
+        ax.set_title(f"κ_shudder = {kappa_shudder:g}"
+                     + (" (rigid body only)" if kappa_shudder == 0 else ""),
                      color=INK, fontsize=10, loc="left")
         for (r, c), v in np.ndenumerate(grid):
             ax.text(c, r, f"{v:.2f}", ha="center", va="center", fontsize=7,
@@ -829,3 +829,52 @@ def post2_assets():
 
 if __name__ == "__main__" and __import__("sys").argv[-1] == "p2assets":
     post2_assets()
+
+
+def fig_roc_twist(out, Js=(0.05, 0.1, 0.18, 0.35), n=2000):
+    """ROC for the gyro channel (detrended detector, κ_twist = 1). One panel:
+    the twist's spin-step is τ-independent by model construction, so one
+    curve per strength covers all contact times."""
+    noise = twist_stat_detrended(gyro_trace(3000))
+    fpr = np.linspace(0, 1, 200)
+    thr = np.quantile(noise, 1 - fpr)
+    fig, ax = plt.subplots(figsize=(6.4, 4.8))
+    fig.patch.set_facecolor(SURFACE)
+    styled_axes(ax)
+    for J, color in zip(Js, CAT):
+        stats = twist_stat_detrended(gyro_trace(n, J * 1e-3, 1.0))
+        tpr = (stats[:, None] > thr[None, :]).mean(axis=0)
+        ax.plot(fpr, tpr, color=color, lw=2, label=f"J = {J:g} mN·s")
+    ax.plot([0, 1], [0, 1], color=GRID, lw=1, ls=":")
+    ax.set_xlabel("false-alarm rate", color=MUTED)
+    ax.set_ylabel("detection rate", color=MUTED)
+    leg = ax.legend(loc="lower right", fontsize=9, frameon=False)
+    for txt in leg.get_texts():
+        txt.set_color(INK)
+    ax.set_title("ROC: the twist (gyro, detrended, κ_twist = 1)",
+                 color=INK, fontsize=12, loc="left")
+    fig.savefig(out, dpi=150, facecolor=SURFACE, bbox_inches="tight")
+    plt.close(fig)
+
+
+def post2_assets_v2():
+    """Re-render only the §4 figures: shudder ROC with more trials (kills the
+    sub-diagonal Monte Carlo wobble), map with uncrowded titles, new twist
+    ROC. Teaser and lottery figures deliberately untouched."""
+    global SIG_AERO, F_AERO, GYRO_JITTER_DPS
+    old = (SIG_AERO, F_AERO, GYRO_JITTER_DPS)
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = CORRECTED
+    noise_stats = detect_stat(to_sensor(make_noise(3000)))
+    fig_roc(noise_stats, "figs/p2_fig_roc.png",
+            Js=(0.2e-3, 0.5e-3, 1e-3, 2e-3), n=2000)
+    print("wrote figs/p2_fig_roc.png (n=2000)")
+    fig_detectability(noise_stats, "figs/p2_fig_detectability.png",
+                      highlight=(0.35e-3, 5e-3))
+    print("wrote figs/p2_fig_detectability.png")
+    fig_roc_twist("figs/p2_fig_roc_twist.png")
+    print("wrote figs/p2_fig_roc_twist.png")
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = old
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "p2assets2":
+    post2_assets_v2()

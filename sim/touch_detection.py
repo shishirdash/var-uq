@@ -878,3 +878,44 @@ def post2_assets_v2():
 
 if __name__ == "__main__" and __import__("sys").argv[-1] == "p2assets2":
     post2_assets_v2()
+
+
+def fig_cliffs_three(out, n=1000):
+    """Three channels, three cliffs: detection rate vs J at 1% FPR, tau=5ms,
+    each channel at a generous coupling. Caller sets corrected inputs."""
+    th_a = np.quantile(detect_stat(to_sensor(make_noise(3000))), 1 - FPR_TARGET)
+    th_g = np.quantile(twist_stat_detrended(gyro_trace(3000)), 1 - FPR_TARGET)
+    Js = np.geomspace(0.02, 4.0, 19)
+    fig, ax = plt.subplots(figsize=(7.5, 4.5))
+    fig.patch.set_facecolor(SURFACE)
+    styled_axes(ax)
+    for label, kap, color in [("push (κ_push = 1)", 0.0, CAT[1]),
+                              ("shudder (κ_shudder = 2)", 2.0, SEQ[2])]:
+        tpr = [(detect_stat(to_sensor(make_noise(n) + touch_pulse(J * 1e-3, 5e-3, kap)))
+                > th_a).mean() for J in Js]
+        ax.plot(Js, tpr, "o-", color=color, lw=2, ms=4, label=label)
+    tpr_t = [(twist_stat_detrended(gyro_trace(n, J * 1e-3, 1.0)) > th_g).mean()
+             for J in Js]
+    ax.plot(Js, tpr_t, "o-", color=SEQ[5], lw=2, ms=4, label="twist (κ_twist = 1)")
+    ax.set_xscale("log")
+    ax.set_xlabel("impulse J (mN·s)", color=MUTED)
+    ax.set_ylabel("detection rate at 1% false-alarm", color=MUTED)
+    ax.set_ylim(-0.03, 1.05)
+    ax.legend(frameon=False, fontsize=9, labelcolor=INK, loc="center right")
+    ax.set_title("Three channels, three cliffs (τ = 5 ms)", color=INK,
+                 fontsize=12, loc="left")
+    fig.savefig(out, dpi=150, facecolor=SURFACE, bbox_inches="tight")
+    plt.close(fig)
+
+
+def p2_cliffs():
+    global SIG_AERO, F_AERO, GYRO_JITTER_DPS
+    old = (SIG_AERO, F_AERO, GYRO_JITTER_DPS)
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = CORRECTED
+    fig_cliffs_three("figs/p2_fig_cliffs_three.png")
+    print("wrote figs/p2_fig_cliffs_three.png")
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = old
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "p2cliffs":
+    p2_cliffs()

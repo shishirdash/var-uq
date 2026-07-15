@@ -919,3 +919,33 @@ def p2_cliffs():
 
 if __name__ == "__main__" and __import__("sys").argv[-1] == "p2cliffs":
     p2_cliffs()
+
+
+def fig_twist_1d(out, n=1000):
+    """Twist detectability at fixed 1% FPR vs impulse — the 1D companion to
+    the shudder's 2D map (no tau axis: the spin step is tau-independent by
+    model construction). Caller sets corrected inputs."""
+    Js = np.geomspace(0.02, 2.0, 21)
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    fig.patch.set_facecolor(SURFACE)
+    styled_axes(ax)
+    for kappa, color in [(1.0, SEQ[5]), (0.3, SEQ[2])]:
+        ax.plot(Js, _sweep_twist(Js, kappa_twist=kappa, n=n), "o-",
+                color=color, lw=2, ms=4, label=f"κ_twist = {kappa:g}")
+    ax.set_xscale("log")
+    ax.set_xlabel("impulse J (mN·s)", color=MUTED)
+    ax.set_ylabel("detection rate at 1% false-alarm", color=MUTED)
+    ax.set_ylim(-0.03, 1.05)
+    ax.legend(frameon=False, fontsize=9, labelcolor=INK, loc="upper left")
+    ax.set_title("Detectability via the twist (gyro) — no contact-time axis needed",
+                 color=INK, fontsize=12, loc="left")
+    fig.savefig(out, dpi=150, facecolor=SURFACE, bbox_inches="tight")
+    plt.close(fig)
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "p2twist1d":
+    old = (SIG_AERO, F_AERO, GYRO_JITTER_DPS)
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = CORRECTED
+    fig_twist_1d("figs/p2_fig_twist_1d.png")
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = old
+    print("wrote figs/p2_fig_twist_1d.png")

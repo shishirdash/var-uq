@@ -29,12 +29,11 @@ unmeasured couplings. No sim details (post 2's job).
 ## Post 2 — "Tinker, Tailor, Sampler, Spy" (the simulation ritual)
 
 SPLIT + RETITLED 2026-07-13: series title stays "On offsides and
-uncertainty". Act I (sections 1–6: setup, questions, code, detection rules,
-beep/silence asymmetry, cliff close) STAGED to Notion private as "part 2:
-detectability" (page 39eb6a00c28a814e9f9ac67d801f1f59; go-live pending
-explicit call). Acts II–III (fit, the CI that lied, staircase, coin-flip
-zones, playable-cliff interactive) become PART 3 — working title TBD
-("Tinker, Tailor, Sampler, Spy" available for it).
+uncertainty". Act I 🚀 PUBLISHED 2026-07-15 under Explorations as "part 2:
+detectability" (page 39eb6a00c28a814e9f9ac67d801f1f59). Acts II–III (fit,
+the CI that lied, staircase, coin-flip zones, playable-cliff interactive)
+become PART 3 — working title TBD ("Tinker, Tailor, Sampler, Spy"
+available for it).
 
 RESCOPED 2026-07-13 (joint sim moved out — see post 2.5). One theme: turning
 noisy detections into knowledge, and catching your own uncertainty estimate
@@ -246,3 +245,13 @@ not on artifact completion.
   companion explainers allowed if depth strains readability. NEXT: Shishir's
   closed-book post-2 skeleton brain-dump → draft assembly vs the log →
   interactive build → critic rounds.
+- 2026-07-15: 🚀 PART 2 PUBLISHED — "On offsides and uncertainty — part 2:
+  detectability" live under Explorations (Shishir moved it live and iterated
+  on the live page). Final form: questions-first + TOC columns; κ-lottery
+  traces figure; shudder ROC + 2D detectability map + twist 1D curve;
+  beep/silence LR asymmetry; closing three-cliffs section with the
+  sensitivity-vs-abruptness tension teeing part 3. Footnotes: ride recap,
+  time-grid, 100 Hz filter, sensitivity/recall, prosecutor's fallacy (Sally
+  Clark), psychometric functions. p2_ figure set in sim/figs (corrected
+  inputs). NEXT: part 3 — fit, the CI that lied, staircase, coin-flip
+  zones, playable-cliff interactive; then post 2.5 (joint sim) per queue.

@@ -28,6 +28,14 @@ unmeasured couplings. No sim details (post 2's job).
 
 ## Post 2 — "Tinker, Tailor, Sampler, Spy" (the simulation ritual)
 
+SPLIT + RETITLED 2026-07-13: series title stays "On offsides and
+uncertainty". Act I (sections 1–6: setup, questions, code, detection rules,
+beep/silence asymmetry, cliff close) STAGED to Notion private as "part 2:
+detectability" (page 39eb6a00c28a814e9f9ac67d801f1f59; go-live pending
+explicit call). Acts II–III (fit, the CI that lied, staircase, coin-flip
+zones, playable-cliff interactive) become PART 3 — working title TBD
+("Tinker, Tailor, Sampler, Spy" available for it).
+
 RESCOPED 2026-07-13 (joint sim moved out — see post 2.5). One theme: turning
 noisy detections into knowledge, and catching your own uncertainty estimate
 lying. The arc = rounds 4 + 6–8 of the prediction log:

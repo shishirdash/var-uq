@@ -943,6 +943,68 @@ def fig_twist_1d(out, n=1000):
     plt.close(fig)
 
 
+# --- round 9: joint sim part 1 — the population curve (2026-07-17) -----------
+# Each flight rolls its own geometry: sin_theta ~ U(0,1) (uniform-offset
+# brush-past model, Shishir's derivation) and slip ~ U(0,1) (honest
+# ignorance). kappa_eff = sin_theta * slip multiplies J one-for-one at the
+# detector. Population curve = detection rate of a RANDOM graze at strength J,
+# vs the old fixed-kappa cliff. Corrected inputs.
+
+def gyro_trace_pop(n_trials, J, rng=RNG):
+    """Gyro traces with per-flight kappa_eff = U(0,1)*U(0,1). J in N*s."""
+    kap = rng.uniform(0, 1, n_trials) * rng.uniform(0, 1, n_trials)
+    t = np.arange(N_G) / FS
+    base = SPIN0_DPS * (1 - AERO_DECAY * t)
+    drift = np.cumsum(rng.standard_normal((n_trials, N_G)) * DRIFT_RW_DPS, axis=1)
+    white = rng.standard_normal((n_trials, N_G)) * GYRO_JITTER_DPS
+    dw_dps = kap * J * R_BALL / I_BALL * 57.2958
+    step = (np.arange(N_G) >= N_G // 2)[None, :] * dw_dps[:, None]
+    return base[None, :] + drift + white + step
+
+
+def round9(n=800):
+    global SIG_AERO, F_AERO, GYRO_JITTER_DPS
+    old = (SIG_AERO, F_AERO, GYRO_JITTER_DPS)
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = CORRECTED
+    th = np.quantile(twist_stat_detrended(gyro_trace(3000)), 1 - FPR_TARGET)
+
+    Js = np.geomspace(0.03, 30.0, 29)      # mN*s — wide: the slope needs room
+    pop = np.array([(twist_stat_detrended(gyro_trace_pop(n, J * 1e-3)) > th).mean()
+                    for J in Js])
+    fixed = _sweep_twist(Js, kappa_twist=1.0, n=n)
+
+    out = {}
+    for tag, tpr in [("fixed k=1", fixed), ("population", pop)]:
+        c10, c50, c90 = (_crossing(Js, tpr, l) for l in (0.1, 0.5, 0.9))
+        w = (c90 / c10) if (c10 and c90) else float("nan")
+        out[tag] = (c10, c50, c90, w)
+        print(f"{tag:11s} J10={c10 and f'{c10:.3f}'}  J50={c50 and f'{c50:.3f}'}"
+              f"  J90={c90 and f'{c90:.3f}'}  10->90 width x{w:.1f}")
+
+    fig, ax = plt.subplots(figsize=(7.5, 4.5))
+    fig.patch.set_facecolor(SURFACE)
+    styled_axes(ax)
+    ax.plot(Js, fixed, "o-", color=SEQ[2], lw=2, ms=4,
+            label="fixed coupling (κ_twist = 1): the cliff")
+    ax.plot(Js, pop, "o-", color=SEQ[5], lw=2, ms=4,
+            label="random graze (sinθ·slip per flight): the population")
+    ax.set_xscale("log")
+    ax.set_xlabel("impulse J (mN·s)", color=MUTED)
+    ax.set_ylabel("detection rate at 1% false-alarm", color=MUTED)
+    ax.set_ylim(-0.03, 1.05)
+    ax.legend(frameon=False, fontsize=9, labelcolor=INK, loc="upper left")
+    ax.set_title("Round 9: the cliff is per-graze; the population is a slope",
+                 color=INK, fontsize=12, loc="left")
+    fig.savefig("figs/fig_round9_population.png", dpi=150, facecolor=SURFACE,
+                bbox_inches="tight")
+    print("wrote figs/fig_round9_population.png")
+    SIG_AERO, F_AERO, GYRO_JITTER_DPS = old
+
+
+if __name__ == "__main__" and __import__("sys").argv[-1] == "round9":
+    round9()
+
+
 if __name__ == "__main__" and __import__("sys").argv[-1] == "p2twist1d":
     old = (SIG_AERO, F_AERO, GYRO_JITTER_DPS)
     SIG_AERO, F_AERO, GYRO_JITTER_DPS = CORRECTED

@@ -306,3 +306,52 @@ Results (fig_round8_disagreement.png):
 Post-2 keeper: reach and reproducibility trade off ACROSS channels — the
 twist detects fainter grazes but re-referees them differently match to
 match; the shudder almost always returns the same verdict, right or wrong.
+
+## Round 9 — 2026-07-17: joint sim part 1 — the geometry of a graze
+
+Socratic chain (all derivations his, post-MLWG session; deliberately paced
+slow after a density complaint — two unpacking passes needed, both worked):
+1. Force decomposition: push/twist are components of ONE vector
+   (κ_push = cos θ, κ_twist = sin θ × slip; θ from the normal) → perfectly
+   anti-correlated through geometry. Convention flip flagged (he derived in
+   θ-from-surface, notes use θ-from-normal).
+2. Uniform-offset brush-past model: sin θ = b/R, b ~ U(0,R). His sealed gut:
+   twist share "piled in the middle" — WRONG: it's exactly UNIFORM (his
+   formula "sin(unif())" also inverted which variable is uniform; gut and
+   formula disagreed with each other — diagnostic of a swapped variable).
+   CDF method re-taught (he'd half-forgotten it), then he ran it on the
+   push share: setup right, chain rule slipped (dropped the −1/2 power,
+   stray constant-derivative); corrected: f(c) = c/√(1−c²) — push share
+   piles violently at 1. REPARAMETERIZATION LESSON: "uniform" is a property
+   of the variable, not the situation — the first deep fact about priors
+   (post-3 ammunition).
+3. Invisibility constraint (his inequality, clean first pass):
+   J·cos θ ≤ v → sin θ ≥ √(1−(v/J)²) → twist impulse ≥ √(J²−v²). The
+   stronger an invisible contact, the more certainly it is nearly pure
+   twist: the gyro is structurally the graze channel, and invisible-but-
+   strong contacts CANNOT roll a quiet twist (only slip can mute them).
+   His check computation: J=1, v=0.1, perfect grip → 0.995 mN·s ≈ 6× the
+   0.176 cliff. (One unit slip: "mN per sec" — flagged, the usual gremlin.)
+
+SEALED ENVELOPE: population curve 10→90 width when each flight rolls
+sin θ ~ U(0,1) and slip ~ U(0,1) (κ_eff = product; anchors given: fixed-κ
+cliff ×3.1, signal ∝ κ_eff·J). He predicted qualitative "long slope," then
+committed ×30.
+
+Result (fig_round9_population.png, corrected inputs, 800 flights/point):
+- fixed κ=1: J10 0.092, J50 0.189, J90 0.276 → ×3.0 (round-6 consistent).
+- population: J10 0.253, J50 0.912, J90 10.25 → **×40.5**.
+
+Score: ×30 vs ×40.5 — off by 1.35×, HIS BEST ENVELOPE OF THE PROJECT by an
+order of magnitude (r6: 10× bullish; r7: 16× pessimistic; r9: within
+~1.4×, slightly narrow). Calibration arc is converging.
+
+Findings:
+1. The cliff is PER-GRAZE; the population curve is a slope — same detector,
+   same physics, different question. The ×40 width is entirely ignorance
+   (geometry × grip) marginalized, not noise.
+2. Population J50 ≈ 0.91 ≈ 5× the per-graze cliff: an average random graze
+   wastes ~80% of its impulse on the coupling lottery.
+3. Next acts queued: condition the population on invisibility (the
+   VAR-relevant subpopulation — geometry pinned, slip-only lottery), then
+   the shudder's location die, then fusion.

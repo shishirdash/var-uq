@@ -245,6 +245,16 @@ not on artifact completion.
   companion explainers allowed if depth strains readability. NEXT: Shishir's
   closed-book post-2 skeleton brain-dump → draft assembly vs the log →
   interactive build → critic rounds.
+- 2026-07-17: MLWG talk delivered (60 min, spoke from the blog; warm
+  reception — "best working group share so far"). Covered posts 1–2 through
+  the ritual + cliff preview; beep/silence asymmetry and AI-receipts coda
+  did NOT fit (aero tangent ate the middle) — banked for a follow-up talk
+  after part 3. Room demand signals: real measurements / what does the
+  broadcast blip actually plot (Devesh), minimum detectable force + its
+  condition-dependence (Sam — literally part 3's J50±CI), ground-truth
+  framing, JEPA interest (publicly committed to the JEPA post), and a long
+  VAR-philosophy thread (clear-and-obvious paradox, referee deference,
+  toe-poke offsides + camera sensor fusion) = early demand for post 6.
 - 2026-07-15: 🚀 PART 2 PUBLISHED — "On offsides and uncertainty — part 2:
   detectability" live under Explorations (Shishir moved it live and iterated
   on the live page). Final form: questions-first + TOC columns; κ-lottery
